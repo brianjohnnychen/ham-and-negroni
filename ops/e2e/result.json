@@ -1,5 +1,5 @@
 {
-  "run": "42347073262",
+  "run": "42347338713",
   "site": "http://127.0.0.1:8765/",
   "steps": [
     {
@@ -70,7 +70,7 @@
     {
       "step": "admin can see both QA users",
       "ok": true,
-      "detail": "{'a': '5bb4fcca-6316-489c-a078-a21728e9ce90', 'b': 'a4ebeced-8653-465a-9e38-cc93fcfee270'}"
+      "detail": "{'a': '6926dd0e-b68c-434a-b84e-267563101463', 'b': '18e7037f-45a6-42ac-8ceb-38556e8ec865'}"
     },
     {
       "step": "eleven AI members exist, including Joseph",
@@ -135,7 +135,7 @@
     {
       "step": "member Daiki replies live",
       "ok": true,
-      "detail": "Hi! On weekends I'm usually either at the ballpark cheering on my team or DJing at home with a pile of records. Oh, and if I'm being honest, I'm always hunting for a good bowl of tonkotsu ramen, since"
+      "detail": "Hi! Weekends for me are usually a mix of baseball on TV and digging through records for my DJ sets. Sometimes I'll grab tonkotsu ramen with friends if I can find a good spot. What about you, QA Carol?"
     },
     {
       "step": "asking for a straight answer gets one",
@@ -150,12 +150,17 @@
     {
       "step": "Joseph answers about Morrison in character",
       "ok": true,
-      "detail": "Morrison Christian Academy, MCA all the way through, which is a lot of years of the same hallways. Wait, are you one of the MCA crowd? Carol's a name I'd have remembered, so I'm guessing you're not ju"
+      "detail": "Morrison Christian Academy, the whole way through from elementary. Carol, is that you? It's been ages! What have you been up to since we all scattered?"
     },
     {
-      "step": "Joseph answers about Morrison in character",
-      "ok": false,
-      "detail": "name 're' is not defined"
+      "step": "Joseph stays in character on a detail he was never given",
+      "ok": true,
+      "detail": "Ha, you're testing me already! I honestly can't remember, it's been too many years. Was it the one with the squeaky chalk, or the one who made us sit in alphabetical order? What's your memory saying?"
+    },
+    {
+      "step": "the conversation log holds the QA chats with AI members",
+      "ok": true,
+      "detail": "http 200, 11"
     },
     {
       "step": "realtime: B's feed updated without reload",
@@ -165,7 +170,7 @@
     {
       "step": "Feed shows who liked whom",
       "ok": true,
-      "detail": "FeedEvery like and dislike, newest first. Updates live.QCQTQA Carol liked QA Thomasjust nowAAnderson liked Joseph58 min "
+      "detail": "FeedEvery like and dislike, newest first. Updates live.QCQTQA Carol liked QA Thomasjust nowAAnderson liked Joseph1 hour "
     },
     {
       "step": "Feed shows the dislike too",
@@ -215,7 +220,7 @@
     {
       "step": "B sees A's photo on the People card",
       "ok": true,
-      "detail": "https://itnxowacktdwbetzkhmw.supabase.co/storage/v1/object/public/avatars/5bb4fcca-6316-489c-a078-a21728e9ce90/avatar.jpg?v=1794032990073"
+      "detail": "https://itnxowacktdwbetzkhmw.supabase.co/storage/v1/object/public/avatars/6926dd0e-b68c-434a-b84e-267563101463/avatar.jpg?v=1794033194467"
     },
     {
       "step": "person sheet shows the bio",
@@ -238,22 +243,22 @@
       "detail": "[]"
     },
     {
-      "step": "deleted QA photo 5bb4fcca",
+      "step": "deleted QA photo 6926dd0e",
       "ok": true,
-      "detail": "(200, [{'name': '5bb4fcca-6316-489c-a078-a21728e9ce90/avatar.jpg', 'bucket_id': 'avatars', 'owner': '5bb4fcca-6316-489c-a078-a21728e9ce90', 'owner_id': '5bb4fcca-6316-489c-a078-a21728e9ce90', 'version': 'cb12db9f-73c1-4507-a4f3-3597aeb32a17', 'id': '98d0a210-d046-4fa0-88ea-29fd1c11f425', 'updated_at': '2026-11-07T06:29:49.948Z', 'created_at': '2026-11-07T06:29:49.948Z', 'last_accessed_at': '2026-1"
+      "detail": "(200, [{'name': '6926dd0e-b68c-434a-b84e-267563101463/avatar.jpg', 'bucket_id': 'avatars', 'owner': '6926dd0e-b68c-434a-b84e-267563101463', 'owner_id': '6926dd0e-b68c-434a-b84e-267563101463', 'version': '0b6a63cb-991d-425d-bc5a-68638ccb07cf', 'id': '23347296-3c31-4a85-8f21-79aff6d09bb5', 'updated_at': '2026-11-07T06:33:14.386Z', 'created_at': '2026-11-07T06:33:14.386Z', 'last_accessed_at': '2026-1"
     },
     {
-      "step": "deleted QA user 5bb4fcca",
+      "step": "deleted QA user 6926dd0e",
       "ok": true,
       "detail": "200"
     },
     {
-      "step": "deleted QA photo a4ebeced",
+      "step": "deleted QA photo 18e7037f",
       "ok": true,
       "detail": "(200, 'nothing to delete')"
     },
     {
-      "step": "deleted QA user a4ebeced",
+      "step": "deleted QA user 18e7037f",
       "ok": true,
       "detail": "200"
     },
@@ -268,8 +273,8 @@
       "detail": "[]"
     }
   ],
-  "pass": false,
-  "started": "2026-11-07T06:28:52Z",
+  "pass": true,
+  "started": "2026-11-07T06:32:17Z",
   "realtime": true,
-  "finished": "2026-11-07T06:30:00Z"
+  "finished": "2026-11-07T06:33:21Z"
 }
