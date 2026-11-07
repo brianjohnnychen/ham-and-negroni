@@ -1,4 +1,4 @@
 bot_config ready
 edge secrets: http 201
-api deploy: http 201 {'id': '4170a284-9ea8-4fa3-a710-151b419b7ac9', 'slug': 'bot-reply', 'name': 'bot-reply', 'status': 'ACTIVE', 'version': 5, 'created_at': 1794025232764, 'updated_at': 1794025922885, 'verify_jwt': False, 'import_map': False, 'entrypoint_path': 'file:///tmp/user_fn_itnxowacktdwbetzkhmw_4170a284-9ea8-4f
+api deploy: http 201 {'id': '4170a284-9ea8-4fa3-a710-151b419b7ac9', 'slug': 'bot-reply', 'name': 'bot-reply', 'status': 'ACTIVE', 'version': 7, 'created_at': 1794025232764, 'updated_at': 1794027551872, 'verify_jwt': False, 'import_map': False, 'entrypoint_path': 'file:///tmp/user_fn_itnxowacktdwbetzkhmw_4170a284-9ea8-4f
 AI members ready: 10
