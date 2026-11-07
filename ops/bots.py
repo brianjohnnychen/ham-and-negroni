@@ -1,10 +1,11 @@
-"""Sets up the AI members: edge function, secrets, database config and the ten AI member accounts.
+"""Sets up the AI members: edge function, secrets, database config and the AI member accounts.
 
 Idempotent. Run by GitHub Actions (provision.yml) after the schema is applied.
 Env: SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, SUPABASE_PROJECT_REF, SUPABASE_ACCESS_TOKEN,
      ANTHROPIC_API_KEY (optional here; without it the AI members cannot reply and this run says so).
 Writes ops/bots.log and ops/bots.json. Never prints secret values.
 """
+import hashlib
 import json
 import os
 import secrets
@@ -164,18 +165,22 @@ def find_user_id(email):
     return None
 
 
+def upload_avatar(uid, path):
+    """Puts a photo in the public avatars bucket where the app expects it and points the profile at it."""
+    data = open(path, "rb").read()
+    st, res = http("POST", f"{URL}/storage/v1/object/avatars/{uid}/avatar.jpg",
+                   {"apikey": SERVICE, "Authorization": f"Bearer {SERVICE}", "Content-Type": "image/jpeg", "x-upsert": "true", "cache-control": "max-age=3600"}, raw=data)
+    if st not in (200, 201):
+        return False, f"storage http {st} {str(res)[:200]}"
+    version = hashlib.sha1(data).hexdigest()[:8]
+    url = f"{URL}/storage/v1/object/public/avatars/{uid}/avatar.jpg?v={version}"
+    st, res = svc("PATCH", f"/rest/v1/profiles?id=eq.{uid}", {"avatar_url": url}, {"Prefer": "return=minimal"})
+    return st in (200, 204), f"profile http {st}"
+
+
 count = 0
-pending = []
 for p in personas:
     prof = by_name.get(p["name"])
-    if not prof and p.get("adopt_email"):
-        # this member signs up through the site with their own photo; the account is then turned into an AI member here
-        uid = find_user_id(p["adopt_email"])
-        if not uid:
-            log(f"{p['name']}: waiting for someone to sign up with {p['adopt_email']} (not set up yet)")
-            pending.append(p["name"])
-            continue
-        prof = {"id": uid}
     if not prof:
         email = f"bot.{p['slug']}@example.com"
         st, res = svc("POST", "/auth/v1/admin/users", {
@@ -205,8 +210,12 @@ for p in personas:
     if st not in (200, 201, 204):
         log(f"cannot write persona {p['name']}: http {st} {res}")
         finish(False)
+    if p.get("avatar_file"):
+        ok, detail = upload_avatar(prof["id"], p["avatar_file"])
+        log(f"{p['name']}: photo " + ("set" if ok else "FAILED " + detail))
+        if not ok:
+            finish(False)
     count += 1
 result["bots"] = count
-result["pending"] = pending
 log(f"AI members ready: {count}")
 finish(True)

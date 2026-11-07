@@ -172,11 +172,20 @@ try:
         st, personas = admin("GET", "/rest/v1/bot_personas?select=profile_id,profiles(display_name)")
         personas = personas if isinstance(personas, list) else []
         bots = sorted([{"id": r["profile_id"], "display_name": (r.get("profiles") or {}).get("display_name", "?")} for r in personas], key=lambda b: b["display_name"])
-        step("at least ten AI members exist", len(bots) >= 10, [b["display_name"] for b in bots])
+        step("eleven AI members exist, including Joseph", len(bots) >= 11 and "Joseph" in [b["display_name"] for b in bots], [b["display_name"] for b in bots])
+        st, jrows = admin("GET", "/rest/v1/profiles?select=id,avatar_url&display_name=eq.Joseph")
+        jrow = jrows[0] if isinstance(jrows, list) and jrows else {}
+        try:
+            with urllib.request.urlopen(jrow.get("avatar_url") or "http://127.0.0.1:1/", timeout=30) as r:
+                jpg_ok = r.status == 200 and r.headers.get("content-type", "").startswith("image/")
+        except Exception:
+            jpg_ok = False
+        step("Joseph has a profile photo that loads", jpg_ok, jrow.get("avatar_url"))
         nav(A, "people")
         A.wait_for_selector(".person-name", timeout=15000)
         people_text = A.text_content("#view-root")
         step("People lists the AI members with no AI label", A.eval_on_selector_all(".person-name", "els => els.length") >= 11 and "(a)" not in people_text and "AI member" not in people_text and A.query_selector(".ai-tag") is None)
+        step("Joseph shows with his photo on People", A.evaluate("() => [...document.querySelectorAll('.person')].some(c => (c.querySelector('.person-name') || {}).textContent === 'Joseph' && c.querySelector('.person-photo img[src*=\"/avatars/\"]'))"))
         step("People says some members are AI", "Some members are AI" in people_text and "Find the AI" not in people_text)
         A.screenshot(path=f"{OUT}/mobile-people-ai.png", full_page=True)
         try:
