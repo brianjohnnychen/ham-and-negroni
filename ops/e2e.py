@@ -198,6 +198,7 @@ try:
             except Exception as ex:
                 step(f"AI member {bot['display_name']} replies live", False, "no reply within 75s: " + str(ex)[:80])
             A.screenshot(path=f"{OUT}/mobile-ai-chat.png")
+        nav(A, "people")
 
         # realtime: B watches the feed while A likes B
         nav(B, "feed")

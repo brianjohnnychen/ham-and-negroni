@@ -102,7 +102,7 @@ if st not in (200, 201):
 # ------------------------------------------------------------------ deploy the edge function
 def deploy_with_cli():
     env = dict(os.environ, SUPABASE_ACCESS_TOKEN=TOKEN)
-    cmd = ["npx", "--yes", "supabase@latest", "functions", "deploy", "bot-reply", "--project-ref", REF, "--use-api", "--no-verify-jwt"]
+    cmd = ["npx", "--yes", "supabase@latest", "functions", "deploy", "bot-reply", "--project-ref", REF, "--use-api", "--no-verify-jwt", "--yes"]
     p = subprocess.run(cmd, env=env, capture_output=True, text=True, timeout=600)
     log("cli deploy: exit " + str(p.returncode))
     log((p.stdout + p.stderr)[-1500:])
@@ -128,10 +128,15 @@ def deploy_with_api():
 
 
 try:
-    deployed = deploy_with_cli() or deploy_with_api()
-except Exception as e:  # noqa: BLE001
-    log(f"cli deploy raised: {e!r}")
     deployed = deploy_with_api()
+except Exception as e:  # noqa: BLE001
+    log(f"api deploy raised: {e!r}")
+    deployed = False
+if not deployed:
+    try:
+        deployed = deploy_with_cli()
+    except Exception as e:  # noqa: BLE001
+        log(f"cli deploy raised: {e!r}")
 result["function_deployed"] = bool(deployed)
 if not deployed:
     log("edge function could not be deployed")
