@@ -14,6 +14,8 @@ create table if not exists public.profiles (
 );
 -- The signup form no longer asks for a "usual order"; drop the old column on existing projects.
 alter table public.profiles drop column if exists drink;
+-- AI members: shown with an (a) label in the app. Only the service role can set this.
+alter table public.profiles add column if not exists is_bot boolean not null default false;
 
 -- ---------------------------------------------------------------- verdicts
 -- Append-only log. 'round' = like, 'night' = dislike (values kept from the original schema).
@@ -55,10 +57,11 @@ security definer
 set search_path = public
 as $$
 begin
-  insert into public.profiles (id, display_name)
+  insert into public.profiles (id, display_name, is_bot)
   values (
     new.id,
-    coalesce(nullif(trim(new.raw_user_meta_data ->> 'display_name'), ''), split_part(coalesce(new.email, 'someone'), '@', 1))
+    coalesce(nullif(trim(new.raw_user_meta_data ->> 'display_name'), ''), split_part(coalesce(new.email, 'someone'), '@', 1)),
+    coalesce((new.raw_app_meta_data ->> 'is_bot')::boolean, false)
   )
   on conflict (id) do nothing;
   return new;
@@ -123,6 +126,116 @@ grant select, insert, update on public.profiles to authenticated;
 grant select, insert on public.verdicts to authenticated;
 grant select, insert on public.messages to authenticated;
 grant select on public.current_verdicts to authenticated;
+
+-- ---------------------------------------------------------------- AI members
+-- Members flagged is_bot are AI personas. A message sent to one calls the bot-reply Edge Function
+-- (through pg_net), which writes the reply as that member. New members also get a welcome message.
+create extension if not exists pg_net with schema extensions;
+
+create table if not exists public.bot_personas (
+  profile_id uuid primary key references public.profiles (id) on delete cascade,
+  persona    text not null,
+  greeting   text not null
+);
+create table if not exists public.bot_config (
+  key   text primary key,
+  value text not null
+);
+alter table public.bot_personas enable row level security;
+alter table public.bot_config enable row level security;
+revoke all on public.bot_personas, public.bot_config from anon, authenticated;
+drop table if exists public.bot_usage;
+
+-- Only the service role (and the database owner) may change is_bot.
+create or replace function public.guard_bot_flag()
+returns trigger
+language plpgsql
+as $$
+declare
+  claims_text text := current_setting('request.jwt.claims', true);
+  who text := coalesce((case when coalesce(claims_text, '') = '' then null else claims_text::jsonb end) ->> 'role', '');
+begin
+  if who in ('anon', 'authenticated') then
+    if tg_op = 'INSERT' and new.is_bot then
+      raise exception 'is_bot cannot be set by members';
+    end if;
+    if tg_op = 'UPDATE' and new.is_bot is distinct from old.is_bot then
+      raise exception 'is_bot cannot be changed by members';
+    end if;
+  end if;
+  return new;
+end;
+$$;
+drop trigger if exists guard_bot_flag on public.profiles;
+create trigger guard_bot_flag
+  before insert or update on public.profiles
+  for each row execute function public.guard_bot_flag();
+
+create or replace function public.notify_bot_message()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  recipient_is_bot boolean;
+  sender_is_bot boolean;
+  fn_url text;
+  fn_secret text;
+begin
+  select p.is_bot into recipient_is_bot from public.profiles p where p.id = new.recipient;
+  select p.is_bot into sender_is_bot from public.profiles p where p.id = new.sender;
+  if not coalesce(recipient_is_bot, false) or coalesce(sender_is_bot, false) then
+    return new;
+  end if;
+  select value into fn_url from public.bot_config where key = 'function_url';
+  select value into fn_secret from public.bot_config where key = 'secret';
+  if fn_url is null or fn_secret is null then
+    return new;
+  end if;
+  perform net.http_post(
+    url := fn_url,
+    headers := jsonb_build_object('Content-Type', 'application/json', 'x-bot-secret', fn_secret),
+    body := jsonb_build_object('type', 'message', 'message_id', new.id)
+  );
+  return new;
+end;
+$$;
+drop trigger if exists on_message_to_bot on public.messages;
+create trigger on_message_to_bot
+  after insert on public.messages
+  for each row execute function public.notify_bot_message();
+
+create or replace function public.notify_bot_welcome()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  fn_url text;
+  fn_secret text;
+begin
+  if new.is_bot then
+    return new;
+  end if;
+  select value into fn_url from public.bot_config where key = 'function_url';
+  select value into fn_secret from public.bot_config where key = 'secret';
+  if fn_url is null or fn_secret is null then
+    return new;
+  end if;
+  perform net.http_post(
+    url := fn_url,
+    headers := jsonb_build_object('Content-Type', 'application/json', 'x-bot-secret', fn_secret),
+    body := jsonb_build_object('type', 'welcome', 'profile_id', new.id)
+  );
+  return new;
+end;
+$$;
+drop trigger if exists on_profile_welcome on public.profiles;
+create trigger on_profile_welcome
+  after insert on public.profiles
+  for each row execute function public.notify_bot_welcome();
 
 -- ---------------------------------------------------------------- realtime
 do $$

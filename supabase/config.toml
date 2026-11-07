@@ -1,0 +1,4 @@
+project_id = "ham-and-negroni"
+
+[functions.bot-reply]
+verify_jwt = false

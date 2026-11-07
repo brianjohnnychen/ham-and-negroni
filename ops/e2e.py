@@ -150,6 +150,55 @@ try:
         cleanup_ids = [i for i in ids.values() if i]
         step("admin can see both QA users", all(ids.values()), ids)
 
+        # AI members: listed with an (a) label, flagged server side, welcome message arrives, members cannot fake the flag
+        st, bots = admin("GET", "/rest/v1/profiles?select=id,display_name&is_bot=eq.true&order=display_name")
+        bots = bots if isinstance(bots, list) else []
+        step("ten AI members exist", len(bots) == 10, [b["display_name"] for b in bots])
+        nav(A, "people")
+        A.wait_for_selector(".person-name .ai-tag", timeout=15000)
+        tags = A.eval_on_selector_all(".person-name .ai-tag", "els => els.length")
+        step("People shows (a) next to all AI members", tags == 10, f"{tags} tags")
+        step("People explains what (a) means", "marked (a) are AI" in A.text_content("#view-root"))
+        A.screenshot(path=f"{OUT}/mobile-people-ai.png", full_page=True)
+        try:
+            nav(A, "chats")
+            A.wait_for_function("() => document.querySelector('#view-root .convo') !== null", timeout=40000)
+            step("a welcome message from an AI member arrives", True, A.text_content("#view-root .convo")[:80])
+        except Exception as ex:
+            step("a welcome message from an AI member arrives", False, str(ex)[:120])
+        # members cannot mark themselves as AI
+        tok_req = urllib.request.Request(URL + "/auth/v1/token?grant_type=password", data=json.dumps({"email": qa["a"]["email"], "password": qa["a"]["pw"]}).encode(), method="POST", headers={"apikey": ANON, "Content-Type": "application/json"})
+        try:
+            with urllib.request.urlopen(tok_req, timeout=30) as r:
+                jwt = json.loads(r.read().decode())["access_token"]
+            patch = urllib.request.Request(URL + f"/rest/v1/profiles?id=eq.{ids['a']}", data=json.dumps({"is_bot": True}).encode(), method="PATCH", headers={"apikey": ANON, "Authorization": f"Bearer {jwt}", "Content-Type": "application/json", "Prefer": "return=representation"})
+            try:
+                with urllib.request.urlopen(patch, timeout=30) as r:
+                    flagged = json.loads(r.read().decode())
+                step("members cannot flag themselves as AI", False, f"update allowed: {flagged}")
+            except urllib.error.HTTPError as he:
+                step("members cannot flag themselves as AI", he.code in (400, 401, 403, 409), f"http {he.code}")
+        except Exception as ex:
+            step("members cannot flag themselves as AI", False, "sign-in for the check failed: " + str(ex)[:100])
+        # live AI reply
+        if bots:
+            bot = bots[0]
+            nav(A, "chats/" + bot["id"])
+            A.wait_for_selector("[data-composer] input", timeout=15000)
+            incoming = "[data-bubbles] .bubble:not(.mine):not(.typing)"
+            before = A.eval_on_selector_all(incoming, "els => els.length")
+            A.fill("[data-composer] input", "Hi! What do you like to do on weekends?")
+            A.click("[data-composer] button")
+            wait_text(A, "[data-bubbles]", "weekends")
+            try:
+                A.wait_for_function("([sel, n]) => document.querySelectorAll(sel).length > n", arg=[incoming, before], timeout=75000)
+                reply = A.eval_on_selector_all(incoming, "els => els.map(e => e.firstChild.textContent)")[-1]
+                bad = ("lost my train of thought" in reply) or ("step away" in reply)
+                step(f"AI member {bot['display_name']} replies live", not bad, reply[:200])
+            except Exception as ex:
+                step(f"AI member {bot['display_name']} replies live", False, "no reply within 75s: " + str(ex)[:80])
+            A.screenshot(path=f"{OUT}/mobile-ai-chat.png")
+
         # realtime: B watches the feed while A likes B
         nav(B, "feed")
         B.wait_for_timeout(1500)

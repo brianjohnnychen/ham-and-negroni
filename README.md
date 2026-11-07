@@ -10,3 +10,11 @@ A joke dating site for friends in Japan. Founded by Carol, Anderson, Thomas, Bri
 - Keepalive: `.github/workflows/keepalive.yml` pings the database twice a week so the free project never pauses, and commits a heartbeat so the schedule never gets disabled.
 
 Likes and dislikes are posted on the public feed, visible to all members. Messages are private to the two people in them (enforced by row-level security). Sign-up asks only for name, email and password; email confirmation is off.
+
+## AI members
+
+Ten AI members (five women, five men) are marked with `(a)` after their name, in People, the feed, messages and profiles. A message sent to one calls the `bot-reply` Supabase Edge Function (via a database trigger and pg_net), which writes the reply as that member using Claude Haiku 5.5. New members also get a fixed welcome message from a random AI member. Each persona is told to say it is an AI if asked.
+
+- Setup: `ops/bots.py` (run by `provision.yml`) deploys the function, sets its secrets, and creates the ten accounts from `ops/bot_personas.json`. Needs the repo secret `ANTHROPIC_API_KEY`.
+- Spending caps in the function: 30 replies per member per hour and 800 replies per day in total. Past the cap the AI member sends a "message me again later" line instead of calling the model.
+- Members cannot flag themselves as AI: `is_bot` is guarded by a trigger and only the service role can set it.
