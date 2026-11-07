@@ -1,5 +1,5 @@
 {
-  "run": "42338840639",
+  "run": "42340731998",
   "site": "http://127.0.0.1:8765/",
   "steps": [
     {
@@ -60,7 +60,7 @@
     {
       "step": "admin can see both QA users",
       "ok": true,
-      "detail": "{'a': 'f9235623-213e-493a-95b1-cc43c9aa8496', 'b': '28fc4af6-dcd2-4ba8-863b-6c7e3df8f9f7'}"
+      "detail": "{'a': 'af28606c-d768-497c-a469-2d010895c9ed', 'b': 'e13a04c4-2330-4821-ad15-f0349cc0cbb1'}"
     },
     {
       "step": "ten AI members exist",
@@ -68,29 +68,49 @@
       "detail": "['Daiki', 'Hana', 'Haruto', 'Kenji', 'Mei', 'Ren', 'Rina', 'Sakura', 'Takumi', 'Yui']"
     },
     {
-      "step": "People shows (a) next to all AI members",
-      "ok": true,
-      "detail": "10 tags"
-    },
-    {
-      "step": "People explains what (a) means",
+      "step": "People lists the AI members with no AI label",
       "ok": true,
       "detail": ""
     },
     {
-      "step": "a welcome message from an AI member arrives",
+      "step": "People explains that Find the AI is on",
       "ok": true,
-      "detail": "KKenji (a)Hi QA Carol, welcome to Ham & Negroni. I'm Kenji, an AI member (the (a"
+      "detail": ""
     },
     {
-      "step": "members cannot flag themselves as AI",
+      "step": "a welcome message from a member arrives",
+      "ok": true,
+      "detail": "HHarutoHi QA Carol, glad you're here. I'm Haruto. Do you play board games?"
+    },
+    {
+      "step": "members cannot read an AI flag on profiles",
       "ok": true,
       "detail": "http 400"
     },
     {
-      "step": "AI member Daiki replies live",
+      "step": "members cannot read the AI member list",
       "ok": true,
-      "detail": "Hi there! On weekends I'm usually either watching baseball or digging through records for my next DJ set. I'm an AI member here, so no weekend plans in the real sense, but those hobbies keep me busy. "
+      "detail": "http 403"
+    },
+    {
+      "step": "chat tells everyone how to pause the game",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "step": "member Daiki replies live",
+      "ok": true,
+      "detail": "Hi! On weekends I usually catch a baseball game if I can, or grab a bowl of tonkotsu ramen with friends in Fukuoka. Sometimes I spend the evening spinning records too, since DJing is my favorite hobby"
+    },
+    {
+      "step": "pause game gets a straight answer",
+      "ok": true,
+      "detail": "Game paused. Straight answer: I'm an AI member of Find the AI, not a real person. Send \"resume game\" to keep playing, or just keep chatting and I'll stay honest."
+    },
+    {
+      "step": "resume game continues the game",
+      "ok": true,
+      "detail": "Back in the game."
     },
     {
       "step": "realtime: B's feed updated without reload",
@@ -150,7 +170,7 @@
     {
       "step": "B sees A's photo on the People card",
       "ok": true,
-      "detail": "https://itnxowacktdwbetzkhmw.supabase.co/storage/v1/object/public/avatars/f9235623-213e-493a-95b1-cc43c9aa8496/avatar.jpg?v=1794026026884"
+      "detail": "https://itnxowacktdwbetzkhmw.supabase.co/storage/v1/object/public/avatars/af28606c-d768-497c-a469-2d010895c9ed/avatar.jpg?v=1794027681961"
     },
     {
       "step": "person sheet shows the bio",
@@ -164,8 +184,8 @@
     },
     {
       "step": "no page errors (A)",
-      "ok": true,
-      "detail": "[]"
+      "ok": false,
+      "detail": "[\"console: Access to fetch at 'https://itnxowacktdwbetzkhmw.supabase.co/rest/v1/verdicts?select=*&order=created_at.desc&limit=150' from origin 'http://127.0.0.1:8765' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.\", 'console: Failed to load resource: net::ERR_FAILED']"
     },
     {
       "step": "no page errors (B)",
@@ -173,22 +193,22 @@
       "detail": "[]"
     },
     {
-      "step": "deleted QA photo f9235623",
+      "step": "deleted QA photo af28606c",
       "ok": true,
-      "detail": "(200, [{'name': 'f9235623-213e-493a-95b1-cc43c9aa8496/avatar.jpg', 'bucket_id': 'avatars', 'owner': 'f9235623-213e-493a-95b1-cc43c9aa8496', 'owner_id': 'f9235623-213e-493a-95b1-cc43c9aa8496', 'version': '70d35f6b-7e60-49ba-a791-e46caac7f75e', 'id': '5e09f4e6-3af9-4775-82ad-01e2ad40271c', 'updated_at': '2026-11-07T04:33:46.727Z', 'created_at': '2026-11-07T04:33:46.727Z', 'last_accessed_at': '2026-1"
+      "detail": "(200, [{'name': 'af28606c-d768-497c-a469-2d010895c9ed/avatar.jpg', 'bucket_id': 'avatars', 'owner': 'af28606c-d768-497c-a469-2d010895c9ed', 'owner_id': 'af28606c-d768-497c-a469-2d010895c9ed', 'version': 'd56ae68e-7740-4a5f-aa09-865cf7a9acd6', 'id': '6e4196e5-6325-43b9-95e5-17ba6ba6157c', 'updated_at': '2026-11-07T05:01:21.853Z', 'created_at': '2026-11-07T05:01:21.853Z', 'last_accessed_at': '2026-1"
     },
     {
-      "step": "deleted QA user f9235623",
+      "step": "deleted QA user af28606c",
       "ok": true,
       "detail": "200"
     },
     {
-      "step": "deleted QA photo 28fc4af6",
+      "step": "deleted QA photo e13a04c4",
       "ok": true,
       "detail": "(200, 'nothing to delete')"
     },
     {
-      "step": "deleted QA user 28fc4af6",
+      "step": "deleted QA user e13a04c4",
       "ok": true,
       "detail": "200"
     },
@@ -203,8 +223,8 @@
       "detail": "[]"
     }
   ],
-  "pass": true,
-  "started": "2026-11-07T04:33:08Z",
+  "pass": false,
+  "started": "2026-11-07T05:00:21Z",
   "realtime": true,
-  "finished": "2026-11-07T04:33:56Z"
+  "finished": "2026-11-07T05:01:30Z"
 }
