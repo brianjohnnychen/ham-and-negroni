@@ -197,6 +197,7 @@ try:
             A.wait_for_function("() => document.querySelector('#view-root .convo') !== null", timeout=40000)
             first = A.text_content("#view-root .convo")
             step("a welcome message from a member arrives", "AI" not in first.split("Hi ")[0] and "(a)" not in first, first[:100])
+            step("Joseph writes first to a member named Carol", "Joseph" in first and "hang out" in first, first[:140])
         except Exception as ex:
             step("a welcome message from a member arrives", False, str(ex)[:120])
         # members cannot tell which members are AI: not a column, and the persona table is closed
@@ -245,6 +246,15 @@ try:
             except Exception as ex:
                 step(f"member {bot['display_name']} replies live", False, "no reply within 75s: " + str(ex)[:80])
             A.screenshot(path=f"{OUT}/mobile-ai-chat.png")
+            joseph = next((b for b in bots if b["display_name"] == "Joseph"), None)
+            if joseph:
+                try:
+                    nav(A, "chats/" + joseph["id"])
+                    A.wait_for_selector("[data-composer] input", timeout=15000)
+                    reply = ask("Where did you go to high school?", "high school")
+                    step("Joseph answers about Morrison in character", ("Morrison" in reply or "MCA" in reply), reply[:200])
+                except Exception as ex:
+                    step("Joseph answers about Morrison in character", False, str(ex)[:100])
         nav(A, "people")
 
         # realtime: B watches the feed while A likes B

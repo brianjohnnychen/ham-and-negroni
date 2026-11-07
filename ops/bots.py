@@ -8,6 +8,7 @@ Writes ops/bots.log and ops/bots.json. Never prints secret values.
 import hashlib
 import json
 import os
+import re
 import secrets
 import subprocess
 import sys
@@ -222,7 +223,7 @@ for p in personas:
     if st not in (200, 204):
         log(f"cannot update profile {p['name']}: http {st} {res}")
         finish(False)
-    st, res = svc("POST", "/rest/v1/bot_personas?on_conflict=profile_id", [{"profile_id": prof["id"], "persona": p["persona"], "greeting": p["greeting"]}], {"Prefer": "resolution=merge-duplicates,return=minimal"})
+    st, res = svc("POST", "/rest/v1/bot_personas?on_conflict=profile_id", [{"profile_id": prof["id"], "persona": p["persona"], "greeting": p["greeting"], "crush_name": p.get("crush_name"), "crush_greeting": p.get("crush_greeting")}], {"Prefer": "resolution=merge-duplicates,return=minimal"})
     if st not in (200, 201, 204):
         log(f"cannot write persona {p['name']}: http {st} {res}")
         finish(False)
@@ -238,5 +239,25 @@ for p in personas:
             finish(False)
     count += 1
 result["bots"] = count
+
+# members who already have the name an AI member has a crush on get the first message now (the function skips anyone already messaged)
+st, plist = svc("GET", "/rest/v1/bot_personas?select=profile_id,crush_name")
+all_bots = {r["profile_id"] for r in (plist if isinstance(plist, list) else [])}
+nudged = 0
+for r in (plist if isinstance(plist, list) else []):
+    crush = (r.get("crush_name") or "").strip()
+    if not crush:
+        continue
+    st, rows = svc("GET", "/rest/v1/profiles?select=id,display_name&display_name=ilike." + urllib.parse.quote(f"*{crush}*"))
+    for m in (rows if isinstance(rows, list) else []):
+        words = [w for w in re.split(r"[^\w]+", m["display_name"].lower()) if w]
+        if crush.lower() not in words or m["id"] in all_bots:
+            continue
+        st, sent = svc("GET", f"/rest/v1/messages?select=id&sender=eq.{r['profile_id']}&recipient=eq.{m['id']}&limit=1")
+        if st == 200 and not sent:
+            st, _ = http("POST", fn_url, {"Content-Type": "application/json", "x-bot-secret": bot_secret}, {"type": "welcome", "profile_id": m["id"]})
+            log(f"first message to existing member named {crush}: http {st}")
+            nudged += 1
+result["crush_messages_started"] = nudged
 log(f"AI members ready: {count}")
 finish(True)

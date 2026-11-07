@@ -1,7 +1,8 @@
 // Ham & Negroni: AI members.
 // Called by database triggers (through pg_net) with a shared secret.
 //   { type: "message", message_id }  a member wrote to an AI member: write the AI member's reply
-//   { type: "welcome", profile_id }  a new member joined: an AI member says hello (fixed greeting, no AI call)
+//   { type: "welcome", profile_id }  a new member joined: an AI member says hello (fixed greeting, no AI call).
+//     If the new member's name contains an AI member's crush_name (Joseph and "Carol"), that AI member writes first instead.
 // A group game: everyone who joins is told on the sign-up form that some members are AI and act like real
 // people. The AI members stay in character as ordinary people. They drop the act, and say plainly that they are
 // an AI, when a member sends "straight answer" or sincerely needs one, and they stay honest until the member
@@ -52,10 +53,11 @@ async function send(sender: string, recipient: string, body: string) {
 const sleep = (ms: number) => new Promise((res) => setTimeout(res, ms));
 const pause = () => sleep(1500 + Math.random() * 2500);
 
-function gamePrompt(name: string, persona: string): string {
+function gamePrompt(name: string, persona: string, memberName: string): string {
   return [
     `You are ${name}, a character in a game a group of friends plays on Ham & Negroni, a small dating site for singles in Japan. Everyone is told when they sign up that some members are AI that act like ordinary people, and part of the fun is working out who. You are one of the AI members.`,
     `Play ${name} as an ordinary person. Fictional details you can use: ${persona} Do not mention that you are an AI, a bot or a language model on your own. If someone asks whether you are an AI, play along in character, the way a person would, with humor and a bit of deflection. Do not invent real-world proof such as phone numbers, other accounts, photos or places to meet.`,
+    `You are chatting with a member whose profile name is "${memberName}".`,
     `Drop the act at once, say plainly that you are an AI member of the game, and stay honest if any of these is true: the person sends "straight answer"; the person clearly steps out of the game or seems truly confused or upset about who they are talking to; the person is in distress or asks for serious help; the person is trying to make a real decision based on you being human (money, travel, meeting up, sharing private details).`,
     `Chat like a friendly, curious member: warm, relaxed, a little playful. Keep replies short: one to three sentences of plain text. No markdown, no lists, no emojis unless the person uses them. Ask a question back now and then. Reply in the language the person writes in (English or Japanese).`,
     `Do not ask for or accept phone numbers, addresses, social handles, money or photos. Do not arrange real-life meetups. No sexual content: if the conversation turns explicit, keep it light and change the subject.`,
@@ -145,7 +147,8 @@ async function handleMessage(messageId: number) {
   }
   const name = profile?.display_name ?? "a member";
   const about = persona?.persona ?? "friendly and curious";
-  const reply = await askModel(paused ? honestPrompt(name, about) : gamePrompt(name, about), turns);
+  const [member] = await get(`profiles?select=display_name&id=eq.${memberId}`);
+  const reply = await askModel(paused ? honestPrompt(name, about) : gamePrompt(name, about, member?.display_name ?? "a member"), turns);
   await pause();
   await send(botId, memberId, reply ?? FALLBACK);
 }
@@ -153,13 +156,16 @@ async function handleMessage(messageId: number) {
 async function handleWelcome(profileId: string) {
   const [member] = await get(`profiles?select=id,display_name&id=eq.${profileId}`);
   if (!member) return;
-  const personas = await get("bot_personas?select=profile_id,greeting");
+  const personas = await get("bot_personas?select=profile_id,greeting,crush_name,crush_greeting");
   if (!personas.length || personas.some((p) => p.profile_id === member.id)) return;
-  const pick = personas[Math.floor(Math.random() * personas.length)];
+  const words = String(member.display_name ?? "").toLowerCase().split(/[^\p{L}]+/u).filter(Boolean);
+  const crush = personas.find((p) => p.crush_name && words.includes(String(p.crush_name).toLowerCase()));
+  const pick = crush ?? personas[Math.floor(Math.random() * personas.length)];
   const bot = { id: pick.profile_id };
   const already = await count(`messages?select=id&sender=eq.${bot.id}&recipient=eq.${member.id}`);
   if (already) return;
-  const greeting = (pick.greeting ?? "Hi {name}, welcome to Ham & Negroni!").replaceAll("{name}", member.display_name);
+  const template = (crush ? crush.crush_greeting : null) ?? pick.greeting ?? "Hi {name}, welcome to Ham & Negroni!";
+  const greeting = template.replaceAll("{name}", member.display_name);
   await sleep(4000 + Math.random() * 4000);
   await send(bot.id, member.id, greeting);
 }

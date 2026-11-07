@@ -138,6 +138,9 @@ create table if not exists public.bot_personas (
   persona    text not null,
   greeting   text not null
 );
+-- An AI member can have a crush: a first name that makes them write first (instead of the usual random welcome).
+alter table public.bot_personas add column if not exists crush_name text;
+alter table public.bot_personas add column if not exists crush_greeting text;
 create table if not exists public.bot_config (
   key   text primary key,
   value text not null
