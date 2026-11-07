@@ -1,5 +1,5 @@
 {
-  "run": "42330892339",
+  "run": "42331104914",
   "site": "http://127.0.0.1:8765/",
   "steps": [
     {
@@ -40,7 +40,7 @@
     {
       "step": "admin can see both QA users",
       "ok": true,
-      "detail": "{'a': '06eb6446-a3c5-4e03-b0f4-b4396341fc80', 'b': '9f58cc91-e8dd-4154-84ba-a49cb1d0392b'}"
+      "detail": "{'a': '772ba48e-db88-4b29-b330-0f37837ff270', 'b': '295929b1-667e-4526-9a26-1157dfafd223'}"
     },
     {
       "step": "realtime: B's Tab updated without reload",
@@ -100,7 +100,7 @@
     {
       "step": "B sees A's photo on the People card",
       "ok": true,
-      "detail": "https://itnxowacktdwbetzkhmw.supabase.co/storage/v1/object/public/avatars/06eb6446-a3c5-4e03-b0f4-b4396341fc80/avatar.jpg?v=1794019697662"
+      "detail": "https://itnxowacktdwbetzkhmw.supabase.co/storage/v1/object/public/avatars/772ba48e-db88-4b29-b330-0f37837ff270/avatar.jpg?v=1794019821349"
     },
     {
       "step": "person sheet shows the bio",
@@ -123,12 +123,22 @@
       "detail": "[]"
     },
     {
-      "step": "deleted QA user 06eb6446",
+      "step": "deleted QA photo 772ba48e",
+      "ok": true,
+      "detail": "(200, [{'name': '772ba48e-db88-4b29-b330-0f37837ff270/avatar.jpg', 'bucket_id': 'avatars', 'owner': '772ba48e-db88-4b29-b330-0f37837ff270', 'owner_id': '772ba48e-db88-4b29-b330-0f37837ff270', 'version': 'c6382a66-49cd-4301-acff-bb0895415693', 'id': 'cf04d693-4717-4994-9c01-60250dc5f571', 'updated_at': '2026-11-07T02:50:21.268Z', 'created_at': '2026-11-07T02:50:21.268Z', 'last_accessed_at': '2026-1"
+    },
+    {
+      "step": "deleted QA user 772ba48e",
       "ok": true,
       "detail": "200"
     },
     {
-      "step": "deleted QA user 9f58cc91",
+      "step": "deleted QA photo 295929b1",
+      "ok": true,
+      "detail": "(200, 'nothing to delete')"
+    },
+    {
+      "step": "deleted QA user 295929b1",
       "ok": true,
       "detail": "200"
     },
@@ -139,12 +149,12 @@
     },
     {
       "step": "no QA photos remain",
-      "ok": false,
-      "detail": "['06eb6446-a3c5-4e03-b0f4-b4396341fc80']"
+      "ok": true,
+      "detail": "[]"
     }
   ],
-  "pass": false,
-  "started": "2026-11-07T02:47:57Z",
+  "pass": true,
+  "started": "2026-11-07T02:50:01Z",
   "realtime": true,
-  "finished": "2026-11-07T02:48:24Z"
+  "finished": "2026-11-07T02:50:28Z"
 }
