@@ -460,7 +460,6 @@
         '<div class="thread-head"><a class="icon-btn back" href="#chats" aria-label="Back to messages">‹</a>' + avatar(peer, 'sm') + '<span class="cname">' + nm(peer) + '</span></div>' +
         '<div class="bubbles" data-bubbles>' + (thread.length ? thread.map((m) => '<div class="bubble' + (m.sender === state.user.id ? ' mine' : '') + '">' + esc(m.body) + '<time>' + esc(clock(m.created_at)) + '</time></div>').join('') : '<p class="small" style="text-align:center;padding:20px 0">No messages yet. Say hi.</p>') + '</div>' +
         '<form class="composer" data-composer><input name="body" type="text" maxlength="2000" autocomplete="off" placeholder="Write a message" aria-label="Message" required><button class="btn btn-primary" type="submit">Send</button></form>' +
-        '<p class="small game-note">Some members are AI. Send &quot;straight answer&quot; for an honest answer.</p>' +
         '</section>';
     } else {
       right = '<div class="empty" data-mobile-hide><h3>Select a conversation</h3><p>Choose one from the list, or start a new one.</p></div>';

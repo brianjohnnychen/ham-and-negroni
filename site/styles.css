@@ -383,7 +383,7 @@ p { margin: 0; }
 .convo .cpreview { display: block; font-size: 0.88rem; color: var(--cocoa); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .convo .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--negroni); }
 .thread {
-  background: var(--cream); border-radius: var(--radius); display: grid; grid-template-rows: auto 1fr auto auto;
+  background: var(--cream); border-radius: var(--radius); display: grid; grid-template-rows: auto 1fr auto;
   min-height: 60dvh; max-height: calc(100dvh - var(--head-h) - var(--tabbar-h) - 60px);
 }
 .thread-head { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-bottom: 2px dashed var(--pink-deep); }
@@ -431,4 +431,3 @@ p { margin: 0; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
-.game-note { margin: 0; padding: 8px 14px 12px; text-align: center; }

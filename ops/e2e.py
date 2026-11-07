@@ -145,6 +145,8 @@ try:
         step("founder titles list is gone", "Chief Taste Officer" not in landing and "Last Train Coordinator" not in landing and B.query_selector(".founder-list") is None)
         step("landing does not name the game", "Find the AI" not in landing)
         step("founders are still credited in one plain line", "Carol, Anderson, Thomas, Brian, Timothy and Joseph" in landing)
+        site_text = B.text_content("body")
+        step("sign-up still says some members are AI and how to get a straight answer", "Some members are AI and act like real people" in site_text and "straight answer" in site_text)
         step("not in demo mode", A.evaluate("() => !!(window.HN_CONFIG && window.HN_CONFIG.url)"), "config.js has a backend url")
 
         # join
@@ -186,6 +188,8 @@ try:
         people_text = A.text_content("#view-root")
         step("People lists the AI members with no AI label", A.eval_on_selector_all(".person-name", "els => els.length") >= 11 and "(a)" not in people_text and "AI member" not in people_text and A.query_selector(".ai-tag") is None)
         step("Joseph shows with his photo on People", A.evaluate("() => [...document.querySelectorAll('.person')].some(c => (c.querySelector('.person-name') || {}).textContent === 'Joseph' && c.querySelector('.person-photo img[src*=\"/avatars/\"]'))"))
+        top4 = A.eval_on_selector_all(".person-name", "els => els.slice(0, 4).map(e => e.textContent)")
+        step("Joseph is in the top 4 on People", "Joseph" in top4, top4)
         step("People says some members are AI", "Some members are AI" in people_text and "Find the AI" not in people_text)
         A.screenshot(path=f"{OUT}/mobile-people-ai.png", full_page=True)
         try:
@@ -219,7 +223,7 @@ try:
             bot = bots[0]
             nav(A, "chats/" + bot["id"])
             A.wait_for_selector("[data-composer] input", timeout=15000)
-            step("chat tells everyone how to get a straight answer", "straight answer" in A.text_content("#view-root") and "Find the AI" not in A.text_content("#view-root"))
+            step("chat page carries no game note", "Some members are AI" not in A.text_content("#view-root") and "straight answer" not in A.text_content("#view-root"))
             incoming = "[data-bubbles] .bubble:not(.mine)"
 
             def ask(text, want_in_bubbles):

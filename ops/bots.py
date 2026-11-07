@@ -16,6 +16,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 import uuid
+from datetime import datetime, timedelta
 
 URL = os.environ["SUPABASE_URL"].rstrip("/")
 SERVICE = os.environ["SUPABASE_SERVICE_ROLE_KEY"]
@@ -165,6 +166,21 @@ def find_user_id(email):
     return None
 
 
+def place_in_list(uid, slot):
+    """People are listed by join date, so give this member a join date that lands them at position `slot`
+    (1 = first) among everyone. Later sign-ups always land after them, so they stay near the top."""
+    st, rows = svc("GET", f"/rest/v1/profiles?select=id,created_at&id=neq.{uid}&order=created_at.asc,id.asc")
+    if st != 200 or not isinstance(rows, list) or len(rows) < slot:
+        return False, f"cannot place: http {st}, {len(rows) if isinstance(rows, list) else '?'} other members"
+    after = datetime.fromisoformat(rows[slot - 1]["created_at"])
+    before = datetime.fromisoformat(rows[slot - 2]["created_at"]) if slot >= 2 else after - timedelta(seconds=2)
+    if after - before < timedelta(microseconds=2):
+        return False, "neighbouring members share a join time"
+    when = (before + (after - before) / 2).isoformat(timespec="microseconds")
+    st, res = svc("PATCH", f"/rest/v1/profiles?id=eq.{uid}", {"created_at": when}, {"Prefer": "return=minimal"})
+    return st in (200, 204), f"profile http {st} {when}"
+
+
 def upload_avatar(uid, path):
     """Puts a photo in the public avatars bucket where the app expects it and points the profile at it."""
     data = open(path, "rb").read()
@@ -210,6 +226,11 @@ for p in personas:
     if st not in (200, 201, 204):
         log(f"cannot write persona {p['name']}: http {st} {res}")
         finish(False)
+    if p.get("slot"):
+        ok, detail = place_in_list(prof["id"], p["slot"])
+        log(f"{p['name']}: list position {p['slot']} " + ("set" if ok else "FAILED " + detail))
+        if not ok:
+            finish(False)
     if p.get("avatar_file"):
         ok, detail = upload_avatar(prof["id"], p["avatar_file"])
         log(f"{p['name']}: photo " + ("set" if ok else "FAILED " + detail))
