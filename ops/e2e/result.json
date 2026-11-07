@@ -1,5 +1,5 @@
 {
-  "run": "42340980776",
+  "run": "42341921831",
   "site": "http://127.0.0.1:8765/",
   "steps": [
     {
@@ -14,6 +14,11 @@
     },
     {
       "step": "founder titles list is gone",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "step": "landing does not name the game",
       "ok": true,
       "detail": ""
     },
@@ -60,10 +65,10 @@
     {
       "step": "admin can see both QA users",
       "ok": true,
-      "detail": "{'a': '02517127-f466-4fde-87d4-adb4d1b0f91d', 'b': 'c02ff1fc-4c7c-4e7f-8aab-8baa2b6485d2'}"
+      "detail": "{'a': 'f80ca413-df47-43b4-9c19-8811de1f7fe3', 'b': '2e7b80c8-3d94-4d31-9b91-d9f1075ed7e8'}"
     },
     {
-      "step": "ten AI members exist",
+      "step": "at least ten AI members exist",
       "ok": true,
       "detail": "['Daiki', 'Hana', 'Haruto', 'Kenji', 'Mei', 'Ren', 'Rina', 'Sakura', 'Takumi', 'Yui']"
     },
@@ -73,14 +78,14 @@
       "detail": ""
     },
     {
-      "step": "People explains that Find the AI is on",
+      "step": "People says some members are AI",
       "ok": true,
       "detail": ""
     },
     {
       "step": "a welcome message from a member arrives",
       "ok": true,
-      "detail": "RRenHi QA Carol, welcome to the site. I'm Ren. Got a favorite album?"
+      "detail": "SSakuraHi QA Carol, welcome to the site! I'm Sakura. Where was your last trip?"
     },
     {
       "step": "members cannot read an AI flag on profiles",
@@ -93,24 +98,24 @@
       "detail": "http 403"
     },
     {
-      "step": "chat tells everyone how to pause the game",
+      "step": "chat tells everyone how to get a straight answer",
       "ok": true,
       "detail": ""
     },
     {
       "step": "member Daiki replies live",
       "ok": true,
-      "detail": "Hey! Weekends are usually baseball on TV if the Hawks are playing, or spinning some records at home for fun. I also have a weakness for a big bowl of tonkotsu ramen after a long week. What about you, "
+      "detail": "Hey, nice to meet you! Weekends are usually baseball or a long tonkotsu ramen lunch if I can find a good spot. I also spin records at home sometimes, which my neighbors may or may not appreciate. What"
     },
     {
-      "step": "pause game gets a straight answer",
+      "step": "asking for a straight answer gets one",
       "ok": true,
-      "detail": "Game paused. Straight answer: I'm an AI member of Find the AI, not a real person. Send \"resume game\" to keep playing, or just keep chatting and I'll stay honest."
+      "detail": "Straight answer: I'm an AI member, not a real person. Say \"play along\" to carry on as before, or keep chatting and I'll stay honest."
     },
     {
-      "step": "resume game continues the game",
+      "step": "play along carries on",
       "ok": true,
-      "detail": "Back in the game."
+      "detail": "Okay, back to it."
     },
     {
       "step": "realtime: B's feed updated without reload",
@@ -170,7 +175,7 @@
     {
       "step": "B sees A's photo on the People card",
       "ok": true,
-      "detail": "https://itnxowacktdwbetzkhmw.supabase.co/storage/v1/object/public/avatars/02517127-f466-4fde-87d4-adb4d1b0f91d/avatar.jpg?v=1794027810693"
+      "detail": "https://itnxowacktdwbetzkhmw.supabase.co/storage/v1/object/public/avatars/f80ca413-df47-43b4-9c19-8811de1f7fe3/avatar.jpg?v=1794028637374"
     },
     {
       "step": "person sheet shows the bio",
@@ -193,22 +198,22 @@
       "detail": "[]"
     },
     {
-      "step": "deleted QA photo 02517127",
+      "step": "deleted QA photo f80ca413",
       "ok": true,
-      "detail": "(200, [{'name': '02517127-f466-4fde-87d4-adb4d1b0f91d/avatar.jpg', 'bucket_id': 'avatars', 'owner': '02517127-f466-4fde-87d4-adb4d1b0f91d', 'owner_id': '02517127-f466-4fde-87d4-adb4d1b0f91d', 'version': '6a8e22ff-1f0b-468c-87b5-4952d79f971c', 'id': '0e6be916-bfbc-4843-95d7-73927ee56e22', 'updated_at': '2026-11-07T05:03:30.570Z', 'created_at': '2026-11-07T05:03:30.570Z', 'last_accessed_at': '2026-1"
+      "detail": "(200, [{'name': 'f80ca413-df47-43b4-9c19-8811de1f7fe3/avatar.jpg', 'bucket_id': 'avatars', 'owner': 'f80ca413-df47-43b4-9c19-8811de1f7fe3', 'owner_id': 'f80ca413-df47-43b4-9c19-8811de1f7fe3', 'version': '26d50416-5cd1-4285-94c1-1496f5c75faf', 'id': '92692fbb-672a-486c-ac1f-fba3aa3a7760', 'updated_at': '2026-11-07T05:17:17.269Z', 'created_at': '2026-11-07T05:17:17.269Z', 'last_accessed_at': '2026-1"
     },
     {
-      "step": "deleted QA user 02517127",
+      "step": "deleted QA user f80ca413",
       "ok": true,
       "detail": "200"
     },
     {
-      "step": "deleted QA photo c02ff1fc",
+      "step": "deleted QA photo 2e7b80c8",
       "ok": true,
       "detail": "(200, 'nothing to delete')"
     },
     {
-      "step": "deleted QA user c02ff1fc",
+      "step": "deleted QA user 2e7b80c8",
       "ok": true,
       "detail": "200"
     },
@@ -224,7 +229,7 @@
     }
   ],
   "pass": true,
-  "started": "2026-11-07T05:02:42Z",
+  "started": "2026-11-07T05:16:36Z",
   "realtime": true,
-  "finished": "2026-11-07T05:03:41Z"
+  "finished": "2026-11-07T05:17:24Z"
 }
