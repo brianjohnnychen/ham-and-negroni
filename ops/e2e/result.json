@@ -1,5 +1,5 @@
 {
-  "run": "42332305964",
+  "run": "42332621662",
   "site": "http://127.0.0.1:8765/",
   "steps": [
     {
@@ -60,7 +60,7 @@
     {
       "step": "admin can see both QA users",
       "ok": true,
-      "detail": "{'a': '0f2c61df-a771-4227-ab38-4484f0f50939', 'b': 'c22a715a-eace-435e-985c-6f0e7114ec78'}"
+      "detail": "{'a': '8a10ef41-86b3-467b-adb7-7827f138cc26', 'b': 'e5382cb9-2b6f-46d5-b05c-4656878609c7'}"
     },
     {
       "step": "realtime: B's feed updated without reload",
@@ -120,7 +120,7 @@
     {
       "step": "B sees A's photo on the People card",
       "ok": true,
-      "detail": "https://itnxowacktdwbetzkhmw.supabase.co/storage/v1/object/public/avatars/0f2c61df-a771-4227-ab38-4484f0f50939/avatar.jpg?v=1794020810004"
+      "detail": "https://itnxowacktdwbetzkhmw.supabase.co/storage/v1/object/public/avatars/8a10ef41-86b3-467b-adb7-7827f138cc26/avatar.jpg?v=1794020984071"
     },
     {
       "step": "person sheet shows the bio",
@@ -143,22 +143,22 @@
       "detail": "[]"
     },
     {
-      "step": "deleted QA photo 0f2c61df",
+      "step": "deleted QA photo 8a10ef41",
       "ok": true,
-      "detail": "(200, [{'name': '0f2c61df-a771-4227-ab38-4484f0f50939/avatar.jpg', 'bucket_id': 'avatars', 'owner': '0f2c61df-a771-4227-ab38-4484f0f50939', 'owner_id': '0f2c61df-a771-4227-ab38-4484f0f50939', 'version': 'dac169c8-e2da-4d14-b982-3133947a3340', 'id': '111ab7da-25f1-42ff-84d9-0bf9f7887f96', 'updated_at': '2026-11-07T03:06:49.924Z', 'created_at': '2026-11-07T03:06:49.924Z', 'last_accessed_at': '2026-1"
+      "detail": "(200, [{'name': '8a10ef41-86b3-467b-adb7-7827f138cc26/avatar.jpg', 'bucket_id': 'avatars', 'owner': '8a10ef41-86b3-467b-adb7-7827f138cc26', 'owner_id': '8a10ef41-86b3-467b-adb7-7827f138cc26', 'version': 'ff4b064a-a30a-4701-ad3a-08e72fc8b04a', 'id': '80c8d6be-b9f7-49c0-8d83-1e7c1f63f52d', 'updated_at': '2026-11-07T03:09:43.907Z', 'created_at': '2026-11-07T03:09:43.907Z', 'last_accessed_at': '2026-1"
     },
     {
-      "step": "deleted QA user 0f2c61df",
+      "step": "deleted QA user 8a10ef41",
       "ok": true,
       "detail": "200"
     },
     {
-      "step": "deleted QA photo c22a715a",
+      "step": "deleted QA photo e5382cb9",
       "ok": true,
       "detail": "(200, 'nothing to delete')"
     },
     {
-      "step": "deleted QA user c22a715a",
+      "step": "deleted QA user e5382cb9",
       "ok": true,
       "detail": "200"
     },
@@ -174,7 +174,7 @@
     }
   ],
   "pass": true,
-  "started": "2026-11-07T03:06:30Z",
+  "started": "2026-11-07T03:09:22Z",
   "realtime": true,
-  "finished": "2026-11-07T03:06:57Z"
+  "finished": "2026-11-07T03:09:51Z"
 }
