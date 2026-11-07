@@ -1,5 +1,5 @@
 {
-  "run": "42340731998",
+  "run": "42340980776",
   "site": "http://127.0.0.1:8765/",
   "steps": [
     {
@@ -60,7 +60,7 @@
     {
       "step": "admin can see both QA users",
       "ok": true,
-      "detail": "{'a': 'af28606c-d768-497c-a469-2d010895c9ed', 'b': 'e13a04c4-2330-4821-ad15-f0349cc0cbb1'}"
+      "detail": "{'a': '02517127-f466-4fde-87d4-adb4d1b0f91d', 'b': 'c02ff1fc-4c7c-4e7f-8aab-8baa2b6485d2'}"
     },
     {
       "step": "ten AI members exist",
@@ -80,7 +80,7 @@
     {
       "step": "a welcome message from a member arrives",
       "ok": true,
-      "detail": "HHarutoHi QA Carol, glad you're here. I'm Haruto. Do you play board games?"
+      "detail": "RRenHi QA Carol, welcome to the site. I'm Ren. Got a favorite album?"
     },
     {
       "step": "members cannot read an AI flag on profiles",
@@ -100,7 +100,7 @@
     {
       "step": "member Daiki replies live",
       "ok": true,
-      "detail": "Hi! On weekends I usually catch a baseball game if I can, or grab a bowl of tonkotsu ramen with friends in Fukuoka. Sometimes I spend the evening spinning records too, since DJing is my favorite hobby"
+      "detail": "Hey! Weekends are usually baseball on TV if the Hawks are playing, or spinning some records at home for fun. I also have a weakness for a big bowl of tonkotsu ramen after a long week. What about you, "
     },
     {
       "step": "pause game gets a straight answer",
@@ -170,7 +170,7 @@
     {
       "step": "B sees A's photo on the People card",
       "ok": true,
-      "detail": "https://itnxowacktdwbetzkhmw.supabase.co/storage/v1/object/public/avatars/af28606c-d768-497c-a469-2d010895c9ed/avatar.jpg?v=1794027681961"
+      "detail": "https://itnxowacktdwbetzkhmw.supabase.co/storage/v1/object/public/avatars/02517127-f466-4fde-87d4-adb4d1b0f91d/avatar.jpg?v=1794027810693"
     },
     {
       "step": "person sheet shows the bio",
@@ -184,8 +184,8 @@
     },
     {
       "step": "no page errors (A)",
-      "ok": false,
-      "detail": "[\"console: Access to fetch at 'https://itnxowacktdwbetzkhmw.supabase.co/rest/v1/verdicts?select=*&order=created_at.desc&limit=150' from origin 'http://127.0.0.1:8765' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.\", 'console: Failed to load resource: net::ERR_FAILED']"
+      "ok": true,
+      "detail": "[]"
     },
     {
       "step": "no page errors (B)",
@@ -193,22 +193,22 @@
       "detail": "[]"
     },
     {
-      "step": "deleted QA photo af28606c",
+      "step": "deleted QA photo 02517127",
       "ok": true,
-      "detail": "(200, [{'name': 'af28606c-d768-497c-a469-2d010895c9ed/avatar.jpg', 'bucket_id': 'avatars', 'owner': 'af28606c-d768-497c-a469-2d010895c9ed', 'owner_id': 'af28606c-d768-497c-a469-2d010895c9ed', 'version': 'd56ae68e-7740-4a5f-aa09-865cf7a9acd6', 'id': '6e4196e5-6325-43b9-95e5-17ba6ba6157c', 'updated_at': '2026-11-07T05:01:21.853Z', 'created_at': '2026-11-07T05:01:21.853Z', 'last_accessed_at': '2026-1"
+      "detail": "(200, [{'name': '02517127-f466-4fde-87d4-adb4d1b0f91d/avatar.jpg', 'bucket_id': 'avatars', 'owner': '02517127-f466-4fde-87d4-adb4d1b0f91d', 'owner_id': '02517127-f466-4fde-87d4-adb4d1b0f91d', 'version': '6a8e22ff-1f0b-468c-87b5-4952d79f971c', 'id': '0e6be916-bfbc-4843-95d7-73927ee56e22', 'updated_at': '2026-11-07T05:03:30.570Z', 'created_at': '2026-11-07T05:03:30.570Z', 'last_accessed_at': '2026-1"
     },
     {
-      "step": "deleted QA user af28606c",
+      "step": "deleted QA user 02517127",
       "ok": true,
       "detail": "200"
     },
     {
-      "step": "deleted QA photo e13a04c4",
+      "step": "deleted QA photo c02ff1fc",
       "ok": true,
       "detail": "(200, 'nothing to delete')"
     },
     {
-      "step": "deleted QA user e13a04c4",
+      "step": "deleted QA user c02ff1fc",
       "ok": true,
       "detail": "200"
     },
@@ -223,8 +223,8 @@
       "detail": "[]"
     }
   ],
-  "pass": false,
-  "started": "2026-11-07T05:00:21Z",
+  "pass": true,
+  "started": "2026-11-07T05:02:42Z",
   "realtime": true,
-  "finished": "2026-11-07T05:01:30Z"
+  "finished": "2026-11-07T05:03:41Z"
 }
