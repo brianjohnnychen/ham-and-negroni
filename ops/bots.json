@@ -1,10 +1,10 @@
 {
-  "started": "2026-11-07T06:27:42Z",
+  "started": "2026-11-07T06:31:11Z",
   "anthropic_key_present": true,
   "function_deployed": true,
   "bots": 11,
   "ok": true,
-  "founders_notes_present": false,
+  "founders_notes_present": true,
   "crush_messages_started": 0,
-  "finished": "2026-11-07T06:27:52Z"
+  "finished": "2026-11-07T06:31:19Z"
 }
