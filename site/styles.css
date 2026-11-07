@@ -383,7 +383,7 @@ p { margin: 0; }
 .convo .cpreview { display: block; font-size: 0.88rem; color: var(--cocoa); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .convo .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--negroni); }
 .thread {
-  background: var(--cream); border-radius: var(--radius); display: grid; grid-template-rows: auto 1fr auto;
+  background: var(--cream); border-radius: var(--radius); display: grid; grid-template-rows: auto 1fr auto auto;
   min-height: 60dvh; max-height: calc(100dvh - var(--head-h) - var(--tabbar-h) - 60px);
 }
 .thread-head { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-bottom: 2px dashed var(--pink-deep); }
@@ -431,12 +431,4 @@ p { margin: 0; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
-
-/* AI members */
-.ai-tag { font-family: var(--sans); font-size: 0.8em; font-weight: 600; color: var(--cocoa); letter-spacing: 0; white-space: nowrap; }
-.bubble.typing { display: inline-flex; gap: 4px; align-items: center; padding: 12px 14px; }
-.bubble.typing span { width: 7px; height: 7px; border-radius: 50%; background: var(--cocoa); opacity: 0.35; animation: hn-typing 1.2s infinite ease-in-out; }
-.bubble.typing span:nth-child(2) { animation-delay: 0.15s; }
-.bubble.typing span:nth-child(3) { animation-delay: 0.3s; }
-@keyframes hn-typing { 0%, 80%, 100% { opacity: 0.3; transform: translateY(0); } 40% { opacity: 0.9; transform: translateY(-3px); } }
-@media (prefers-reduced-motion: reduce) { .bubble.typing span { animation: none; opacity: 0.6; } }
+.game-note { margin: 0; padding: 8px 14px 12px; text-align: center; }

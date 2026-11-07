@@ -144,7 +144,11 @@ if not deployed:
 
 # ------------------------------------------------------------------ the AI member accounts
 personas = json.load(open("ops/bot_personas.json"))
-st, existing = svc("GET", "/rest/v1/profiles?select=id,display_name,is_bot&is_bot=eq.true")
+st, plist = svc("GET", "/rest/v1/bot_personas?select=profile_id")
+bot_ids = [r["profile_id"] for r in (plist if isinstance(plist, list) else [])]
+existing = []
+if bot_ids:
+    st, existing = svc("GET", "/rest/v1/profiles?select=id,display_name&id=in.(" + ",".join(bot_ids) + ")")
 by_name = {p["display_name"]: p for p in (existing if isinstance(existing, list) else [])}
 
 
@@ -175,16 +179,16 @@ for p in personas:
         if not uid:
             log(f"could not create {p['name']}: http {st} {str(res)[:200]}")
             finish(False)
-        # the profile is created by a trigger; make sure it exists and is flagged
+        # the profile is created by a trigger; make sure it exists
         for _ in range(10):
-            st, rows = svc("GET", f"/rest/v1/profiles?select=id,is_bot&id=eq.{uid}")
+            st, rows = svc("GET", f"/rest/v1/profiles?select=id&id=eq.{uid}")
             if st == 200 and rows:
                 break
             time.sleep(1)
         else:
-            st, _ = svc("POST", "/rest/v1/profiles", {"id": uid, "display_name": p["name"], "is_bot": True}, {"Prefer": "return=minimal"})
+            st, _ = svc("POST", "/rest/v1/profiles", {"id": uid, "display_name": p["name"]}, {"Prefer": "return=minimal"})
         prof = {"id": uid}
-    st, res = svc("PATCH", f"/rest/v1/profiles?id=eq.{prof['id']}", {"is_bot": True, "display_name": p["name"], "bio": p["bio"]}, {"Prefer": "return=minimal"})
+    st, res = svc("PATCH", f"/rest/v1/profiles?id=eq.{prof['id']}", {"display_name": p["name"], "bio": p["bio"]}, {"Prefer": "return=minimal"})
     if st not in (200, 204):
         log(f"cannot update profile {p['name']}: http {st} {res}")
         finish(False)

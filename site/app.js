@@ -45,9 +45,8 @@
     clearTimeout(toast._t);
     toast._t = setTimeout(() => { el.hidden = true; }, ms || 2600);
   }
-  // AI members carry an (a) after their name everywhere they appear.
-  function nm(p) { return esc(p.display_name) + (p.is_bot ? ' <span class="ai-tag" title="AI member">(a)</span>' : ''); }
-  function plainName(p) { return p.display_name + (p.is_bot ? ' (a)' : ''); }
+  const nm = (p) => esc(p.display_name);
+  const plainName = (p) => p.display_name;
   function friendlyError(err) {
     const m = (err && err.message) || String(err || 'Something went wrong');
     if (/already registered|already exists|already been registered/i.test(m)) return 'That email is already registered. Sign in instead.';
@@ -88,7 +87,6 @@
     peer: null,
     seen: {},
     realtime: false,
-    typing: {},              // peer id -> when I last wrote to an AI member
   };
   try { state.seen = JSON.parse(localStorage.getItem('hn.seen') || '{}'); } catch (e) { state.seen = {}; }
   const me = () => state.profiles.get(state.user && state.user.id) || null;
@@ -324,7 +322,6 @@
         if (state.msgs.some((x) => x.id === m.id)) return;
         state.msgs.unshift(m);
         const peer = m.sender === state.user.id ? m.recipient : m.sender;
-        if (m.sender !== state.user.id) delete state.typing[peer];
         if (state.view === 'chats' && state.peer === peer) markSeen(peer);
         if (!state.profiles.has(peer)) refreshProfiles().then(render); else render();
         if (m.sender !== state.user.id && !(state.view === 'chats' && state.peer === peer)) toast((state.profiles.get(m.sender) ? plainName(state.profiles.get(m.sender)) : 'Someone') + ' sent you a message');
@@ -404,7 +401,7 @@
 
   function renderPeople() {
     const others = Array.from(state.profiles.values()).filter((p) => p.id !== state.user.id);
-    let html = '<div class="view-head"><div><h2>People</h2><p>' + (others.length ? others.length + (others.length === 1 ? ' other member' : ' other members') + '. Like or dislike anyone; it shows on the feed.' : 'Like or dislike anyone; it shows on the feed.') + ' Members marked <span class="ai-tag">(a)</span> are AI.</p></div></div>';
+    let html = '<div class="view-head"><div><h2>People</h2><p>' + (others.length ? others.length + (others.length === 1 ? ' other member' : ' other members') + '. Like or dislike anyone; it shows on the feed.' : 'Like or dislike anyone; it shows on the feed.') + ' Find the AI is on: some members are AI.</p></div></div>';
     if (!others.length) {
       return html + '<div class="empty"><h3>You are the first one here.</h3><p>Invite your friends to get started.</p><button class="btn btn-soft" type="button" data-share>Copy invite link</button></div>';
     }
@@ -461,20 +458,14 @@
       const thread = state.msgs.filter((m) => (m.sender === state.peer && m.recipient === state.user.id) || (m.sender === state.user.id && m.recipient === state.peer)).slice().reverse();
       right = '<section class="thread" aria-label="Conversation with ' + esc(peer.display_name) + '">' +
         '<div class="thread-head"><a class="icon-btn back" href="#chats" aria-label="Back to messages">‹</a>' + avatar(peer, 'sm') + '<span class="cname">' + nm(peer) + '</span></div>' +
-        '<div class="bubbles" data-bubbles>' + (peer.is_bot ? '<p class="small" style="text-align:center;margin:0 0 6px">AI member (a). Replies are written by AI.</p>' : '') + (thread.length ? thread.map((m) => '<div class="bubble' + (m.sender === state.user.id ? ' mine' : '') + '">' + esc(m.body) + '<time>' + esc(clock(m.created_at)) + '</time></div>').join('') : '<p class="small" style="text-align:center;padding:20px 0">No messages yet. Say hi.</p>') + typingBubble(peer, thread) + '</div>' +
+        '<div class="bubbles" data-bubbles>' + (thread.length ? thread.map((m) => '<div class="bubble' + (m.sender === state.user.id ? ' mine' : '') + '">' + esc(m.body) + '<time>' + esc(clock(m.created_at)) + '</time></div>').join('') : '<p class="small" style="text-align:center;padding:20px 0">No messages yet. Say hi.</p>') + '</div>' +
         '<form class="composer" data-composer><input name="body" type="text" maxlength="2000" autocomplete="off" placeholder="Write a message" aria-label="Message" required><button class="btn btn-primary" type="submit">Send</button></form>' +
+        '<p class="small game-note">Find the AI is on. Send &quot;pause game&quot; for a straight answer.</p>' +
         '</section>';
     } else {
       right = '<div class="empty" data-mobile-hide><h3>Select a conversation</h3><p>Choose one from the list, or start a new one.</p></div>';
     }
     return html + '<div class="chat-layout">' + left + right + '</div>';
-  }
-
-  function typingBubble(peer, thread) {
-    const t = state.typing[peer.id];
-    const last = thread[thread.length - 1];
-    if (!peer.is_bot || !t || Date.now() - t > 25000 || !last || last.sender !== state.user.id) return '';
-    return '<div class="bubble typing" aria-label="' + esc(peer.display_name) + ' is typing"><span></span><span></span><span></span></div>';
   }
 
   function renderMe() {
@@ -500,7 +491,6 @@
     $('[data-person-body]').innerHTML =
       '<div class="big">' + (p.avatar_url ? '<img src="' + esc(p.avatar_url) + '" alt="">' : esc(initials(p.display_name))) + '</div>' +
       (p.bio ? '<p>' + esc(p.bio) + '</p>' : '<p class="muted">No bio yet.</p>') +
-      (p.is_bot ? '<p class="small">AI member (a). Replies are written by AI, so do not share personal details.</p>' : '') +
       '<div class="tally"><span class="chip round">👍 ' + t.round + (t.round === 1 ? ' like' : ' likes') + '</span><span class="chip night">👎 ' + t.night + (t.night === 1 ? ' dislike' : ' dislikes') + '</span></div>' +
       '<div class="actions">' +
         '<button class="btn btn-round' + (mv === 'round' ? ' is-active' : '') + '" type="button" data-verdict="round" data-target="' + esc(id) + '">Like</button>' +
@@ -525,7 +515,7 @@
     }
     if (t.hasAttribute('data-signout')) {
       await api.signOut();
-      state.user = null; state.profiles = new Map(); state.current = []; state.feed = []; state.msgs = []; state.typing = {};
+      state.user = null; state.profiles = new Map(); state.current = []; state.feed = []; state.msgs = [];
       history.replaceState(null, '', location.pathname + location.search);
       showLanding();
       toast('Signed out.');
@@ -558,8 +548,6 @@
       try {
         const m = await api.sendMessage(state.peer, body);
         if (!state.msgs.some((x) => x.id === m.id)) state.msgs.unshift(m);
-        const to = state.profiles.get(state.peer);
-        if (to && to.is_bot) { state.typing[state.peer] = Date.now(); setTimeout(() => { if (state.user) render(); }, 25500); }
         markSeen(state.peer);
         render();
         const again = $('[data-composer] input'); if (again) again.focus();

@@ -14,8 +14,10 @@ create table if not exists public.profiles (
 );
 -- The signup form no longer asks for a "usual order"; drop the old column on existing projects.
 alter table public.profiles drop column if exists drink;
--- AI members: shown with an (a) label in the app. Only the service role can set this.
-alter table public.profiles add column if not exists is_bot boolean not null default false;
+-- Who is an AI member is only recorded in bot_personas (not readable by members), so no client can tell.
+drop trigger if exists guard_bot_flag on public.profiles;
+drop function if exists public.guard_bot_flag();
+alter table public.profiles drop column if exists is_bot;
 
 -- ---------------------------------------------------------------- verdicts
 -- Append-only log. 'round' = like, 'night' = dislike (values kept from the original schema).
@@ -57,11 +59,10 @@ security definer
 set search_path = public
 as $$
 begin
-  insert into public.profiles (id, display_name, is_bot)
+  insert into public.profiles (id, display_name)
   values (
     new.id,
-    coalesce(nullif(trim(new.raw_user_meta_data ->> 'display_name'), ''), split_part(coalesce(new.email, 'someone'), '@', 1)),
-    coalesce((new.raw_app_meta_data ->> 'is_bot')::boolean, false)
+    coalesce(nullif(trim(new.raw_user_meta_data ->> 'display_name'), ''), split_part(coalesce(new.email, 'someone'), '@', 1))
   )
   on conflict (id) do nothing;
   return new;
@@ -128,7 +129,7 @@ grant select, insert on public.messages to authenticated;
 grant select on public.current_verdicts to authenticated;
 
 -- ---------------------------------------------------------------- AI members
--- Members flagged is_bot are AI personas. A message sent to one calls the bot-reply Edge Function
+-- Members with a bot_personas row are AI personas. A message sent to one calls the bot-reply Edge Function
 -- (through pg_net), which writes the reply as that member. New members also get a welcome message.
 create extension if not exists pg_net with schema extensions;
 
@@ -146,31 +147,6 @@ alter table public.bot_config enable row level security;
 revoke all on public.bot_personas, public.bot_config from anon, authenticated;
 drop table if exists public.bot_usage;
 
--- Only the service role (and the database owner) may change is_bot.
-create or replace function public.guard_bot_flag()
-returns trigger
-language plpgsql
-as $$
-declare
-  claims_text text := current_setting('request.jwt.claims', true);
-  who text := coalesce((case when coalesce(claims_text, '') = '' then null else claims_text::jsonb end) ->> 'role', '');
-begin
-  if who in ('anon', 'authenticated') then
-    if tg_op = 'INSERT' and new.is_bot then
-      raise exception 'is_bot cannot be set by members';
-    end if;
-    if tg_op = 'UPDATE' and new.is_bot is distinct from old.is_bot then
-      raise exception 'is_bot cannot be changed by members';
-    end if;
-  end if;
-  return new;
-end;
-$$;
-drop trigger if exists guard_bot_flag on public.profiles;
-create trigger guard_bot_flag
-  before insert or update on public.profiles
-  for each row execute function public.guard_bot_flag();
-
 create or replace function public.notify_bot_message()
 returns trigger
 language plpgsql
@@ -178,14 +154,11 @@ security definer
 set search_path = public
 as $$
 declare
-  recipient_is_bot boolean;
-  sender_is_bot boolean;
   fn_url text;
   fn_secret text;
 begin
-  select p.is_bot into recipient_is_bot from public.profiles p where p.id = new.recipient;
-  select p.is_bot into sender_is_bot from public.profiles p where p.id = new.sender;
-  if not coalesce(recipient_is_bot, false) or coalesce(sender_is_bot, false) then
+  if not exists (select 1 from public.bot_personas b where b.profile_id = new.recipient)
+     or exists (select 1 from public.bot_personas b where b.profile_id = new.sender) then
     return new;
   end if;
   select value into fn_url from public.bot_config where key = 'function_url';
@@ -216,7 +189,8 @@ declare
   fn_url text;
   fn_secret text;
 begin
-  if new.is_bot then
+  -- AI member accounts are created by an admin with app_metadata.is_bot; they do not get a welcome message
+  if exists (select 1 from auth.users u where u.id = new.id and coalesce((u.raw_app_meta_data ->> 'is_bot')::boolean, false)) then
     return new;
   end if;
   select value into fn_url from public.bot_config where key = 'function_url';

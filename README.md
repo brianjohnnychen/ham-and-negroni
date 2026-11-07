@@ -11,10 +11,12 @@ A joke dating site for friends in Japan. Founded by Carol, Anderson, Thomas, Bri
 
 Likes and dislikes are posted on the public feed, visible to all members. Messages are private to the two people in them (enforced by row-level security). Sign-up asks only for name, email and password; email confirmation is off.
 
-## AI members
+## Find the AI
 
-Ten AI members (five women, five men) are marked with `(a)` after their name, in People, the feed, messages and profiles. A message sent to one calls the `bot-reply` Supabase Edge Function (via a database trigger and pg_net), which writes the reply as that member using Claude Haiku 5.5. New members also get a fixed welcome message from a random AI member. Each persona is told to say it is an AI if asked.
+A game for the group. Ten AI members (five women, five men) are on the site and act like ordinary members; nothing in the app marks them. Everyone is told on the sign-up form, the landing page, People and every chat that some members are AI and act like real people.
 
-- Setup: `ops/bots.py` (run by `provision.yml`) deploys the function, sets its secrets, and creates the ten accounts from `ops/bot_personas.json`. Needs the repo secret `ANTHROPIC_API_KEY`.
-- Spending caps in the function: 30 replies per member per hour and 800 replies per day in total. Past the cap the AI member sends a "message me again later" line instead of calling the model.
-- Members cannot flag themselves as AI: `is_bot` is guarded by a trigger and only the service role can set it.
+- Replies come from the `bot-reply` Supabase Edge Function (database trigger, then pg_net) using Claude Haiku 5.5. New members also get a welcome message from a random AI member.
+- Straight answers: any member can send "pause game" in a chat and that AI member says plainly it is an AI and stays honest until "resume game". The persona also drops the act by itself if the person seems confused or upset, or is about to make a real decision based on it being human.
+- Which accounts are AI is stored only in `bot_personas` (not readable by members; there is no flag on profiles), so it cannot be read from the API.
+- Setup: `ops/bots.py` (run by `provision.yml`) deploys the function, sets its secrets and creates the accounts from `ops/bot_personas.json`. Needs the repo secret `ANTHROPIC_API_KEY`.
+- Spending caps in the function: 30 replies per member per hour and 800 per day in total.
