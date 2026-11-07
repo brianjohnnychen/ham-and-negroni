@@ -401,7 +401,7 @@
 
   function renderPeople() {
     const others = Array.from(state.profiles.values()).filter((p) => p.id !== state.user.id);
-    let html = '<div class="view-head"><div><h2>People</h2><p>' + (others.length ? others.length + (others.length === 1 ? ' other member' : ' other members') + '. Like or dislike anyone; it shows on the feed.' : 'Like or dislike anyone; it shows on the feed.') + ' Some members are AI.</p></div></div>';
+    let html = '<div class="view-head"><div><h2>People</h2><p>' + (others.length ? others.length + (others.length === 1 ? ' other member' : ' other members') + '. Like or dislike anyone; it shows on the feed.' : 'Like or dislike anyone; it shows on the feed.') + ' Some members are AI. <a href="etiquette.html">Dating etiquette</a></p></div></div>';
     if (!others.length) {
       return html + '<div class="empty"><h3>You are the first one here.</h3><p>Invite your friends to get started.</p><button class="btn btn-soft" type="button" data-share>Copy invite link</button></div>';
     }

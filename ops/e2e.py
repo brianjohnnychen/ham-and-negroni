@@ -150,6 +150,19 @@ try:
         step("sign-up still says some members are AI and how to get a straight answer", "Some members are AI and act like real people" in site_text and "straight answer" in site_text)
         step("not in demo mode", A.evaluate("() => !!(window.HN_CONFIG && window.HN_CONFIG.url)"), "config.js has a backend url")
 
+        # teaser edit and the etiquette page, on both viewports
+        step("Timothy is seeing someone on the landing feed", "Timothy is seeing someone" in landing and "Timothy is available" not in landing)
+        step("landing links to the etiquette guide", B.query_selector("#landing a[href='etiquette.html']") is not None)
+        for label, pg, shot in (("mobile", A, "mobile-etiquette.png"), ("desktop", B, "desktop-etiquette.png")):
+            pg.goto(SITE + "etiquette.html", wait_until="networkidle")
+            txt = pg.text_content("body")
+            step(f"etiquette page loads ({label})", "Dating in Japan: etiquette" in pg.text_content("h1"))
+            step(f"etiquette page covers paying and splitting ({label})", "Never split to the exact yen" in txt and "¥3,900" in txt and "Round her share down" in txt and "last train" in txt.lower())
+            step(f"etiquette page has no sideways scroll ({label})", pg.evaluate("() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1"), pg.evaluate("() => document.documentElement.scrollWidth + ' vs ' + document.documentElement.clientWidth"))
+            pg.screenshot(path=f"{OUT}/{shot}", full_page=True)
+        A.goto(SITE, wait_until="networkidle")
+        B.goto(SITE, wait_until="networkidle")
+
         # join
         join(A, qa["a"])
         step("A joins and lands in the app", True)
@@ -191,6 +204,7 @@ try:
         step("Joseph shows with his photo on People", A.evaluate("() => [...document.querySelectorAll('.person')].some(c => (c.querySelector('.person-name') || {}).textContent === 'Joseph' && c.querySelector('.person-photo img[src*=\"/avatars/\"]'))"))
         top4 = A.eval_on_selector_all(".person-name", "els => els.slice(0, 4).map(e => e.textContent)")
         step("Joseph is in the top 4 on People", "Joseph" in top4, top4)
+        step("People links to the etiquette guide", A.query_selector("#view-root a[href='etiquette.html']") is not None)
         step("People says some members are AI", "Some members are AI" in people_text and "Find the AI" not in people_text)
         A.screenshot(path=f"{OUT}/mobile-people-ai.png", full_page=True)
         try:

@@ -431,3 +431,32 @@ p { margin: 0; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
+
+/* ---------- etiquette page ---------- */
+.etiq-intro { padding: 28px 0 8px; display: grid; gap: 16px; }
+.etiq-intro h1 { font-size: clamp(2.2rem, 6.4vw, 3.6rem); }
+.etiq-jump { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+.etiq-jump a {
+  display: inline-flex; align-items: center; min-height: 38px; padding: 0 14px; border-radius: 999px;
+  background: var(--cream); border: 2px solid var(--pink-deep); color: var(--espresso); text-decoration: none; font-weight: 600; font-size: 0.92rem;
+}
+.etiq-jump a:hover { border-color: var(--negroni); }
+.etiq { display: grid; gap: 18px; }
+.etiq > * { max-width: 46em; }
+.etiq h2 [lang="ja"] { white-space: nowrap; }
+.etiq-page .section { scroll-margin-top: 12px; }
+.etiq-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+.etiq-list li { position: relative; padding-left: 24px; line-height: 1.6; }
+.etiq-list li::before {
+  content: ""; position: absolute; left: 3px; top: 0.62em; width: 9px; height: 9px; border-radius: 50%; background: var(--negroni);
+}
+.callout {
+  background: var(--cream); border: 2px solid var(--pink-deep); border-radius: var(--radius-sm); padding: 16px 18px; display: grid; gap: 8px; box-shadow: var(--shadow-sm);
+}
+.phrases { display: grid; gap: 10px; margin: 0; }
+.phrases > div { background: var(--cream); border-radius: var(--radius-sm); padding: 12px 16px; display: grid; gap: 2px; }
+.phrases dt { font-weight: 700; font-size: 1.05rem; }
+.phrases dd { margin: 0; color: var(--cocoa); }
+@media (min-width: 720px) { .phrases { grid-template-columns: 1fr 1fr; } }
+.sources { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; font-size: 0.95rem; }
+.sources a { overflow-wrap: anywhere; }
