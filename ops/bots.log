@@ -1,6 +1,7 @@
+FOUNDERS_NOTES is not set in the repo secrets; the AI members do not know the founders' details yet.
 bot_config ready
 edge secrets: http 201
-api deploy: http 201 {'id': '4170a284-9ea8-4fa3-a710-151b419b7ac9', 'slug': 'bot-reply', 'name': 'bot-reply', 'status': 'ACTIVE', 'version': 17, 'created_at': 1794025232764, 'updated_at': 1794032291186, 'verify_jwt': False, 'import_map': False, 'entrypoint_path': 'file:///tmp/user_fn_itnxowacktdwbetzkhmw_4170a284-9ea8-4
+api deploy: http 201 {'id': '4170a284-9ea8-4fa3-a710-151b419b7ac9', 'slug': 'bot-reply', 'name': 'bot-reply', 'status': 'ACTIVE', 'version': 19, 'created_at': 1794025232764, 'updated_at': 1794032864826, 'verify_jwt': False, 'import_map': False, 'entrypoint_path': 'file:///tmp/user_fn_itnxowacktdwbetzkhmw_4170a284-9ea8-4
 Joseph: list position 3 set
 Joseph: photo set
 AI members ready: 11
