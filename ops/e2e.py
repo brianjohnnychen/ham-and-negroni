@@ -88,6 +88,23 @@ def wait_text(page, selector, text, timeout=15000):
     page.wait_for_function("([s, t]) => { const el = document.querySelector(s); return !!el && el.textContent.includes(t); }", arg=[selector, text], timeout=timeout)
 
 
+def click_debug(page, selector, tag):
+    """Click, and if that fails keep a screenshot, what covers the target and the list markup."""
+    try:
+        page.click(selector, timeout=15000)
+    except Exception as ex:  # noqa: BLE001
+        info = ""
+        try:
+            page.screenshot(path=f"{OUT}/failure-{tag}.png", full_page=True)
+            info = page.evaluate("""(s) => { const el = document.querySelector(s); if (!el) return 'target missing';
+              const r = el.getBoundingClientRect(); const top = document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2);
+              return JSON.stringify({rect: [r.x, r.y, r.width, r.height], top: top ? top.outerHTML.slice(0, 160) : null, convos: document.querySelectorAll('.convo').length, view: location.hash}); }""", selector)
+        except Exception as ex2:  # noqa: BLE001
+            info = f"no debug: {ex2!r}"[:200]
+        step(f"click {tag}", False, f"{str(ex)[:120]} || {info}")
+        raise
+
+
 cleanup_ids = []
 pages_for_debug = {}
 
@@ -236,7 +253,7 @@ try:
         nav(B, "chats")
         wait_text(B, "#view-root", "free this weekend", 20000)
         step("B sees A's message in the chat list", True)
-        B.click(f"[data-open-chat='{ids['a']}']")
+        click_debug(B, f"[data-open-chat='{ids['a']}']", "open-chat-B")
         wait_text(B, "[data-bubbles]", "free this weekend")
         B.fill("[data-composer] input", "Yes, Saturday works.")
         B.click("[data-composer] button")
