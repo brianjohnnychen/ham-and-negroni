@@ -1,5 +1,5 @@
 {
-  "run": "42331104914",
+  "run": "42332305964",
   "site": "http://127.0.0.1:8765/",
   "steps": [
     {
@@ -13,14 +13,34 @@
       "detail": ""
     },
     {
+      "step": "founder titles list is gone",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "step": "founders are still credited in one plain line",
+      "ok": true,
+      "detail": ""
+    },
+    {
       "step": "not in demo mode",
       "ok": true,
       "detail": "config.js has a backend url"
     },
     {
+      "step": "sign-up form asks only for name, email, password (QA Carol)",
+      "ok": true,
+      "detail": "['display_name', 'email', 'password']"
+    },
+    {
       "step": "A joins and lands in the app",
       "ok": true,
       "detail": ""
+    },
+    {
+      "step": "sign-up form asks only for name, email, password (QA Thomas)",
+      "ok": true,
+      "detail": "['display_name', 'email', 'password']"
     },
     {
       "step": "B joins and lands in the app",
@@ -40,20 +60,20 @@
     {
       "step": "admin can see both QA users",
       "ok": true,
-      "detail": "{'a': '772ba48e-db88-4b29-b330-0f37837ff270', 'b': '295929b1-667e-4526-9a26-1157dfafd223'}"
+      "detail": "{'a': '0f2c61df-a771-4227-ab38-4484f0f50939', 'b': 'c22a715a-eace-435e-985c-6f0e7114ec78'}"
     },
     {
-      "step": "realtime: B's Tab updated without reload",
+      "step": "realtime: B's feed updated without reload",
       "ok": true,
       "detail": ""
     },
     {
-      "step": "Tab shows who wanted another round with whom",
+      "step": "Feed shows who liked whom",
       "ok": true,
-      "detail": ""
+      "detail": "FeedEvery like and dislike, newest first. Updates live.QCQTQA Carol liked QA Thomasjust now"
     },
     {
-      "step": "Tab shows the call-it-a-night verdict too",
+      "step": "Feed shows the dislike too",
       "ok": true,
       "detail": ""
     },
@@ -100,7 +120,7 @@
     {
       "step": "B sees A's photo on the People card",
       "ok": true,
-      "detail": "https://itnxowacktdwbetzkhmw.supabase.co/storage/v1/object/public/avatars/772ba48e-db88-4b29-b330-0f37837ff270/avatar.jpg?v=1794019821349"
+      "detail": "https://itnxowacktdwbetzkhmw.supabase.co/storage/v1/object/public/avatars/0f2c61df-a771-4227-ab38-4484f0f50939/avatar.jpg?v=1794020810004"
     },
     {
       "step": "person sheet shows the bio",
@@ -123,22 +143,22 @@
       "detail": "[]"
     },
     {
-      "step": "deleted QA photo 772ba48e",
+      "step": "deleted QA photo 0f2c61df",
       "ok": true,
-      "detail": "(200, [{'name': '772ba48e-db88-4b29-b330-0f37837ff270/avatar.jpg', 'bucket_id': 'avatars', 'owner': '772ba48e-db88-4b29-b330-0f37837ff270', 'owner_id': '772ba48e-db88-4b29-b330-0f37837ff270', 'version': 'c6382a66-49cd-4301-acff-bb0895415693', 'id': 'cf04d693-4717-4994-9c01-60250dc5f571', 'updated_at': '2026-11-07T02:50:21.268Z', 'created_at': '2026-11-07T02:50:21.268Z', 'last_accessed_at': '2026-1"
+      "detail": "(200, [{'name': '0f2c61df-a771-4227-ab38-4484f0f50939/avatar.jpg', 'bucket_id': 'avatars', 'owner': '0f2c61df-a771-4227-ab38-4484f0f50939', 'owner_id': '0f2c61df-a771-4227-ab38-4484f0f50939', 'version': 'dac169c8-e2da-4d14-b982-3133947a3340', 'id': '111ab7da-25f1-42ff-84d9-0bf9f7887f96', 'updated_at': '2026-11-07T03:06:49.924Z', 'created_at': '2026-11-07T03:06:49.924Z', 'last_accessed_at': '2026-1"
     },
     {
-      "step": "deleted QA user 772ba48e",
+      "step": "deleted QA user 0f2c61df",
       "ok": true,
       "detail": "200"
     },
     {
-      "step": "deleted QA photo 295929b1",
+      "step": "deleted QA photo c22a715a",
       "ok": true,
       "detail": "(200, 'nothing to delete')"
     },
     {
-      "step": "deleted QA user 295929b1",
+      "step": "deleted QA user c22a715a",
       "ok": true,
       "detail": "200"
     },
@@ -154,7 +174,7 @@
     }
   ],
   "pass": true,
-  "started": "2026-11-07T02:50:01Z",
+  "started": "2026-11-07T03:06:30Z",
   "realtime": true,
-  "finished": "2026-11-07T02:50:28Z"
+  "finished": "2026-11-07T03:06:57Z"
 }
