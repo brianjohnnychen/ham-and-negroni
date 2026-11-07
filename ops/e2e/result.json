@@ -1,5 +1,5 @@
 {
-  "run": "42346356202",
+  "run": "42347073262",
   "site": "http://127.0.0.1:8765/",
   "steps": [
     {
@@ -70,7 +70,7 @@
     {
       "step": "admin can see both QA users",
       "ok": true,
-      "detail": "{'a': '82a12bf5-174a-4d6c-8ff0-d4e9e50603f4', 'b': 'bdaa6958-7238-4ca3-863e-31da6d75968f'}"
+      "detail": "{'a': '5bb4fcca-6316-489c-a078-a21728e9ce90', 'b': 'a4ebeced-8653-465a-9e38-cc93fcfee270'}"
     },
     {
       "step": "eleven AI members exist, including Joseph",
@@ -123,6 +123,11 @@
       "detail": "http 403"
     },
     {
+      "step": "members cannot read the conversation log",
+      "ok": true,
+      "detail": "http 403"
+    },
+    {
       "step": "chat page carries no game note",
       "ok": true,
       "detail": ""
@@ -130,7 +135,7 @@
     {
       "step": "member Daiki replies live",
       "ok": true,
-      "detail": "Hi! Weekends are usually a mix of baseball on TV and DJing a bit at home, plus a bowl of tonkotsu ramen if I can find a good spot. How about you, QA Carol? Do you have a favorite way to spend Saturday"
+      "detail": "Hi! On weekends I'm usually either at the ballpark cheering on my team or DJing at home with a pile of records. Oh, and if I'm being honest, I'm always hunting for a good bowl of tonkotsu ramen, since"
     },
     {
       "step": "asking for a straight answer gets one",
@@ -145,7 +150,12 @@
     {
       "step": "Joseph answers about Morrison in character",
       "ok": true,
-      "detail": "Ha, I went to Morrison Christian Academy, MCA, all the way from elementary through high school. Class of 2010. Wait, is that where you were too, Carol? I feel like I'd recognize a name like yours from"
+      "detail": "Morrison Christian Academy, MCA all the way through, which is a lot of years of the same hallways. Wait, are you one of the MCA crowd? Carol's a name I'd have remembered, so I'm guessing you're not ju"
+    },
+    {
+      "step": "Joseph answers about Morrison in character",
+      "ok": false,
+      "detail": "name 're' is not defined"
     },
     {
       "step": "realtime: B's feed updated without reload",
@@ -155,7 +165,7 @@
     {
       "step": "Feed shows who liked whom",
       "ok": true,
-      "detail": "FeedEvery like and dislike, newest first. Updates live.QCQTQA Carol liked QA Thomasjust nowAAnderson liked Joseph48 min "
+      "detail": "FeedEvery like and dislike, newest first. Updates live.QCQTQA Carol liked QA Thomasjust nowAAnderson liked Joseph58 min "
     },
     {
       "step": "Feed shows the dislike too",
@@ -205,7 +215,7 @@
     {
       "step": "B sees A's photo on the People card",
       "ok": true,
-      "detail": "https://itnxowacktdwbetzkhmw.supabase.co/storage/v1/object/public/avatars/82a12bf5-174a-4d6c-8ff0-d4e9e50603f4/avatar.jpg?v=1794032414863"
+      "detail": "https://itnxowacktdwbetzkhmw.supabase.co/storage/v1/object/public/avatars/5bb4fcca-6316-489c-a078-a21728e9ce90/avatar.jpg?v=1794032990073"
     },
     {
       "step": "person sheet shows the bio",
@@ -228,22 +238,22 @@
       "detail": "[]"
     },
     {
-      "step": "deleted QA photo 82a12bf5",
+      "step": "deleted QA photo 5bb4fcca",
       "ok": true,
-      "detail": "(200, [{'name': '82a12bf5-174a-4d6c-8ff0-d4e9e50603f4/avatar.jpg', 'bucket_id': 'avatars', 'owner': '82a12bf5-174a-4d6c-8ff0-d4e9e50603f4', 'owner_id': '82a12bf5-174a-4d6c-8ff0-d4e9e50603f4', 'version': 'ad02a5bf-dc6f-4222-b67c-3c526dcd9c00', 'id': 'f7b1e241-5c85-4500-beb4-99540fec0351', 'updated_at': '2026-11-07T06:20:14.733Z', 'created_at': '2026-11-07T06:20:14.733Z', 'last_accessed_at': '2026-1"
+      "detail": "(200, [{'name': '5bb4fcca-6316-489c-a078-a21728e9ce90/avatar.jpg', 'bucket_id': 'avatars', 'owner': '5bb4fcca-6316-489c-a078-a21728e9ce90', 'owner_id': '5bb4fcca-6316-489c-a078-a21728e9ce90', 'version': 'cb12db9f-73c1-4507-a4f3-3597aeb32a17', 'id': '98d0a210-d046-4fa0-88ea-29fd1c11f425', 'updated_at': '2026-11-07T06:29:49.948Z', 'created_at': '2026-11-07T06:29:49.948Z', 'last_accessed_at': '2026-1"
     },
     {
-      "step": "deleted QA user 82a12bf5",
+      "step": "deleted QA user 5bb4fcca",
       "ok": true,
       "detail": "200"
     },
     {
-      "step": "deleted QA photo bdaa6958",
+      "step": "deleted QA photo a4ebeced",
       "ok": true,
       "detail": "(200, 'nothing to delete')"
     },
     {
-      "step": "deleted QA user bdaa6958",
+      "step": "deleted QA user a4ebeced",
       "ok": true,
       "detail": "200"
     },
@@ -258,8 +268,8 @@
       "detail": "[]"
     }
   ],
-  "pass": true,
-  "started": "2026-11-07T06:19:30Z",
+  "pass": false,
+  "started": "2026-11-07T06:28:52Z",
   "realtime": true,
-  "finished": "2026-11-07T06:20:22Z"
+  "finished": "2026-11-07T06:30:00Z"
 }
