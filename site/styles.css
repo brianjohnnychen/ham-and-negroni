@@ -325,6 +325,7 @@ p { margin: 0; }
 .avatar.sm { width: 36px; height: 36px; font-size: 0.85rem; }
 .pair { display: inline-flex; align-items: center; }
 .pair .avatar:nth-child(2) { margin-left: -14px; }
+.teaser-list .pair { min-width: 58px; }
 
 /* people grid */
 .people-grid { display: grid; gap: 14px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
