@@ -1,5 +1,5 @@
 {
-  "run": "42332621662",
+  "run": "42337981405",
   "site": "http://127.0.0.1:8765/",
   "steps": [
     {
@@ -60,105 +60,60 @@
     {
       "step": "admin can see both QA users",
       "ok": true,
-      "detail": "{'a': '8a10ef41-86b3-467b-adb7-7827f138cc26', 'b': 'e5382cb9-2b6f-46d5-b05c-4656878609c7'}"
+      "detail": "{'a': 'b9d9bf59-4aaa-43cf-8533-6de60632dfde', 'b': 'ef1882d0-b9ca-4bf1-835a-3f1b5331bb8a'}"
     },
     {
-      "step": "realtime: B's feed updated without reload",
+      "step": "ten AI members exist",
+      "ok": true,
+      "detail": "['Daiki', 'Hana', 'Haruto', 'Kenji', 'Mei', 'Ren', 'Rina', 'Sakura', 'Takumi', 'Yui']"
+    },
+    {
+      "step": "People shows (a) next to all AI members",
+      "ok": true,
+      "detail": "10 tags"
+    },
+    {
+      "step": "People explains what (a) means",
       "ok": true,
       "detail": ""
     },
     {
-      "step": "Feed shows who liked whom",
+      "step": "a welcome message from an AI member arrives",
       "ok": true,
-      "detail": "FeedEvery like and dislike, newest first. Updates live.QCQTQA Carol liked QA Thomasjust now"
+      "detail": "KKenji (a)Hi QA Carol, welcome to Ham & Negroni. I'm Kenji, an AI member (the (a"
     },
     {
-      "step": "Feed shows the dislike too",
+      "step": "members cannot flag themselves as AI",
       "ok": true,
-      "detail": ""
+      "detail": "http 400"
     },
     {
-      "step": "A sends a message",
-      "ok": true,
-      "detail": ""
+      "step": "AI member Daiki replies live",
+      "ok": false,
+      "detail": "Sorry, I lost my train of thought. Could you say that again?"
     },
     {
-      "step": "B sees A's message in the chat list",
-      "ok": true,
-      "detail": ""
+      "step": "unexpected error",
+      "ok": false,
+      "detail": "TimeoutError('Page.click: Timeout 30000ms exceeded.\\nCall log:\\n  - waiting for locator(\"[data-verdict=round][data-target=\\'ef1882d0-b9ca-4bf1-835a-3f1b5331bb8a\\']\")\\n') || a: no debug (Error('Event loop is closed! Is Playwright already stopped?')) || b: no debug (Error('Event loop is closed! Is Playwright already stopped?'))"
     },
     {
-      "step": "realtime: A receives B's reply without reload",
-      "ok": true,
-      "detail": ""
-    },
-    {
-      "step": "A sees B's reply",
-      "ok": true,
-      "detail": ""
-    },
-    {
-      "step": "anonymous visitor cannot read messages",
-      "ok": true,
-      "detail": "got 0 rows"
-    },
-    {
-      "step": "anonymous visitor cannot list members",
-      "ok": true,
-      "detail": "got 0 rows"
-    },
-    {
-      "step": "A saves profile text",
-      "ok": true,
-      "detail": ""
-    },
-    {
-      "step": "A uploads a photo",
-      "ok": true,
-      "detail": ""
-    },
-    {
-      "step": "B sees A's photo on the People card",
-      "ok": true,
-      "detail": "https://itnxowacktdwbetzkhmw.supabase.co/storage/v1/object/public/avatars/8a10ef41-86b3-467b-adb7-7827f138cc26/avatar.jpg?v=1794020984071"
-    },
-    {
-      "step": "person sheet shows the bio",
-      "ok": true,
-      "detail": ""
-    },
-    {
-      "step": "sign out returns to the landing page",
-      "ok": true,
-      "detail": ""
-    },
-    {
-      "step": "no page errors (A)",
-      "ok": true,
-      "detail": "[]"
-    },
-    {
-      "step": "no page errors (B)",
-      "ok": true,
-      "detail": "[]"
-    },
-    {
-      "step": "deleted QA photo 8a10ef41",
-      "ok": true,
-      "detail": "(200, [{'name': '8a10ef41-86b3-467b-adb7-7827f138cc26/avatar.jpg', 'bucket_id': 'avatars', 'owner': '8a10ef41-86b3-467b-adb7-7827f138cc26', 'owner_id': '8a10ef41-86b3-467b-adb7-7827f138cc26', 'version': 'ff4b064a-a30a-4701-ad3a-08e72fc8b04a', 'id': '80c8d6be-b9f7-49c0-8d83-1e7c1f63f52d', 'updated_at': '2026-11-07T03:09:43.907Z', 'created_at': '2026-11-07T03:09:43.907Z', 'last_accessed_at': '2026-1"
-    },
-    {
-      "step": "deleted QA user 8a10ef41",
-      "ok": true,
-      "detail": "200"
-    },
-    {
-      "step": "deleted QA photo e5382cb9",
+      "step": "deleted QA photo b9d9bf59",
       "ok": true,
       "detail": "(200, 'nothing to delete')"
     },
     {
-      "step": "deleted QA user e5382cb9",
+      "step": "deleted QA user b9d9bf59",
+      "ok": true,
+      "detail": "200"
+    },
+    {
+      "step": "deleted QA photo ef1882d0",
+      "ok": true,
+      "detail": "(200, 'nothing to delete')"
+    },
+    {
+      "step": "deleted QA user ef1882d0",
       "ok": true,
       "detail": "200"
     },
@@ -173,8 +128,12 @@
       "detail": "[]"
     }
   ],
-  "pass": true,
-  "started": "2026-11-07T03:09:22Z",
-  "realtime": true,
-  "finished": "2026-11-07T03:09:51Z"
+  "pass": false,
+  "started": "2026-11-07T04:21:41Z",
+  "console": {
+    "a": [],
+    "b": []
+  },
+  "realtime": false,
+  "finished": "2026-11-07T04:22:34Z"
 }
