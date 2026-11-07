@@ -84,10 +84,11 @@ if st != 200:
 cfg = {r["key"]: r["value"] for r in rows}
 bot_secret = cfg.get("secret") or secrets.token_urlsafe(32)
 fn_url = f"{URL}/functions/v1/bot-reply"
-founders = os.environ.get("FOUNDERS_NOTES", "").strip()  # private facts about the founders: a repo secret, never a file in the repo
+# facts about the founders for the AI members: ops/founders.md, or the FOUNDERS_NOTES repo secret if one is set
+founders = os.environ.get("FOUNDERS_NOTES", "").strip() or (open("ops/founders.md", encoding="utf-8").read().strip() if os.path.exists("ops/founders.md") else "")
 result["founders_notes_present"] = bool(founders)
 if not founders:
-    log("FOUNDERS_NOTES is not set in the repo secrets; the AI members do not know the founders' details yet.")
+    log("No founders notes (ops/founders.md or FOUNDERS_NOTES); the AI members do not know the founders' details.")
 for k, v in (("function_url", fn_url), ("secret", bot_secret), ("founders", founders)):
     if not v:
         continue
