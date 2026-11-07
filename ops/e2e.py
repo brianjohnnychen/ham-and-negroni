@@ -255,17 +255,32 @@ except Exception as exc:  # noqa: BLE001
         pass
 finally:
     # ---------------------------------------------------------------- cleanup: QA users, data and photos
+    def delete_folder(uid):
+        st, files = admin("POST", "/storage/v1/object/list/avatars", {"prefix": uid, "limit": 100})
+        names = [f"{uid}/{o['name']}" for o in (files if isinstance(files, list) else []) if o.get("name")]
+        if not names:
+            return 200, "nothing to delete"
+        return admin("DELETE", "/storage/v1/object/avatars", {"prefixes": names})
+
     for uid in cleanup_ids:
-        admin("DELETE", f"/storage/v1/object/avatars/{uid}/avatar.jpg", ok=(200, 204, 400, 404))
+        st, body = delete_folder(uid)
+        step(f"deleted QA photo {uid[:8]}", st in (200, 204), (st, body))
         st, body = admin("DELETE", f"/auth/v1/admin/users/{uid}")
         step(f"deleted QA user {uid[:8]}", st in (200, 204), st)
     st, left = admin("GET", "/rest/v1/profiles?select=id,display_name&display_name=like.QA%25")
     step("no QA profiles remain", isinstance(left, list) and len(left) == 0, left)
-    st, left = admin("GET", "/rest/v1/verdicts?select=id&limit=1000")
-    orphan = [r for r in (left if isinstance(left, list) else [])]
-    st2, objs = admin("POST", "/storage/v1/object/list/avatars", {"prefix": "", "limit": 100})
-    qa_objs = [o for o in (objs if isinstance(objs, list) else []) if any(o.get("name", "").startswith(uid) for uid in cleanup_ids)]
-    step("no QA photos remain", len(qa_objs) == 0, [o.get("name") for o in qa_objs])
+    # sweep photo folders that belong to nobody (earlier QA runs, deleted members)
+    st, profs = admin("GET", "/rest/v1/profiles?select=id")
+    live = {p["id"] for p in profs} if isinstance(profs, list) else None
+    st2, objs = admin("POST", "/storage/v1/object/list/avatars", {"prefix": "", "limit": 1000})
+    folders = [o.get("name") for o in (objs if isinstance(objs, list) else []) if o.get("name") and o.get("id") is None]
+    if live is not None:
+        for name in folders:
+            if name not in live:
+                delete_folder(name)
+    st2, objs = admin("POST", "/storage/v1/object/list/avatars", {"prefix": "", "limit": 1000})
+    leftover = [o.get("name") for o in (objs if isinstance(objs, list) else []) if any(o.get("name", "").startswith(uid) for uid in cleanup_ids)]
+    step("no QA photos remain", len(leftover) == 0, leftover)
     names = [s["step"] for s in result["steps"]]
     result["pass"] = all(s["ok"] for s in result["steps"] if not s["step"].startswith("realtime")) and "A sees B's reply" in names and "B sees A's photo on the People card" in names
     rt = [s for s in result["steps"] if s["step"].startswith("realtime")]
