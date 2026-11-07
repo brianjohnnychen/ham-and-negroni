@@ -1,5 +1,5 @@
 {
-  "run": "42330697889",
+  "run": "42330892339",
   "site": "http://127.0.0.1:8765/",
   "steps": [
     {
@@ -40,12 +40,12 @@
     {
       "step": "admin can see both QA users",
       "ok": true,
-      "detail": "{'a': 'adfa726d-9cf5-4680-b7ae-ef1cbb981d67', 'b': '059a6e62-7154-472e-8f8b-e66218a29b65'}"
+      "detail": "{'a': '06eb6446-a3c5-4e03-b0f4-b4396341fc80', 'b': '9f58cc91-e8dd-4154-84ba-a49cb1d0392b'}"
     },
     {
       "step": "realtime: B's Tab updated without reload",
-      "ok": false,
-      "detail": "fell back to polling: Page.wait_for_function: Timeout 12000ms exceeded."
+      "ok": true,
+      "detail": ""
     },
     {
       "step": "Tab shows who wanted another round with whom",
@@ -53,17 +53,82 @@
       "detail": ""
     },
     {
-      "step": "unexpected error",
-      "ok": false,
-      "detail": "TimeoutError('Page.wait_for_function: Timeout 15000ms exceeded.') || a: no debug (Error('Event loop is closed! Is Playwright already stopped?')) || b: no debug (Error('Event loop is closed! Is Playwright already stopped?'))"
+      "step": "Tab shows the call-it-a-night verdict too",
+      "ok": true,
+      "detail": ""
     },
     {
-      "step": "deleted QA user adfa726d",
+      "step": "A sends a message",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "step": "B sees A's message in the chat list",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "step": "realtime: A receives B's reply without reload",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "step": "A sees B's reply",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "step": "anonymous visitor cannot read messages",
+      "ok": true,
+      "detail": "got 0 rows"
+    },
+    {
+      "step": "anonymous visitor cannot list members",
+      "ok": true,
+      "detail": "got 0 rows"
+    },
+    {
+      "step": "A saves profile text",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "step": "A uploads a photo",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "step": "B sees A's photo on the People card",
+      "ok": true,
+      "detail": "https://itnxowacktdwbetzkhmw.supabase.co/storage/v1/object/public/avatars/06eb6446-a3c5-4e03-b0f4-b4396341fc80/avatar.jpg?v=1794019697662"
+    },
+    {
+      "step": "person sheet shows the bio",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "step": "sign out returns to the landing page",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "step": "no page errors (A)",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "step": "no page errors (B)",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "step": "deleted QA user 06eb6446",
       "ok": true,
       "detail": "200"
     },
     {
-      "step": "deleted QA user 059a6e62",
+      "step": "deleted QA user 9f58cc91",
       "ok": true,
       "detail": "200"
     },
@@ -74,16 +139,12 @@
     },
     {
       "step": "no QA photos remain",
-      "ok": true,
-      "detail": "[]"
+      "ok": false,
+      "detail": "['06eb6446-a3c5-4e03-b0f4-b4396341fc80']"
     }
   ],
   "pass": false,
-  "started": "2026-11-07T02:44:51Z",
-  "console": {
-    "a": [],
-    "b": []
-  },
-  "realtime": false,
-  "finished": "2026-11-07T02:45:32Z"
+  "started": "2026-11-07T02:47:57Z",
+  "realtime": true,
+  "finished": "2026-11-07T02:48:24Z"
 }
