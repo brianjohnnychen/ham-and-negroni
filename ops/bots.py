@@ -251,6 +251,8 @@ result["bots"] = count
 st, plist = svc("GET", "/rest/v1/bot_personas?select=profile_id,crush_name")
 all_bots = {r["profile_id"] for r in (plist if isinstance(plist, list) else [])}
 nudged = 0
+matching = 0
+already = 0
 for r in (plist if isinstance(plist, list) else []):
     crush = (r.get("crush_name") or "").strip()
     if not crush:
@@ -260,11 +262,17 @@ for r in (plist if isinstance(plist, list) else []):
         words = [w for w in re.split(r"[^\w]+", m["display_name"].lower()) if w]
         if crush.lower() not in words or m["id"] in all_bots:
             continue
+        matching += 1
         st, sent = svc("GET", f"/rest/v1/messages?select=id&sender=eq.{r['profile_id']}&recipient=eq.{m['id']}&limit=1")
+        if st == 200 and sent:
+            already += 1
         if st == 200 and not sent:
             st, _ = http("POST", fn_url, {"Content-Type": "application/json", "x-bot-secret": bot_secret}, {"type": "welcome", "profile_id": m["id"]})
             log(f"first message to existing member named {crush}: http {st}")
             nudged += 1
+result["crush_members_matching"] = matching
+result["crush_members_already_messaged"] = already
 result["crush_messages_started"] = nudged
+log(f"crush: {matching} existing member(s) match, {already} already messaged, {nudged} messaged now")
 log(f"AI members ready: {count}")
 finish(True)
