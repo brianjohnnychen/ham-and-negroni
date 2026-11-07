@@ -1,5 +1,5 @@
 {
-  "run": "42347338713",
+  "run": "42355500263",
   "site": "http://127.0.0.1:8765/",
   "steps": [
     {
@@ -38,6 +38,46 @@
       "detail": "config.js has a backend url"
     },
     {
+      "step": "Timothy is seeing someone on the landing feed",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "step": "landing links to the etiquette guide",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "step": "etiquette page loads (mobile)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "step": "etiquette page covers paying and splitting (mobile)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "step": "etiquette page has no sideways scroll (mobile)",
+      "ok": true,
+      "detail": "390 vs 390"
+    },
+    {
+      "step": "etiquette page loads (desktop)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "step": "etiquette page covers paying and splitting (desktop)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "step": "etiquette page has no sideways scroll (desktop)",
+      "ok": true,
+      "detail": "1440 vs 1440"
+    },
+    {
       "step": "sign-up form asks only for name, email, password (QA Carol)",
       "ok": true,
       "detail": "['display_name', 'email', 'password']"
@@ -70,7 +110,7 @@
     {
       "step": "admin can see both QA users",
       "ok": true,
-      "detail": "{'a': '6926dd0e-b68c-434a-b84e-267563101463', 'b': '18e7037f-45a6-42ac-8ceb-38556e8ec865'}"
+      "detail": "{'a': '023877c4-8587-40f5-b8e8-b488c1db6ed0', 'b': 'c0ad3d04-7b45-4b2c-acf4-a00a0c9c18d3'}"
     },
     {
       "step": "eleven AI members exist, including Joseph",
@@ -96,6 +136,11 @@
       "step": "Joseph is in the top 4 on People",
       "ok": true,
       "detail": "['Anderson', 'Yui', 'Joseph', 'Hana']"
+    },
+    {
+      "step": "People links to the etiquette guide",
+      "ok": true,
+      "detail": ""
     },
     {
       "step": "People says some members are AI",
@@ -135,7 +180,7 @@
     {
       "step": "member Daiki replies live",
       "ok": true,
-      "detail": "Hi! Weekends for me are usually a mix of baseball on TV and digging through records for my DJ sets. Sometimes I'll grab tonkotsu ramen with friends if I can find a good spot. What about you, QA Carol?"
+      "detail": "Hey! On weekends I usually catch a baseball game if I can, or if not, I'm digging through records for my next DJ set. Lately I've been trying to find a good tonkotsu ramen place around here, which is "
     },
     {
       "step": "asking for a straight answer gets one",
@@ -150,12 +195,12 @@
     {
       "step": "Joseph answers about Morrison in character",
       "ok": true,
-      "detail": "Morrison Christian Academy, the whole way through from elementary. Carol, is that you? It's been ages! What have you been up to since we all scattered?"
+      "detail": "Morrison Christian"
     },
     {
       "step": "Joseph stays in character on a detail he was never given",
       "ok": true,
-      "detail": "Ha, you're testing me already! I honestly can't remember, it's been too many years. Was it the one with the squeaky chalk, or the one who made us sit in alphabetical order? What's your memory saying?"
+      "detail": "Ha, I'm drawing a blank on that one, Carol. Was it Mrs. something? You always had a better memory for those details than I did."
     },
     {
       "step": "the conversation log holds the QA chats with AI members",
@@ -170,7 +215,7 @@
     {
       "step": "Feed shows who liked whom",
       "ok": true,
-      "detail": "FeedEvery like and dislike, newest first. Updates live.QCQTQA Carol liked QA Thomasjust nowAAnderson liked Joseph1 hour "
+      "detail": "FeedEvery like and dislike, newest first. Updates live.QCQTQA Carol liked QA Thomasjust nowAAnderson liked Joseph3 hours"
     },
     {
       "step": "Feed shows the dislike too",
@@ -220,7 +265,7 @@
     {
       "step": "B sees A's photo on the People card",
       "ok": true,
-      "detail": "https://itnxowacktdwbetzkhmw.supabase.co/storage/v1/object/public/avatars/6926dd0e-b68c-434a-b84e-267563101463/avatar.jpg?v=1794033194467"
+      "detail": "https://itnxowacktdwbetzkhmw.supabase.co/storage/v1/object/public/avatars/023877c4-8587-40f5-b8e8-b488c1db6ed0/avatar.jpg?v=1794040132537"
     },
     {
       "step": "person sheet shows the bio",
@@ -243,22 +288,22 @@
       "detail": "[]"
     },
     {
-      "step": "deleted QA photo 6926dd0e",
+      "step": "deleted QA photo 023877c4",
       "ok": true,
-      "detail": "(200, [{'name': '6926dd0e-b68c-434a-b84e-267563101463/avatar.jpg', 'bucket_id': 'avatars', 'owner': '6926dd0e-b68c-434a-b84e-267563101463', 'owner_id': '6926dd0e-b68c-434a-b84e-267563101463', 'version': '0b6a63cb-991d-425d-bc5a-68638ccb07cf', 'id': '23347296-3c31-4a85-8f21-79aff6d09bb5', 'updated_at': '2026-11-07T06:33:14.386Z', 'created_at': '2026-11-07T06:33:14.386Z', 'last_accessed_at': '2026-1"
+      "detail": "(200, [{'name': '023877c4-8587-40f5-b8e8-b488c1db6ed0/avatar.jpg', 'bucket_id': 'avatars', 'owner': '023877c4-8587-40f5-b8e8-b488c1db6ed0', 'owner_id': '023877c4-8587-40f5-b8e8-b488c1db6ed0', 'version': '2a2a0968-9e05-4ab0-b086-ce66d7361573', 'id': 'de308b70-c9ff-471d-96c2-464677d3faa5', 'updated_at': '2026-11-07T08:28:52.437Z', 'created_at': '2026-11-07T08:28:52.437Z', 'last_accessed_at': '2026-1"
     },
     {
-      "step": "deleted QA user 6926dd0e",
+      "step": "deleted QA user 023877c4",
       "ok": true,
       "detail": "200"
     },
     {
-      "step": "deleted QA photo 18e7037f",
+      "step": "deleted QA photo c0ad3d04",
       "ok": true,
       "detail": "(200, 'nothing to delete')"
     },
     {
-      "step": "deleted QA user 18e7037f",
+      "step": "deleted QA user c0ad3d04",
       "ok": true,
       "detail": "200"
     },
@@ -274,7 +319,7 @@
     }
   ],
   "pass": true,
-  "started": "2026-11-07T06:32:17Z",
+  "started": "2026-11-07T08:27:59Z",
   "realtime": true,
-  "finished": "2026-11-07T06:33:21Z"
+  "finished": "2026-11-07T08:29:00Z"
 }
