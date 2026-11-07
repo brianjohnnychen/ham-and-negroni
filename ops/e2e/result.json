@@ -1,5 +1,5 @@
 {
-  "run": "42338707770",
+  "run": "42338840639",
   "site": "http://127.0.0.1:8765/",
   "steps": [
     {
@@ -60,7 +60,7 @@
     {
       "step": "admin can see both QA users",
       "ok": true,
-      "detail": "{'a': 'aac20c01-08f8-46bf-a314-f7af1a461c25', 'b': '260b3d98-3bc1-4bec-b463-1a02e5a8429a'}"
+      "detail": "{'a': 'f9235623-213e-493a-95b1-cc43c9aa8496', 'b': '28fc4af6-dcd2-4ba8-863b-6c7e3df8f9f7'}"
     },
     {
       "step": "ten AI members exist",
@@ -80,7 +80,7 @@
     {
       "step": "a welcome message from an AI member arrives",
       "ok": true,
-      "detail": "RRina (a)Hi QA Carol, welcome! I'm Rina, one of the AI members here, marked (a)."
+      "detail": "KKenji (a)Hi QA Carol, welcome to Ham & Negroni. I'm Kenji, an AI member (the (a"
     },
     {
       "step": "members cannot flag themselves as AI",
@@ -89,8 +89,8 @@
     },
     {
       "step": "AI member Daiki replies live",
-      "ok": false,
-      "detail": "Sorry, I lost my train of thought. Could you say that again?"
+      "ok": true,
+      "detail": "Hi there! On weekends I'm usually either watching baseball or digging through records for my next DJ set. I'm an AI member here, so no weekend plans in the real sense, but those hobbies keep me busy. "
     },
     {
       "step": "realtime: B's feed updated without reload",
@@ -150,7 +150,7 @@
     {
       "step": "B sees A's photo on the People card",
       "ok": true,
-      "detail": "https://itnxowacktdwbetzkhmw.supabase.co/storage/v1/object/public/avatars/aac20c01-08f8-46bf-a314-f7af1a461c25/avatar.jpg?v=1794025858983"
+      "detail": "https://itnxowacktdwbetzkhmw.supabase.co/storage/v1/object/public/avatars/f9235623-213e-493a-95b1-cc43c9aa8496/avatar.jpg?v=1794026026884"
     },
     {
       "step": "person sheet shows the bio",
@@ -173,22 +173,22 @@
       "detail": "[]"
     },
     {
-      "step": "deleted QA photo aac20c01",
+      "step": "deleted QA photo f9235623",
       "ok": true,
-      "detail": "(200, [{'name': 'aac20c01-08f8-46bf-a314-f7af1a461c25/avatar.jpg', 'bucket_id': 'avatars', 'owner': 'aac20c01-08f8-46bf-a314-f7af1a461c25', 'owner_id': 'aac20c01-08f8-46bf-a314-f7af1a461c25', 'version': '5fc648d1-3000-4038-83df-9aa82985340d', 'id': 'ed424dfa-d02b-411c-84d9-344d4529ace5', 'updated_at': '2026-11-07T04:30:58.854Z', 'created_at': '2026-11-07T04:30:58.854Z', 'last_accessed_at': '2026-1"
+      "detail": "(200, [{'name': 'f9235623-213e-493a-95b1-cc43c9aa8496/avatar.jpg', 'bucket_id': 'avatars', 'owner': 'f9235623-213e-493a-95b1-cc43c9aa8496', 'owner_id': 'f9235623-213e-493a-95b1-cc43c9aa8496', 'version': '70d35f6b-7e60-49ba-a791-e46caac7f75e', 'id': '5e09f4e6-3af9-4775-82ad-01e2ad40271c', 'updated_at': '2026-11-07T04:33:46.727Z', 'created_at': '2026-11-07T04:33:46.727Z', 'last_accessed_at': '2026-1"
     },
     {
-      "step": "deleted QA user aac20c01",
+      "step": "deleted QA user f9235623",
       "ok": true,
       "detail": "200"
     },
     {
-      "step": "deleted QA photo 260b3d98",
+      "step": "deleted QA photo 28fc4af6",
       "ok": true,
       "detail": "(200, 'nothing to delete')"
     },
     {
-      "step": "deleted QA user 260b3d98",
+      "step": "deleted QA user 28fc4af6",
       "ok": true,
       "detail": "200"
     },
@@ -203,8 +203,8 @@
       "detail": "[]"
     }
   ],
-  "pass": false,
-  "started": "2026-11-07T04:30:28Z",
+  "pass": true,
+  "started": "2026-11-07T04:33:08Z",
   "realtime": true,
-  "finished": "2026-11-07T04:31:06Z"
+  "finished": "2026-11-07T04:33:56Z"
 }
