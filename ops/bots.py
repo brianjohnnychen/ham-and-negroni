@@ -32,7 +32,7 @@ result = {"started": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "anthro
 
 def log(msg):
     msg = str(msg)
-    for secret in (SERVICE, TOKEN, ANTHROPIC):
+    for secret in (SERVICE, TOKEN, ANTHROPIC, os.environ.get("FOUNDERS_NOTES", "").strip()):
         if secret:
             msg = msg.replace(secret, "***")
     print(msg, flush=True)
@@ -84,7 +84,13 @@ if st != 200:
 cfg = {r["key"]: r["value"] for r in rows}
 bot_secret = cfg.get("secret") or secrets.token_urlsafe(32)
 fn_url = f"{URL}/functions/v1/bot-reply"
-for k, v in (("function_url", fn_url), ("secret", bot_secret)):
+founders = os.environ.get("FOUNDERS_NOTES", "").strip()  # private facts about the founders: a repo secret, never a file in the repo
+result["founders_notes_present"] = bool(founders)
+if not founders:
+    log("FOUNDERS_NOTES is not set in the repo secrets; the AI members do not know the founders' details yet.")
+for k, v in (("function_url", fn_url), ("secret", bot_secret), ("founders", founders)):
+    if not v:
+        continue
     st, res = svc("POST", "/rest/v1/bot_config?on_conflict=key", [{"key": k, "value": v}], {"Prefer": "resolution=merge-duplicates,return=minimal"})
     if st not in (200, 201, 204):
         log(f"cannot write bot_config {k}: http {st} {res}")

@@ -150,6 +150,22 @@ alter table public.bot_config enable row level security;
 revoke all on public.bot_personas, public.bot_config from anon, authenticated;
 drop table if exists public.bot_usage;
 
+-- Log of every conversation with an AI member (both directions), with names and an AI flag. Not readable by members or the
+-- public API; the project owner reads it in the Supabase dashboard (Table Editor).
+create or replace view public.ai_conversation_log as
+select m.id, m.created_at,
+       s.display_name as from_name, (sb.profile_id is not null) as from_is_ai,
+       r.display_name as to_name,   (rb.profile_id is not null) as to_is_ai,
+       m.body
+from public.messages m
+join public.profiles s on s.id = m.sender
+join public.profiles r on r.id = m.recipient
+left join public.bot_personas sb on sb.profile_id = m.sender
+left join public.bot_personas rb on rb.profile_id = m.recipient
+where sb.profile_id is not null or rb.profile_id is not null
+order by m.created_at desc;
+revoke all on public.ai_conversation_log from anon, authenticated;
+
 create or replace function public.notify_bot_message()
 returns trigger
 language plpgsql

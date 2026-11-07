@@ -217,6 +217,12 @@ try:
                     step("members cannot read the AI member list", rows == [], f"got {len(rows)} rows")
             except urllib.error.HTTPError as he:
                 step("members cannot read the AI member list", he.code in (401, 403, 404), f"http {he.code}")
+            try:
+                with urllib.request.urlopen(urllib.request.Request(URL + "/rest/v1/ai_conversation_log?select=id&limit=1", headers=hdr), timeout=30) as r:
+                    rows = json.loads(r.read().decode())
+                    step("members cannot read the conversation log", rows == [], f"got {len(rows)} rows")
+            except urllib.error.HTTPError as he:
+                step("members cannot read the conversation log", he.code in (401, 403, 404), f"http {he.code}")
         except Exception as ex:
             step("members cannot see which members are AI", False, "sign-in for the check failed: " + str(ex)[:100])
         # live replies, in character, then pause and resume
@@ -253,6 +259,10 @@ try:
                     A.wait_for_selector("[data-composer] input", timeout=15000)
                     reply = ask("Where did you go to high school?", "high school")
                     step("Joseph answers about Morrison in character", ("Morrison" in reply or "MCA" in reply), reply[:200])
+                    reply = ask("Do you remember our homeroom teacher's name?", "homeroom")
+                    step("Joseph stays in character on a detail he was never given", re.search(r"\b(an ai|language model|artificial intelligence)\b", reply.lower()) is None and "lost my train of thought" not in reply, reply[:200])
+                    st, logrows = admin("GET", "/rest/v1/ai_conversation_log?select=from_name,to_name,body&or=(from_name.eq.QA%20Carol,to_name.eq.QA%20Carol)&limit=50")
+                    step("the conversation log holds the QA chats with AI members", isinstance(logrows, list) and any(r.get("to_name") == "Joseph" for r in logrows) and any(r.get("from_name") == "Joseph" for r in logrows), f"http {st}, {len(logrows) if isinstance(logrows, list) else logrows}")
                 except Exception as ex:
                     step("Joseph answers about Morrison in character", False, str(ex)[:100])
         nav(A, "people")
