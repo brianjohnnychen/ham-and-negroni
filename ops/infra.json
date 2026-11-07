@@ -1,0 +1,23 @@
+{
+  "supabase": {
+    "org": "Meteor City Sandbox",
+    "org_id": "xaegzjcvnawshndfoyqa",
+    "project": "ham-and-negroni",
+    "ref": "itnxowacktdwbetzkhmw",
+    "url": "https://itnxowacktdwbetzkhmw.supabase.co",
+    "region": "ap-northeast-1",
+    "plan": "free"
+  },
+  "site": {
+    "url": "https://brianjohnnychen.github.io/ham-and-negroni/",
+    "hosting": "GitHub Pages (workflow build from site/)"
+  },
+  "secrets": [
+    "SUPABASE_URL",
+    "SUPABASE_PROJECT_REF",
+    "SUPABASE_ANON_KEY",
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "SUPABASE_DB_PASSWORD"
+  ],
+  "provisioned_at": "2026-11-07T02:41:46Z"
+}
