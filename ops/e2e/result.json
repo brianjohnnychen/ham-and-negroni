@@ -1,5 +1,5 @@
 {
-  "run": "42343520838",
+  "run": "42346356202",
   "site": "http://127.0.0.1:8765/",
   "steps": [
     {
@@ -70,7 +70,7 @@
     {
       "step": "admin can see both QA users",
       "ok": true,
-      "detail": "{'a': '01f4b66a-7f6d-403b-a830-0478fa3ac620', 'b': '2c6b2588-2d9e-46de-9da3-c4c3942e1f0d'}"
+      "detail": "{'a': '82a12bf5-174a-4d6c-8ff0-d4e9e50603f4', 'b': 'bdaa6958-7238-4ca3-863e-31da6d75968f'}"
     },
     {
       "step": "eleven AI members exist, including Joseph",
@@ -130,7 +130,7 @@
     {
       "step": "member Daiki replies live",
       "ok": true,
-      "detail": "Hey! Weekends for me are usually a mix of watching baseball, grabbing tonkotsu ramen with friends, and sometimes spinning records at a friend's little bar. How about you, what does your weekend look l"
+      "detail": "Hi! Weekends are usually a mix of baseball on TV and DJing a bit at home, plus a bowl of tonkotsu ramen if I can find a good spot. How about you, QA Carol? Do you have a favorite way to spend Saturday"
     },
     {
       "step": "asking for a straight answer gets one",
@@ -145,7 +145,7 @@
     {
       "step": "Joseph answers about Morrison in character",
       "ok": true,
-      "detail": "Ha, Morrison Christian Academy, MCA all the way. I'm guessing you know the place, since you're asking? What year did you graduate?"
+      "detail": "Ha, I went to Morrison Christian Academy, MCA, all the way from elementary through high school. Class of 2010. Wait, is that where you were too, Carol? I feel like I'd recognize a name like yours from"
     },
     {
       "step": "realtime: B's feed updated without reload",
@@ -155,7 +155,7 @@
     {
       "step": "Feed shows who liked whom",
       "ok": true,
-      "detail": "FeedEvery like and dislike, newest first. Updates live.QCQTQA Carol liked QA Thomasjust nowAAnderson liked Joseph8 min a"
+      "detail": "FeedEvery like and dislike, newest first. Updates live.QCQTQA Carol liked QA Thomasjust nowAAnderson liked Joseph48 min "
     },
     {
       "step": "Feed shows the dislike too",
@@ -205,7 +205,7 @@
     {
       "step": "B sees A's photo on the People card",
       "ok": true,
-      "detail": "https://itnxowacktdwbetzkhmw.supabase.co/storage/v1/object/public/avatars/01f4b66a-7f6d-403b-a830-0478fa3ac620/avatar.jpg?v=1794029992064"
+      "detail": "https://itnxowacktdwbetzkhmw.supabase.co/storage/v1/object/public/avatars/82a12bf5-174a-4d6c-8ff0-d4e9e50603f4/avatar.jpg?v=1794032414863"
     },
     {
       "step": "person sheet shows the bio",
@@ -228,22 +228,22 @@
       "detail": "[]"
     },
     {
-      "step": "deleted QA photo 01f4b66a",
+      "step": "deleted QA photo 82a12bf5",
       "ok": true,
-      "detail": "(200, [{'name': '01f4b66a-7f6d-403b-a830-0478fa3ac620/avatar.jpg', 'bucket_id': 'avatars', 'owner': '01f4b66a-7f6d-403b-a830-0478fa3ac620', 'owner_id': '01f4b66a-7f6d-403b-a830-0478fa3ac620', 'version': '667b136e-2151-4729-a849-04c71f86926c', 'id': '06cabc31-492e-4a75-ac60-696f3f42e578', 'updated_at': '2026-11-07T05:39:51.866Z', 'created_at': '2026-11-07T05:39:51.866Z', 'last_accessed_at': '2026-1"
+      "detail": "(200, [{'name': '82a12bf5-174a-4d6c-8ff0-d4e9e50603f4/avatar.jpg', 'bucket_id': 'avatars', 'owner': '82a12bf5-174a-4d6c-8ff0-d4e9e50603f4', 'owner_id': '82a12bf5-174a-4d6c-8ff0-d4e9e50603f4', 'version': 'ad02a5bf-dc6f-4222-b67c-3c526dcd9c00', 'id': 'f7b1e241-5c85-4500-beb4-99540fec0351', 'updated_at': '2026-11-07T06:20:14.733Z', 'created_at': '2026-11-07T06:20:14.733Z', 'last_accessed_at': '2026-1"
     },
     {
-      "step": "deleted QA user 01f4b66a",
+      "step": "deleted QA user 82a12bf5",
       "ok": true,
       "detail": "200"
     },
     {
-      "step": "deleted QA photo 2c6b2588",
+      "step": "deleted QA photo bdaa6958",
       "ok": true,
       "detail": "(200, 'nothing to delete')"
     },
     {
-      "step": "deleted QA user 2c6b2588",
+      "step": "deleted QA user bdaa6958",
       "ok": true,
       "detail": "200"
     },
@@ -259,7 +259,7 @@
     }
   ],
   "pass": true,
-  "started": "2026-11-07T05:39:05Z",
+  "started": "2026-11-07T06:19:30Z",
   "realtime": true,
-  "finished": "2026-11-07T05:40:00Z"
+  "finished": "2026-11-07T06:20:22Z"
 }
