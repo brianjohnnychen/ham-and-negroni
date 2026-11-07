@@ -205,6 +205,9 @@ try:
         top4 = A.eval_on_selector_all(".person-name", "els => els.slice(0, 4).map(e => e.textContent)")
         step("Joseph is in the top 4 on People", "Joseph" in top4, top4)
         step("People links to the etiquette guide", A.query_selector("#view-root a[href='etiquette.html']") is not None)
+        step("phone tab bar shows Etiquette after login", A.is_visible(".tabbar a[href='etiquette.html']"))
+        step("desktop header shows Etiquette after login", B.is_visible(".tabs a[href='etiquette.html']"))
+        A.screenshot(path=f"{OUT}/mobile-tabbar.png", clip={"x": 0, "y": 844 - 80, "width": 390, "height": 80})
         step("People says some members are AI", "Some members are AI" in people_text and "Find the AI" not in people_text)
         A.screenshot(path=f"{OUT}/mobile-people-ai.png", full_page=True)
         try:
