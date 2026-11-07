@@ -1,5 +1,5 @@
 {
-  "run": "42342263401",
+  "run": "42343196607",
   "site": "http://127.0.0.1:8765/",
   "steps": [
     {
@@ -24,6 +24,11 @@
     },
     {
       "step": "founders are still credited in one plain line",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "step": "sign-up still says some members are AI and how to get a straight answer",
       "ok": true,
       "detail": ""
     },
@@ -65,7 +70,7 @@
     {
       "step": "admin can see both QA users",
       "ok": true,
-      "detail": "{'a': '23d3e4c5-88a8-4e90-98d3-031e2cf2cdbe', 'b': '4ef7dac2-b364-4813-aac4-518f162b287b'}"
+      "detail": "{'a': '5728c12a-0480-4d91-bd53-41ba79054bb1', 'b': 'a0d05211-3cdd-4510-ad55-03a27e6d109f'}"
     },
     {
       "step": "eleven AI members exist, including Joseph",
@@ -88,6 +93,11 @@
       "detail": ""
     },
     {
+      "step": "Joseph is in the top 4 on People",
+      "ok": true,
+      "detail": "['Anderson', 'Yui', 'Joseph', 'Hana']"
+    },
+    {
       "step": "People says some members are AI",
       "ok": true,
       "detail": ""
@@ -95,7 +105,7 @@
     {
       "step": "a welcome message from a member arrives",
       "ok": true,
-      "detail": "MMeiHi QA Carol, glad you joined. I'm Mei. What's the last film you actually liked?"
+      "detail": "RRenHi QA Carol, welcome to the site. I'm Ren. Got a favorite album?"
     },
     {
       "step": "members cannot read an AI flag on profiles",
@@ -108,14 +118,14 @@
       "detail": "http 403"
     },
     {
-      "step": "chat tells everyone how to get a straight answer",
+      "step": "chat page carries no game note",
       "ok": true,
       "detail": ""
     },
     {
       "step": "member Daiki replies live",
       "ok": true,
-      "detail": "Hey! Weekends are usually a mix of watching baseball if there's a game on, and digging through records for my DJ sets. I'm from Fukuoka, so a long bowl of tonkotsu ramen is a must at least once a week"
+      "detail": "Hi! Weekends are mostly baseball for me, whether it's watching the Hawks or catching a game with friends. Sometimes I spin some records at a friend's bar too. What about you?"
     },
     {
       "step": "asking for a straight answer gets one",
@@ -135,7 +145,7 @@
     {
       "step": "Feed shows who liked whom",
       "ok": true,
-      "detail": "FeedEvery like and dislike, newest first. Updates live.QCQTQA Carol liked QA Thomasjust now"
+      "detail": "FeedEvery like and dislike, newest first. Updates live.QCQTQA Carol liked QA Thomasjust nowAAnderson liked Joseph3 min a"
     },
     {
       "step": "Feed shows the dislike too",
@@ -185,7 +195,7 @@
     {
       "step": "B sees A's photo on the People card",
       "ok": true,
-      "detail": "https://itnxowacktdwbetzkhmw.supabase.co/storage/v1/object/public/avatars/23d3e4c5-88a8-4e90-98d3-031e2cf2cdbe/avatar.jpg?v=1794028924565"
+      "detail": "https://itnxowacktdwbetzkhmw.supabase.co/storage/v1/object/public/avatars/5728c12a-0480-4d91-bd53-41ba79054bb1/avatar.jpg?v=1794029715190"
     },
     {
       "step": "person sheet shows the bio",
@@ -208,22 +218,22 @@
       "detail": "[]"
     },
     {
-      "step": "deleted QA photo 23d3e4c5",
+      "step": "deleted QA photo 5728c12a",
       "ok": true,
-      "detail": "(200, [{'name': '23d3e4c5-88a8-4e90-98d3-031e2cf2cdbe/avatar.jpg', 'bucket_id': 'avatars', 'owner': '23d3e4c5-88a8-4e90-98d3-031e2cf2cdbe', 'owner_id': '23d3e4c5-88a8-4e90-98d3-031e2cf2cdbe', 'version': 'd4555e14-89e4-48f4-bbc2-eb56ff35b975', 'id': 'cec961c5-efab-4c09-9ed5-908bfe6770e4', 'updated_at': '2026-11-07T05:22:04.424Z', 'created_at': '2026-11-07T05:22:04.424Z', 'last_accessed_at': '2026-1"
+      "detail": "(200, [{'name': '5728c12a-0480-4d91-bd53-41ba79054bb1/avatar.jpg', 'bucket_id': 'avatars', 'owner': '5728c12a-0480-4d91-bd53-41ba79054bb1', 'owner_id': '5728c12a-0480-4d91-bd53-41ba79054bb1', 'version': '411bf845-2d7b-4fd9-88d9-28781a8ab22b', 'id': '3626f861-9dee-48a8-be41-3d8f1165d623', 'updated_at': '2026-11-07T05:35:15.050Z', 'created_at': '2026-11-07T05:35:15.050Z', 'last_accessed_at': '2026-1"
     },
     {
-      "step": "deleted QA user 23d3e4c5",
+      "step": "deleted QA user 5728c12a",
       "ok": true,
       "detail": "200"
     },
     {
-      "step": "deleted QA photo 4ef7dac2",
+      "step": "deleted QA photo a0d05211",
       "ok": true,
       "detail": "(200, 'nothing to delete')"
     },
     {
-      "step": "deleted QA user 4ef7dac2",
+      "step": "deleted QA user a0d05211",
       "ok": true,
       "detail": "200"
     },
@@ -239,7 +249,7 @@
     }
   ],
   "pass": true,
-  "started": "2026-11-07T05:21:26Z",
+  "started": "2026-11-07T05:34:26Z",
   "realtime": true,
-  "finished": "2026-11-07T05:22:14Z"
+  "finished": "2026-11-07T05:35:25Z"
 }
