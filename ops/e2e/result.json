@@ -1,5 +1,5 @@
 {
-  "run": "42338253455",
+  "run": "42338523505",
   "site": "http://127.0.0.1:8765/",
   "steps": [
     {
@@ -60,7 +60,7 @@
     {
       "step": "admin can see both QA users",
       "ok": true,
-      "detail": "{'a': '33a7e8ad-fdd9-4e54-8d68-169a76078036', 'b': 'ef7344b4-d6fa-485c-a564-c73afbe0a0a5'}"
+      "detail": "{'a': '3681a070-73f4-4fb6-b56e-31f9c36455f0', 'b': '53051ddb-e76f-4dd1-b072-53a39e453ab9'}"
     },
     {
       "step": "ten AI members exist",
@@ -80,7 +80,7 @@
     {
       "step": "a welcome message from an AI member arrives",
       "ok": true,
-      "detail": "MMei (a)Hi QA Carol, glad you joined. I'm Mei, one of the AI members here, marke"
+      "detail": "RRina (a)Hi QA Carol, welcome! I'm Rina, one of the AI members here, marked (a)."
     },
     {
       "step": "members cannot flag themselves as AI",
@@ -118,27 +118,32 @@
       "detail": ""
     },
     {
-      "step": "unexpected error",
+      "step": "click open-chat-B",
       "ok": false,
-      "detail": "TimeoutError('Page.click: Timeout 30000ms exceeded.\\nCall log:\\n  - waiting for locator(\"[data-open-chat=\\'33a7e8ad-fdd9-4e54-8d68-169a76078036\\']\")\\n    - locator resolved to <button class=\"convo\" type=\"button\" data-open-chat=\"33a7e8ad-fdd9-4e54-8d68-169a76078036\">\u2026</button>\\n  - attempting click a || a: no debug (Error('Event loop is closed! Is Playwright already stopped?')) || b: no debug (Erro"
+      "detail": "Page.click: Timeout 15000ms exceeded.\nCall log:\n  - waiting for locator(\"[data-open-chat='3681a070-73f4-4fb6-b56e-31f9c3 || {\"rect\":[200,255.578125,874,72.6875],\"top\":\"<div class=\\\"empty\\\" data-mobile-hide=\\\"\\\"><h3>Select a conversation</h3><p>Choose one from the list, or start a new one.</p></div>\",\"convos\":2,\"view\":\"#chats\"}"
     },
     {
-      "step": "deleted QA photo 33a7e8ad",
+      "step": "unexpected error",
+      "ok": false,
+      "detail": "TimeoutError('Page.click: Timeout 15000ms exceeded.\\nCall log:\\n  - waiting for locator(\"[data-open-chat=\\'3681a070-73f4-4fb6-b56e-31f9c36455f0\\']\")\\n    - locator resolved to <button class=\"convo\" type=\"button\" data-open-chat=\"3681a070-73f4-4fb6-b56e-31f9c36455f0\">\u2026</button>\\n  - attempting click a || a: no debug (Error('Event loop is closed! Is Playwright already stopped?')) || b: no debug (Erro"
+    },
+    {
+      "step": "deleted QA photo 3681a070",
       "ok": true,
       "detail": "(200, 'nothing to delete')"
     },
     {
-      "step": "deleted QA user 33a7e8ad",
+      "step": "deleted QA user 3681a070",
       "ok": true,
       "detail": "200"
     },
     {
-      "step": "deleted QA photo ef7344b4",
+      "step": "deleted QA photo 53051ddb",
       "ok": true,
       "detail": "(200, 'nothing to delete')"
     },
     {
-      "step": "deleted QA user ef7344b4",
+      "step": "deleted QA user 53051ddb",
       "ok": true,
       "detail": "200"
     },
@@ -154,11 +159,11 @@
     }
   ],
   "pass": false,
-  "started": "2026-11-07T04:25:05Z",
+  "started": "2026-11-07T04:27:50Z",
   "console": {
     "a": [],
     "b": []
   },
   "realtime": true,
-  "finished": "2026-11-07T04:26:07Z"
+  "finished": "2026-11-07T04:28:33Z"
 }
