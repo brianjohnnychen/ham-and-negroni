@@ -401,7 +401,7 @@
 
   function renderPeople() {
     const others = Array.from(state.profiles.values()).filter((p) => p.id !== state.user.id);
-    let html = '<div class="view-head"><div><h2>People</h2><p>' + (others.length ? others.length + (others.length === 1 ? ' other member' : ' other members') + '. Like or dislike anyone; it shows on the feed.' : 'Like or dislike anyone; it shows on the feed.') + ' Find the AI is on: some members are AI.</p></div></div>';
+    let html = '<div class="view-head"><div><h2>People</h2><p>' + (others.length ? others.length + (others.length === 1 ? ' other member' : ' other members') + '. Like or dislike anyone; it shows on the feed.' : 'Like or dislike anyone; it shows on the feed.') + ' Some members are AI.</p></div></div>';
     if (!others.length) {
       return html + '<div class="empty"><h3>You are the first one here.</h3><p>Invite your friends to get started.</p><button class="btn btn-soft" type="button" data-share>Copy invite link</button></div>';
     }
@@ -460,7 +460,7 @@
         '<div class="thread-head"><a class="icon-btn back" href="#chats" aria-label="Back to messages">‹</a>' + avatar(peer, 'sm') + '<span class="cname">' + nm(peer) + '</span></div>' +
         '<div class="bubbles" data-bubbles>' + (thread.length ? thread.map((m) => '<div class="bubble' + (m.sender === state.user.id ? ' mine' : '') + '">' + esc(m.body) + '<time>' + esc(clock(m.created_at)) + '</time></div>').join('') : '<p class="small" style="text-align:center;padding:20px 0">No messages yet. Say hi.</p>') + '</div>' +
         '<form class="composer" data-composer><input name="body" type="text" maxlength="2000" autocomplete="off" placeholder="Write a message" aria-label="Message" required><button class="btn btn-primary" type="submit">Send</button></form>' +
-        '<p class="small game-note">Find the AI is on. Send &quot;pause game&quot; for a straight answer.</p>' +
+        '<p class="small game-note">Some members are AI. Send &quot;straight answer&quot; for an honest answer.</p>' +
         '</section>';
     } else {
       right = '<div class="empty" data-mobile-hide><h3>Select a conversation</h3><p>Choose one from the list, or start a new one.</p></div>';

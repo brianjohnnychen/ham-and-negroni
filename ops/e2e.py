@@ -143,6 +143,7 @@ try:
         B.screenshot(path=f"{OUT}/desktop-landing.png", full_page=True)
         landing = B.text_content("#landing")
         step("founder titles list is gone", "Chief Taste Officer" not in landing and "Last Train Coordinator" not in landing and B.query_selector(".founder-list") is None)
+        step("landing does not name the game", "Find the AI" not in landing)
         step("founders are still credited in one plain line", "Carol, Anderson, Thomas, Brian, Timothy and Joseph" in landing)
         step("not in demo mode", A.evaluate("() => !!(window.HN_CONFIG && window.HN_CONFIG.url)"), "config.js has a backend url")
 
@@ -167,16 +168,16 @@ try:
         cleanup_ids = [i for i in ids.values() if i]
         step("admin can see both QA users", all(ids.values()), ids)
 
-        # AI members ("Find the AI"): no labels anywhere, hidden from members, welcome message, honest pause, live reply
+        # AI members: no labels anywhere, hidden from members, welcome message, honest pause, live reply
         st, personas = admin("GET", "/rest/v1/bot_personas?select=profile_id,profiles(display_name)")
         personas = personas if isinstance(personas, list) else []
         bots = sorted([{"id": r["profile_id"], "display_name": (r.get("profiles") or {}).get("display_name", "?")} for r in personas], key=lambda b: b["display_name"])
-        step("ten AI members exist", len(bots) == 10, [b["display_name"] for b in bots])
+        step("at least ten AI members exist", len(bots) >= 10, [b["display_name"] for b in bots])
         nav(A, "people")
         A.wait_for_selector(".person-name", timeout=15000)
         people_text = A.text_content("#view-root")
         step("People lists the AI members with no AI label", A.eval_on_selector_all(".person-name", "els => els.length") >= 11 and "(a)" not in people_text and "AI member" not in people_text and A.query_selector(".ai-tag") is None)
-        step("People explains that Find the AI is on", "Find the AI is on" in people_text)
+        step("People says some members are AI", "Some members are AI" in people_text and "Find the AI" not in people_text)
         A.screenshot(path=f"{OUT}/mobile-people-ai.png", full_page=True)
         try:
             nav(A, "chats")
@@ -209,7 +210,7 @@ try:
             bot = bots[0]
             nav(A, "chats/" + bot["id"])
             A.wait_for_selector("[data-composer] input", timeout=15000)
-            step("chat tells everyone how to pause the game", "pause game" in A.text_content("#view-root"))
+            step("chat tells everyone how to get a straight answer", "straight answer" in A.text_content("#view-root") and "Find the AI" not in A.text_content("#view-root"))
             incoming = "[data-bubbles] .bubble:not(.mine)"
 
             def ask(text, want_in_bubbles):
@@ -224,10 +225,10 @@ try:
                 reply = ask("Hi! What do you like to do on weekends?", "weekends")
                 bad = ("lost my train of thought" in reply) or ("step away" in reply)
                 step(f"member {bot['display_name']} replies live", not bad, reply[:200])
-                reply = ask("pause game", "pause game")
-                step("pause game gets a straight answer", "AI member" in reply and "not a real person" in reply, reply[:200])
-                reply = ask("resume game", "resume game")
-                step("resume game continues the game", "Back in the game" in reply, reply[:200])
+                reply = ask("straight answer", "straight answer")
+                step("asking for a straight answer gets one", "AI member" in reply and "not a real person" in reply, reply[:200])
+                reply = ask("play along", "play along")
+                step("play along carries on", "back to it" in reply, reply[:200])
             except Exception as ex:
                 step(f"member {bot['display_name']} replies live", False, "no reply within 75s: " + str(ex)[:80])
             A.screenshot(path=f"{OUT}/mobile-ai-chat.png")

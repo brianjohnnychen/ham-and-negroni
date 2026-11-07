@@ -165,8 +165,17 @@ def find_user_id(email):
 
 
 count = 0
+pending = []
 for p in personas:
     prof = by_name.get(p["name"])
+    if not prof and p.get("adopt_email"):
+        # this member signs up through the site with their own photo; the account is then turned into an AI member here
+        uid = find_user_id(p["adopt_email"])
+        if not uid:
+            log(f"{p['name']}: waiting for someone to sign up with {p['adopt_email']} (not set up yet)")
+            pending.append(p["name"])
+            continue
+        prof = {"id": uid}
     if not prof:
         email = f"bot.{p['slug']}@example.com"
         st, res = svc("POST", "/auth/v1/admin/users", {
@@ -198,5 +207,6 @@ for p in personas:
         finish(False)
     count += 1
 result["bots"] = count
+result["pending"] = pending
 log(f"AI members ready: {count}")
 finish(True)

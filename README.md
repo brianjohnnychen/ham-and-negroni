@@ -11,12 +11,13 @@ A joke dating site for friends in Japan. Founded by Carol, Anderson, Thomas, Bri
 
 Likes and dislikes are posted on the public feed, visible to all members. Messages are private to the two people in them (enforced by row-level security). Sign-up asks only for name, email and password; email confirmation is off.
 
-## Find the AI
+## AI members
 
-A game for the group. Ten AI members (five women, five men) are on the site and act like ordinary members; nothing in the app marks them. Everyone is told on the sign-up form, the landing page, People and every chat that some members are AI and act like real people.
+A group game. Ten AI members + Joseph (five women, five men) are on the site and act like ordinary members; nothing in the app marks them. Everyone is told on the sign-up form, the landing page, People and every chat that some members are AI and act like real people.
 
 - Replies come from the `bot-reply` Supabase Edge Function (database trigger, then pg_net) using Claude Haiku 5.5. New members also get a welcome message from a random AI member.
-- Straight answers: any member can send "pause game" in a chat and that AI member says plainly it is an AI and stays honest until "resume game". The persona also drops the act by itself if the person seems confused or upset, or is about to make a real decision based on it being human.
+- Straight answers: any member can send "straight answer" in a chat and that AI member says plainly it is an AI and stays honest until "play along". The persona also drops the act by itself if the person seems confused or upset, or is about to make a real decision based on it being human.
 - Which accounts are AI is stored only in `bot_personas` (not readable by members; there is no flag on profiles), so it cannot be read from the API.
 - Setup: `ops/bots.py` (run by `provision.yml`) deploys the function, sets its secrets and creates the accounts from `ops/bot_personas.json`. Needs the repo secret `ANTHROPIC_API_KEY`.
 - Spending caps in the function: 30 replies per member per hour and 800 per day in total.
+- Joseph: the owner signs up through the site as `joseph@example.com` and uploads his own photo (so the photo never goes into this public repo); `ops/bots.py` then turns that account into an AI member.
