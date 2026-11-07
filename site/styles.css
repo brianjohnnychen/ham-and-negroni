@@ -221,14 +221,9 @@ p { margin: 0; }
 .teaser-list time { color: #cbb5a8; font-size: 0.85rem; }
 @media (min-width: 720px) { .tab-teaser { grid-template-columns: 1fr 1.2fr; gap: 40px; padding: 40px; align-items: center; } }
 
-.founders { display: grid; gap: 28px; }
+.founders { max-width: 720px; }
 .founders-photo { border-radius: var(--radius); box-shadow: var(--shadow); width: 100%; height: auto; }
 .founders figcaption { margin-top: 10px; font-size: 0.92rem; color: var(--cocoa); }
-.founder-list { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
-.founder-list li { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding: 12px 0; border-bottom: 2px dotted var(--pink-deep); }
-.founder-list .fname { font-family: var(--display); font-variation-settings: "SOFT" 100, "WONK" 1; font-weight: 600; font-size: 1.3rem; }
-.founder-list .ftitle { color: var(--cocoa); text-align: right; }
-@media (min-width: 880px) { .founders { grid-template-columns: 1.2fr 0.8fr; align-items: start; } }
 
 .site-foot { padding: 40px 0 56px; color: var(--cocoa); font-size: 0.92rem; display: grid; gap: 8px; }
 
@@ -346,7 +341,8 @@ p { margin: 0; }
 }
 .person-photo img { width: 100%; height: 100%; object-fit: cover; }
 .person-name { font-family: var(--display); font-variation-settings: "SOFT" 100, "WONK" 1; font-weight: 600; font-size: 1.2rem; line-height: 1.1; }
-.person-order { font-size: 0.88rem; color: var(--cocoa); min-height: 1.3em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.person > * { min-width: 0; }
+.person-order { font-size: 0.88rem; color: var(--cocoa); min-height: 2.6em; line-height: 1.3; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow-wrap: anywhere; }
 .tally { display: flex; gap: 6px; flex-wrap: wrap; }
 .chip {
   display: inline-flex; align-items: center; gap: 4px; font-size: 0.8rem; font-weight: 600; padding: 3px 9px; border-radius: 999px;

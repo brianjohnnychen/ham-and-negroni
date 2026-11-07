@@ -47,13 +47,13 @@
   }
   function friendlyError(err) {
     const m = (err && err.message) || String(err || 'Something went wrong');
-    if (/already registered|already exists|already been registered/i.test(m)) return 'That email already has a seat at the bar. Sign in instead.';
-    if (/invalid login credentials|invalid_credentials/i.test(m)) return 'Wrong email or password. The bartender is sure.';
+    if (/already registered|already exists|already been registered/i.test(m)) return 'That email is already registered. Sign in instead.';
+    if (/invalid login credentials|invalid_credentials/i.test(m)) return 'Wrong email or password.';
     if (/at least 6|password should be/i.test(m)) return 'Password needs at least 6 characters.';
-    if (/rate limit/i.test(m)) return 'Too many tries in a row. Give it a minute, then try again.';
+    if (/rate limit/i.test(m)) return 'Too many attempts. Wait a minute and try again.';
     if (/email not confirmed/i.test(m)) return 'Your email still needs confirming. Check your inbox.';
     if (/invalid.*email|unable to validate email/i.test(m)) return 'That email address does not look right.';
-    if (/Failed to fetch|NetworkError|network/i.test(m)) return 'Could not reach the bar. Check your connection and try again.';
+    if (/Failed to fetch|NetworkError|network/i.test(m)) return 'Could not reach the server. Check your connection and try again.';
     return m;
   }
   function resizeImage(file, size) {
@@ -99,7 +99,7 @@
       async session() { return unwrap(await client.auth.getSession()).session; },
       onAuth(cb) { client.auth.onAuthStateChange((_e, s) => cb(s)); },
       async signUp(f) {
-        const data = unwrap(await client.auth.signUp({ email: f.email, password: f.password, options: { data: { display_name: f.display_name, drink: f.drink } } }));
+        const data = unwrap(await client.auth.signUp({ email: f.email, password: f.password, options: { data: { display_name: f.display_name } } }));
         return { session: data.session, user: data.user };
       },
       async signIn(f) { return unwrap(await client.auth.signInWithPassword({ email: f.email, password: f.password })).session; },
@@ -109,7 +109,7 @@
         const rows = unwrap(await client.from('profiles').select('*').eq('id', user.id));
         if (rows.length) return rows[0];
         const md = (user.user_metadata || {});
-        return unwrap(await client.from('profiles').insert({ id: user.id, display_name: md.display_name || (user.email || 'someone').split('@')[0], drink: md.drink || '' }).select().single());
+        return unwrap(await client.from('profiles').insert({ id: user.id, display_name: md.display_name || (user.email || 'someone').split('@')[0] }).select().single());
       },
       async currentVerdicts() { return unwrap(await client.from('current_verdicts').select('*')); },
       async feed() { return unwrap(await client.from('verdicts').select('*').order('created_at', { ascending: false }).limit(150)); },
@@ -143,14 +143,14 @@
   function demoApi() {
     const now = Date.now();
     const ago = (m) => new Date(now - m * 60000).toISOString();
-    const P = (id, name, drink, bio, min) => ({ id, display_name: name, drink, bio, avatar_url: null, created_at: ago(min) });
+    const P = (id, name, bio, min) => ({ id, display_name: name, bio, avatar_url: null, created_at: ago(min) });
     const ids = { carol: 'demo-carol', anderson: 'demo-anderson', thomas: 'demo-thomas', brian: 'demo-brian', timothy: 'demo-timothy' };
     const profiles = [
-      P(ids.carol, 'Carol', 'Negroni, extra orange', 'Chief Taste Officer. Orders for the table. Is right about it.', 900),
-      P(ids.anderson, 'Anderson', 'Negroni, obviously', 'Head of Negroni. Equal parts gin, Campari and good ideas.', 880),
-      P(ids.thomas, 'Thomas', 'Highball', 'Director of First Impressions. Has never had a bad one.', 860),
-      P(ids.brian, 'Brian', 'Oolong tea, sometimes a Negroni', 'Keeper of the Tab. Sees everything.', 840),
-      P(ids.timothy, 'Timothy', 'Whatever Carol ordered', 'Last Train Coordinator. Knows every timetable in Kanto.', 820),
+      P(ids.carol, 'Carol', 'Co-founder. Chooses the restaurant.', 900),
+      P(ids.anderson, 'Anderson', 'Co-founder. Makes the Negronis.', 880),
+      P(ids.thomas, 'Thomas', 'Co-founder. Good at first impressions.', 860),
+      P(ids.brian, 'Brian', 'Co-founder. Keeps the feed running.', 840),
+      P(ids.timothy, 'Timothy', 'Co-founder. Knows the last train times.', 820),
     ];
     let seq = 1;
     const verdicts = [
@@ -170,14 +170,14 @@
       async session() { return user ? { user } : null; },
       onAuth(cb) { authCb = cb; },
       async signUp(f) {
-        user = { id: 'demo-' + uuid().slice(0, 8), email: f.email, user_metadata: { display_name: f.display_name, drink: f.drink } };
-        profiles.push(P(user.id, f.display_name || 'You', f.drink || '', '', 0));
+        user = { id: 'demo-' + uuid().slice(0, 8), email: f.email, user_metadata: { display_name: f.display_name } };
+        profiles.push(P(user.id, f.display_name || 'You', '', 0));
         messages = seedMessages(user.id);
         return { session: { user }, user };
       },
       async signIn(f) {
         user = { id: 'demo-you', email: f.email, user_metadata: {} };
-        if (!profiles.find((p) => p.id === user.id)) profiles.push(P(user.id, (f.email || 'You').split('@')[0], 'Negroni', 'Just here for the ham.', 0));
+        if (!profiles.find((p) => p.id === user.id)) profiles.push(P(user.id, (f.email || 'You').split('@')[0], '', 0));
         messages = seedMessages(user.id);
         return { user };
       },
@@ -194,7 +194,7 @@
       async myMessages() { return messages.filter((m) => m.sender === user.id || m.recipient === user.id).sort((a, b) => b.created_at.localeCompare(a.created_at)); },
       async sendMessage(recipient, body) {
         const m = { id: seq++, sender: user.id, recipient, body, created_at: tick() }; messages.push(m);
-        setTimeout(() => { const r = { id: seq++, sender: recipient, recipient: user.id, body: 'Another round? 🍸', created_at: tick() }; messages.push(r); handlers && handlers.message(r); }, 1800);
+        setTimeout(() => { const r = { id: seq++, sender: recipient, recipient: user.id, body: 'Hey, nice to meet you.', created_at: tick() }; messages.push(r); handlers && handlers.message(r); }, 1800);
         return m;
       },
       async updateProfile(fields) { const p = profiles.find((x) => x.id === user.id); Object.assign(p, fields); return p; },
@@ -203,10 +203,10 @@
     };
     function seedMessages(uid) {
       return [
-        { id: seq++, sender: ids.carol, recipient: uid, body: 'Is this thing on? Also, you owe me a Negroni.', created_at: ago(40) },
-        { id: seq++, sender: uid, recipient: ids.carol, body: 'It is on. I owe you nothing. I owe Thomas a Negroni.', created_at: ago(38) },
-        { id: seq++, sender: ids.carol, recipient: uid, body: 'Noted on the Tab.', created_at: ago(37) },
-        { id: seq++, sender: ids.timothy, recipient: uid, body: 'Last train is 23:58. Plan accordingly.', created_at: ago(12) },
+        { id: seq++, sender: ids.carol, recipient: uid, body: 'Hey, welcome to the site.', created_at: ago(40) },
+        { id: seq++, sender: uid, recipient: ids.carol, body: 'Thanks, glad to be here.', created_at: ago(38) },
+        { id: seq++, sender: ids.carol, recipient: uid, body: 'Say hi to the others too.', created_at: ago(37) },
+        { id: seq++, sender: ids.timothy, recipient: uid, body: 'Last train is 23:58, just so you know.', created_at: ago(12) },
       ];
     }
   }
@@ -222,7 +222,7 @@
       return;
     }
     const [view, arg] = h.split('/');
-    state.view = ['people', 'tab', 'chats', 'me'].includes(view) ? view : 'people';
+    state.view = ['people', 'feed', 'chats', 'me'].includes(view) ? view : 'people';
     state.peer = state.view === 'chats' && arg ? arg : null;
     showApp();
     render();
@@ -257,7 +257,7 @@
     $$('.auth-switch [data-mode]').forEach((b) => b.setAttribute('aria-selected', String(b.dataset.mode === mode)));
     $('#join-form').hidden = mode !== 'join';
     $('#signin-form').hidden = mode !== 'signin';
-    $('#auth-title').textContent = mode === 'join' ? 'Welcome in' : 'Welcome back';
+    $('#auth-title').textContent = mode === 'join' ? 'Create an account' : 'Sign in';
   }
   $$('[data-auth]').forEach((b) => b.addEventListener('click', () => openAuth(b.dataset.auth)));
   $$('[data-close-auth]').forEach((b) => b.addEventListener('click', closeAuth));
@@ -266,7 +266,7 @@
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeAuth(); closePerson(); } });
 
   function formError(form, msg) { const el = $('[data-error]', form); el.textContent = msg || ''; el.hidden = !msg; }
-  function busy(form, on) { const b = $('button[type=submit]', form); b.disabled = on; b.dataset.label = b.dataset.label || b.textContent; b.textContent = on ? 'One moment…' : b.dataset.label; }
+  function busy(form, on) { const b = $('button[type=submit]', form); b.disabled = on; b.dataset.label = b.dataset.label || b.textContent; b.textContent = on ? 'Please wait…' : b.dataset.label; }
 
   $('#join-form').addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -274,8 +274,7 @@
     const f = Object.fromEntries(new FormData(form));
     f.display_name = (f.display_name || '').trim();
     f.email = (f.email || '').trim();
-    f.drink = (f.drink || '').trim();
-    if (!f.display_name) return formError(form, 'Tell us what the bartender should call you.');
+    if (!f.display_name) return formError(form, 'Enter your name.');
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.email)) return formError(form, 'That email address does not look right.');
     if ((f.password || '').length < 6) return formError(form, 'Password needs at least 6 characters.');
     formError(form, '');
@@ -285,11 +284,11 @@
       if (!r.session) {
         formError(form, '');
         $('[data-error]', form).className = 'form-ok';
-        $('[data-error]', form).textContent = 'Almost in. Check your email for a confirmation link, then sign in.';
+        $('[data-error]', form).textContent = 'Check your email for a confirmation link, then sign in.';
         $('[data-error]', form).hidden = false;
       } else {
         await enter(r.session.user);
-        toast('Welcome in, ' + f.display_name + '. Grab a stool.');
+        toast('Welcome, ' + f.display_name + '.');
       }
     } catch (err) {
       formError(form, friendlyError(err));
@@ -327,7 +326,7 @@
       },
       profile(p) { state.profiles.set(p.id, p); render(); },
     });
-    if (!/^#(people|tab|chats|me)/.test(location.hash)) history.replaceState(null, '', '#people');
+    if (!/^#(people|feed|chats|me)/.test(location.hash)) history.replaceState(null, '', '#people');
     route();
   }
   async function loadAll(user) {
@@ -382,7 +381,7 @@
     const mine = me();
     $('[data-head-me]').innerHTML = avatar(mine, 'sm') + '<span class="sr-only">Your profile</span>';
     const root = $('#view-root');
-    const views = { people: renderPeople, tab: renderTab, chats: renderChats, me: renderMe };
+    const views = { people: renderPeople, feed: renderFeed, chats: renderChats, me: renderMe };
     // keep whatever the person is typing, and where the thread is scrolled, across re-renders
     const drafts = {};
     $$('input, textarea', root).forEach((el) => { const k = el.id || el.name; if (k && el.type !== 'file') drafts[k] = el.value; });
@@ -400,12 +399,12 @@
 
   function renderPeople() {
     const others = Array.from(state.profiles.values()).filter((p) => p.id !== state.user.id);
-    let html = '<div class="view-head"><div><h2>Everyone at the bar</h2><p>' + (others.length ? others.length + (others.length === 1 ? ' other person' : ' other people') + ' in tonight. Give your verdicts; they all go on the Tab.' : 'Give your verdicts; they all go on the Tab.') + '</p></div></div>';
+    let html = '<div class="view-head"><div><h2>People</h2><p>' + (others.length ? others.length + (others.length === 1 ? ' other member' : ' other members') + '. Like or dislike anyone; it shows on the feed.' : 'Like or dislike anyone; it shows on the feed.') + '</p></div></div>';
     if (!others.length) {
-      return html + '<div class="empty"><h3>You are the first one in.</h3><p>Invite the others. The bar is very quiet and the ham is getting warm.</p><button class="btn btn-soft" type="button" data-share>Copy the invite link</button></div>';
+      return html + '<div class="empty"><h3>You are the first one here.</h3><p>Invite your friends to get started.</p><button class="btn btn-soft" type="button" data-share>Copy invite link</button></div>';
     }
     html += '<div class="people-grid">' + others.map(personCard).join('') + '</div>';
-    html += '<p class="me-note">You are in the room too. Edit how you look under Me.</p>';
+    html += '<p class="me-note">You can edit your own profile under Profile.</p>';
     return html;
   }
   function personCard(p) {
@@ -413,25 +412,25 @@
     const mv = myVerdict(p.id);
     return '<article class="person" data-person="' + esc(p.id) + '">' +
       '<button class="person-photo" type="button" data-open-person="' + esc(p.id) + '" aria-label="Open ' + esc(p.display_name) + '">' + (p.avatar_url ? '<img src="' + esc(p.avatar_url) + '" alt="" loading="lazy">' : esc(initials(p.display_name))) + '</button>' +
-      '<div><div class="person-name">' + esc(p.display_name) + '</div><div class="person-order">' + (p.drink ? 'Usual: ' + esc(p.drink) : '<span class="muted">No usual yet</span>') + '</div></div>' +
-      '<div class="tally"><span class="chip round">🍸 ' + t.round + '</span><span class="chip night">🌙 ' + t.night + '</span></div>' +
+      '<div><div class="person-name">' + esc(p.display_name) + '</div><div class="person-order">' + (p.bio ? esc(p.bio.length > 70 ? p.bio.slice(0, 67) + '…' : p.bio) : '<span class="muted">No bio yet</span>') + '</div></div>' +
+      '<div class="tally"><span class="chip round" title="Likes">👍 ' + t.round + '</span><span class="chip night" title="Dislikes">👎 ' + t.night + '</span></div>' +
       '<div class="verdicts">' +
-        '<button class="btn btn-round' + (mv === 'round' ? ' is-active' : '') + '" type="button" data-verdict="round" data-target="' + esc(p.id) + '"' + (mv === 'round' ? ' aria-pressed="true"' : '') + '>Another round</button>' +
-        '<button class="btn btn-night' + (mv === 'night' ? ' is-active' : '') + '" type="button" data-verdict="night" data-target="' + esc(p.id) + '"' + (mv === 'night' ? ' aria-pressed="true"' : '') + '>Call it a night</button>' +
+        '<button class="btn btn-round' + (mv === 'round' ? ' is-active' : '') + '" type="button" data-verdict="round" data-target="' + esc(p.id) + '"' + (mv === 'round' ? ' aria-pressed="true"' : '') + '>Like</button>' +
+        '<button class="btn btn-night' + (mv === 'night' ? ' is-active' : '') + '" type="button" data-verdict="night" data-target="' + esc(p.id) + '"' + (mv === 'night' ? ' aria-pressed="true"' : '') + '>Dislike</button>' +
       '</div></article>';
   }
 
   function feedLine(v) {
     const a = state.profiles.get(v.actor) || { display_name: 'Someone' };
     const b = state.profiles.get(v.target) || { display_name: 'someone' };
-    const verb = v.kind === 'round' ? ' <span class="verb">wants another round</span> with ' : ' <span class="verb night">is calling it a night</span> with ';
+    const verb = v.kind === 'round' ? ' <span class="verb">liked</span> ' : ' <span class="verb night">disliked</span> ';
     return '<div class="feed-item' + (state.feed._fresh === v.id ? ' pop' : '') + '"><span class="pair">' + avatar(a, 'sm') + avatar(b, 'sm') + '</span>' +
       '<p class="line"><b>' + esc(a.display_name) + '</b>' + verb + '<b>' + esc(b.display_name) + '</b></p>' +
       '<time datetime="' + esc(v.created_at) + '" title="' + esc(new Date(v.created_at).toLocaleString()) + '">' + esc(timeAgo(v.created_at)) + '</time></div>';
   }
-  function renderTab() {
-    let html = '<div class="view-head"><div><h2>The Tab</h2><p>Everyone\'s business, newest first.' + (state.realtime ? ' Updates live.' : '') + '</p></div></div>';
-    if (!state.feed.length) return html + '<div class="empty"><h3>Nothing on the Tab yet.</h3><p>Be the first to make it awkward. Verdicts are under People.</p><a class="btn btn-soft" href="#people">Go to People</a></div>';
+  function renderFeed() {
+    let html = '<div class="view-head"><div><h2>Feed</h2><p>Every like and dislike, newest first.' + (state.realtime ? ' Updates live.' : '') + '</p></div></div>';
+    if (!state.feed.length) return html + '<div class="empty"><h3>Nothing here yet.</h3><p>Likes and dislikes will show up here. Find someone on People.</p><a class="btn btn-soft" href="#people">Go to People</a></div>';
     html += '<div class="feed">' + state.feed.map(feedLine).join('') + '</div>';
     return html;
   }
@@ -448,36 +447,35 @@
             (c.unread ? '<span class="dot" aria-label="Unread"></span>' : '<time class="small">' + esc(timeAgo(c.last.created_at)) + '</time>') + '</button>';
         }).join('') + '</div>'
       : '';
-    const picker = '<div class="field"><label for="chat-pick">Start a chat</label><select id="chat-pick"><option value="">Pick someone…</option>' +
+    const picker = '<div class="field"><label for="chat-pick">New message</label><select id="chat-pick"><option value="">Choose someone…</option>' +
       Array.from(state.profiles.values()).filter((p) => p.id !== state.user.id).map((p) => '<option value="' + esc(p.id) + '">' + esc(p.display_name) + '</option>').join('') + '</select></div>';
-    let html = '<div class="view-head"><div><h2>Chats</h2><p>Booths for two. Nobody else reads these.</p></div></div>';
-    const left = '<div class="convo-side" ' + (peer ? 'data-mobile-hide' : '') + '>' + picker + (listHtml || '<div class="empty" style="padding:22px"><p>No booths taken yet.</p></div>') + '</div>';
+    let html = '<div class="view-head"><div><h2>Messages</h2><p>Private. Only you and the other person can read these.</p></div></div>';
+    const left = '<div class="convo-side" ' + (peer ? 'data-mobile-hide' : '') + '>' + picker + (listHtml || '<div class="empty" style="padding:22px"><p>No conversations yet.</p></div>') + '</div>';
     let right;
     if (peer) {
       const thread = state.msgs.filter((m) => (m.sender === state.peer && m.recipient === state.user.id) || (m.sender === state.user.id && m.recipient === state.peer)).slice().reverse();
       right = '<section class="thread" aria-label="Conversation with ' + esc(peer.display_name) + '">' +
-        '<div class="thread-head"><a class="icon-btn back" href="#chats" aria-label="Back to chats">‹</a>' + avatar(peer, 'sm') + '<span class="cname">' + esc(peer.display_name) + '</span>' + (peer.drink ? '<span class="small">' + esc(peer.drink) + '</span>' : '') + '</div>' +
-        '<div class="bubbles" data-bubbles>' + (thread.length ? thread.map((m) => '<div class="bubble' + (m.sender === state.user.id ? ' mine' : '') + '">' + esc(m.body) + '<time>' + esc(clock(m.created_at)) + '</time></div>').join('') : '<p class="small" style="text-align:center;padding:20px 0">A fresh booth. Say something.</p>') + '</div>' +
-        '<form class="composer" data-composer><input name="body" type="text" maxlength="2000" autocomplete="off" placeholder="Say something" aria-label="Message" required><button class="btn btn-primary" type="submit">Send</button></form>' +
+        '<div class="thread-head"><a class="icon-btn back" href="#chats" aria-label="Back to messages">‹</a>' + avatar(peer, 'sm') + '<span class="cname">' + esc(peer.display_name) + '</span></div>' +
+        '<div class="bubbles" data-bubbles>' + (thread.length ? thread.map((m) => '<div class="bubble' + (m.sender === state.user.id ? ' mine' : '') + '">' + esc(m.body) + '<time>' + esc(clock(m.created_at)) + '</time></div>').join('') : '<p class="small" style="text-align:center;padding:20px 0">No messages yet. Say hi.</p>') + '</div>' +
+        '<form class="composer" data-composer><input name="body" type="text" maxlength="2000" autocomplete="off" placeholder="Write a message" aria-label="Message" required><button class="btn btn-primary" type="submit">Send</button></form>' +
         '</section>';
     } else {
-      right = '<div class="empty" data-mobile-hide><h3>Pick a booth</h3><p>Choose a conversation, or start one from the list.</p></div>';
+      right = '<div class="empty" data-mobile-hide><h3>Select a conversation</h3><p>Choose one from the list, or start a new one.</p></div>';
     }
     return html + '<div class="chat-layout">' + left + right + '</div>';
   }
 
   function renderMe() {
-    const p = me() || { display_name: '', drink: '', bio: '' };
-    return '<div class="view-head"><div><h2>You, at the bar</h2><p>This is what everyone else sees.</p></div></div>' +
+    const p = me() || { display_name: '', bio: '' };
+    return '<div class="view-head"><div><h2>Your profile</h2><p>This is what other members see.</p></div></div>' +
       '<form class="me-card" data-me-form>' +
-      '<div class="me-photo">' + avatar(p, 'xl') + '<div class="me-actions"><label class="btn btn-soft btn-sm" for="avatar-file">Change photo</label><input id="avatar-file" type="file" accept="image/*" class="sr-only"><span class="small">Square crop, 512px. Looks like you, ideally.</span></div></div>' +
+      '<div class="me-photo">' + avatar(p, 'xl') + '<div class="me-actions"><label class="btn btn-soft btn-sm" for="avatar-file">Change photo</label><input id="avatar-file" type="file" accept="image/*" class="sr-only"><span class="small">Cropped to a square.</span></div></div>' +
       '<div class="field"><label for="me-name">Name</label><input id="me-name" name="display_name" type="text" maxlength="40" required value="' + esc(p.display_name) + '"></div>' +
-      '<div class="field"><label for="me-drink">Your usual order</label><input id="me-drink" name="drink" type="text" maxlength="60" value="' + esc(p.drink) + '" placeholder="Negroni, highball, oolong tea..."></div>' +
-      '<div class="field"><label for="me-bio">A line about you</label><textarea id="me-bio" name="bio" maxlength="280" placeholder="Keep it short. The ham is waiting.">' + esc(p.bio) + '</textarea><span class="hint">Up to 280 characters.</span></div>' +
+      '<div class="field"><label for="me-bio">About you</label><textarea id="me-bio" name="bio" maxlength="280" placeholder="A line or two about you">' + esc(p.bio) + '</textarea><span class="hint">Up to 280 characters.</span></div>' +
       '<div class="form-error" data-error hidden></div>' +
       '<div class="me-actions"><button class="btn btn-primary" type="submit">Save</button><button class="btn btn-ghost" type="button" data-signout>Sign out</button></div>' +
       '</form>' +
-      '<p class="small">Signed in as ' + esc(state.user.email || '') + '. ' + (DEMO ? 'Demo mode: nothing is saved.' : 'Your verdicts are public to members; your chats are not.') + '</p>';
+      '<p class="small">Signed in as ' + esc(state.user.email || '') + '. ' + (DEMO ? 'Demo mode: nothing is saved.' : 'Likes and dislikes are public to members. Messages are private.') + '</p>';
   }
 
   // ------------------------------------------------------------------ person sheet
@@ -489,12 +487,11 @@
     $('#person-title').textContent = p.display_name;
     $('[data-person-body]').innerHTML =
       '<div class="big">' + (p.avatar_url ? '<img src="' + esc(p.avatar_url) + '" alt="">' : esc(initials(p.display_name))) + '</div>' +
-      (p.drink ? '<p><b>Usual:</b> ' + esc(p.drink) + '</p>' : '') +
-      (p.bio ? '<p>' + esc(p.bio) + '</p>' : '<p class="muted">No bio yet. Mysterious, or lazy.</p>') +
-      '<div class="tally"><span class="chip round">🍸 ' + t.round + ' want another round</span><span class="chip night">🌙 ' + t.night + ' called it a night</span></div>' +
+      (p.bio ? '<p>' + esc(p.bio) + '</p>' : '<p class="muted">No bio yet.</p>') +
+      '<div class="tally"><span class="chip round">👍 ' + t.round + (t.round === 1 ? ' like' : ' likes') + '</span><span class="chip night">👎 ' + t.night + (t.night === 1 ? ' dislike' : ' dislikes') + '</span></div>' +
       '<div class="actions">' +
-        '<button class="btn btn-round' + (mv === 'round' ? ' is-active' : '') + '" type="button" data-verdict="round" data-target="' + esc(id) + '">Another round</button>' +
-        '<button class="btn btn-night' + (mv === 'night' ? ' is-active' : '') + '" type="button" data-verdict="night" data-target="' + esc(id) + '">Call it a night</button>' +
+        '<button class="btn btn-round' + (mv === 'round' ? ' is-active' : '') + '" type="button" data-verdict="round" data-target="' + esc(id) + '">Like</button>' +
+        '<button class="btn btn-night' + (mv === 'night' ? ' is-active' : '') + '" type="button" data-verdict="night" data-target="' + esc(id) + '">Dislike</button>' +
       '</div>' +
       '<a class="btn btn-soft btn-block" href="#chats/' + esc(id) + '" data-close-person>Message ' + esc(p.display_name) + '</a>';
     $('#person-sheet').hidden = false;
@@ -510,7 +507,7 @@
     if (t.hasAttribute('data-open-person')) { openPerson(t.dataset.openPerson); return; }
     if (t.hasAttribute('data-open-chat')) { go('chats/' + t.dataset.openChat); return; }
     if (t.hasAttribute('data-share')) {
-      try { await navigator.clipboard.writeText(location.origin + location.pathname); toast('Invite link copied.'); } catch (err) { toast(location.origin + location.pathname, 5000); }
+      try { await navigator.clipboard.writeText(location.origin + location.pathname); toast('Link copied.'); } catch (err) { toast(location.origin + location.pathname, 5000); }
       return;
     }
     if (t.hasAttribute('data-signout')) {
@@ -518,19 +515,19 @@
       state.user = null; state.profiles = new Map(); state.current = []; state.feed = []; state.msgs = [];
       history.replaceState(null, '', location.pathname + location.search);
       showLanding();
-      toast('Signed out. Mind the step.');
+      toast('Signed out.');
       return;
     }
     if (t.hasAttribute('data-verdict')) {
       const target = t.dataset.target, kind = t.dataset.verdict;
-      if (myVerdict(target) === kind) { toast(kind === 'round' ? 'You already want another round with them.' : 'You already called it a night with them.'); return; }
+      if (myVerdict(target) === kind) { toast(kind === 'round' ? 'You already liked them.' : 'You already disliked them.'); return; }
       t.classList.remove('clink'); void t.offsetWidth; t.classList.add('clink');
       try {
         const v = await api.giveVerdict(target, kind);
         if (!state.feed.some((x) => x.id === v.id)) { state.feed.unshift(v); state.feed._fresh = v.id; }
         applyCurrent(v);
         const name = (state.profiles.get(target) || {}).display_name || 'them';
-        toast(kind === 'round' ? 'Another round with ' + name + '. It\'s on the Tab.' : 'Calling it a night with ' + name + '. It\'s on the Tab.');
+        toast(kind === 'round' ? 'You liked ' + name + '.' : 'You disliked ' + name + '.');
         render();
         if (!$('#person-sheet').hidden) openPerson(target);
       } catch (err) { toast(friendlyError(err), 4000); }
@@ -556,11 +553,11 @@
     if (form.hasAttribute('data-me-form')) {
       e.preventDefault();
       const f = Object.fromEntries(new FormData(form));
-      const fields = { display_name: (f.display_name || '').trim(), drink: (f.drink || '').trim(), bio: (f.bio || '').trim() };
-      if (!fields.display_name) return formError(form, 'A name, please. Any name.');
+      const fields = { display_name: (f.display_name || '').trim(), bio: (f.bio || '').trim() };
+      if (!fields.display_name) return formError(form, 'Enter a name.');
       formError(form, '');
       busy(form, true);
-      try { const p = await api.updateProfile(fields); state.profiles.set(p.id, p); render(); toast('Saved. Looking good.'); }
+      try { const p = await api.updateProfile(fields); state.profiles.set(p.id, p); render(); toast('Saved.'); }
       catch (err) { formError(form, friendlyError(err)); }
       finally { busy(form, false); }
     }
@@ -576,7 +573,7 @@
         const p = await api.uploadAvatar(blob);
         state.profiles.set(p.id, p);
         render();
-        toast('New photo is up.');
+        toast('Photo updated.');
       } catch (err) { toast(friendlyError(err), 4000); }
     }
   });

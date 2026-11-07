@@ -1,7 +1,7 @@
 """End-to-end check of the live backend through the real UI, run by GitHub Actions.
 
-Two throwaway members (one on a phone viewport, one on a desktop viewport) join, give verdicts,
-message each other, upload a photo, and the Tab is checked for the public record. Screenshots go to
+Two throwaway members (one on a phone viewport, one on a desktop viewport) sign up with name, email and
+password only, like and dislike each other, message each other, upload a photo, and the public feed is checked. Screenshots go to
 ops/e2e/*.png, the verdict to ops/e2e/result.json, and both QA accounts plus their data and photos
 are deleted afterwards via the service role, so production holds only real members.
 
@@ -28,8 +28,8 @@ OUT = "ops/e2e"
 os.makedirs(OUT, exist_ok=True)
 result = {"run": RUN, "site": SITE, "steps": [], "pass": False, "started": time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())}
 qa = {
-    "a": {"name": "QA Carol", "email": f"hn-qa-a-{RUN}@example.com", "pw": "negroni-" + RUN[-6:], "drink": "Negroni, test batch"},
-    "b": {"name": "QA Thomas", "email": f"hn-qa-b-{RUN}@example.com", "pw": "highball-" + RUN[-6:], "drink": "Highball, test batch"},
+    "a": {"name": "QA Carol", "email": f"hn-qa-a-{RUN}@example.com", "pw": "negroni-" + RUN[-6:]},
+    "b": {"name": "QA Thomas", "email": f"hn-qa-b-{RUN}@example.com", "pw": "highball-" + RUN[-6:]},
 }
 
 
@@ -70,8 +70,9 @@ def png(size=256, color=(200, 55, 30)):
 def join(page, who):
     nav(page, "join")
     page.wait_for_selector("#join-form:not([hidden])", timeout=15000)
+    fields = page.eval_on_selector_all("#join-form input", "els => els.map(e => e.name)")
+    step(f"sign-up form asks only for name, email, password ({who['name']})", fields == ["display_name", "email", "password"], fields)
     page.fill("#join-name", who["name"])
-    page.fill("#join-drink", who["drink"])
     page.fill("#join-email", who["email"])
     page.fill("#join-password", who["pw"])
     page.click("#join-form button[type=submit]")
@@ -118,11 +119,14 @@ try:
 
         # landing renders on both viewports
         A.goto(SITE, wait_until="networkidle")
-        step("landing loads (mobile)", "Negroni" in A.text_content("h1"))
+        step("landing loads (mobile)", "Meet someone" in A.text_content("h1"))
         A.screenshot(path=f"{OUT}/mobile-landing.png", full_page=True)
         B.goto(SITE, wait_until="networkidle")
-        step("landing loads (desktop)", "Negroni" in B.text_content("h1"))
+        step("landing loads (desktop)", "Meet someone" in B.text_content("h1"))
         B.screenshot(path=f"{OUT}/desktop-landing.png", full_page=True)
+        landing = B.text_content("#landing")
+        step("founder titles list is gone", "Chief Taste Officer" not in landing and "Last Train Coordinator" not in landing and B.query_selector(".founder-list") is None)
+        step("founders are still credited in one plain line", "Carol, Anderson, Thomas, Brian and Timothy" in landing)
         step("not in demo mode", A.evaluate("() => !!(window.HN_CONFIG && window.HN_CONFIG.url)"), "config.js has a backend url")
 
         # join
@@ -146,54 +150,54 @@ try:
         cleanup_ids = [i for i in ids.values() if i]
         step("admin can see both QA users", all(ids.values()), ids)
 
-        # realtime: B watches the Tab while A gives a verdict
-        nav(B, "tab")
+        # realtime: B watches the feed while A likes B
+        nav(B, "feed")
         B.wait_for_timeout(1500)
         A.click(f"[data-verdict=round][data-target='{ids['b']}']")
-        wait_text(A, "#toast", "on the Tab", 10000)
+        wait_text(A, "#toast", "You liked", 10000)
         try:
             wait_text(B, "#view-root", f"{qa['a']['name']}", 12000)
-            step("realtime: B's Tab updated without reload", True)
+            step("realtime: B's feed updated without reload", True)
         except Exception as e:
-            step("realtime: B's Tab updated without reload", False, "fell back to polling: " + str(e)[:80])
+            step("realtime: B's feed updated without reload", False, "fell back to polling: " + str(e)[:80])
             B.reload(wait_until="networkidle")
             wait_text(B, "#view-root", qa["a"]["name"])
         line = B.text_content("#view-root")
-        step("Tab shows who wanted another round with whom", (qa["a"]["name"] in line) and ("another round" in line) and (qa["b"]["name"] in line))
+        step("Feed shows who liked whom", f"{qa['a']['name']} liked {qa['b']['name']}" in line, line[:120])
 
         # B calls it a night with A; A's people card tally updates after reload
         nav(B, "people")
         B.click(f"[data-verdict=night][data-target='{ids['a']}']")
-        wait_text(B, "#toast", "on the Tab", 10000)
-        nav(A, "tab")
-        wait_text(A, "#view-root", "calling it a night")
-        step("Tab shows the call-it-a-night verdict too", True)
-        A.screenshot(path=f"{OUT}/mobile-tab.png", full_page=True)
-        nav(B, "tab")
+        wait_text(B, "#toast", "You disliked", 10000)
+        nav(A, "feed")
+        wait_text(A, "#view-root", f"{qa['b']['name']} disliked {qa['a']['name']}")
+        step("Feed shows the dislike too", True)
+        A.screenshot(path=f"{OUT}/mobile-feed.png", full_page=True)
+        nav(B, "feed")
         B.wait_for_timeout(800)
-        B.screenshot(path=f"{OUT}/desktop-tab.png", full_page=True)
+        B.screenshot(path=f"{OUT}/desktop-feed.png", full_page=True)
 
         # messaging both ways
         nav(A, "chats/" + ids["b"])
-        A.fill("[data-composer] input", "Table for two at the usual place?")
+        A.fill("[data-composer] input", "Are you free this weekend?")
         A.click("[data-composer] button")
-        wait_text(A, "[data-bubbles]", "Table for two")
+        wait_text(A, "[data-bubbles]", "free this weekend")
         step("A sends a message", True)
         nav(B, "chats")
-        wait_text(B, "#view-root", "Table for two", 20000)
+        wait_text(B, "#view-root", "free this weekend", 20000)
         step("B sees A's message in the chat list", True)
         B.click(f"[data-open-chat='{ids['a']}']")
-        wait_text(B, "[data-bubbles]", "Table for two")
-        B.fill("[data-composer] input", "Only if you are buying the Negronis.")
+        wait_text(B, "[data-bubbles]", "free this weekend")
+        B.fill("[data-composer] input", "Yes, Saturday works.")
         B.click("[data-composer] button")
-        wait_text(B, "[data-bubbles]", "buying the Negronis")
+        wait_text(B, "[data-bubbles]", "Saturday works")
         try:
-            wait_text(A, "[data-bubbles]", "buying the Negronis", 12000)
+            wait_text(A, "[data-bubbles]", "Saturday works", 12000)
             step("realtime: A receives B's reply without reload", True)
         except Exception as e:
             step("realtime: A receives B's reply without reload", False, str(e)[:80])
             A.reload(wait_until="networkidle")
-            wait_text(A, "[data-bubbles]", "buying the Negronis")
+            wait_text(A, "[data-bubbles]", "Saturday works")
         step("A sees B's reply", True)
         A.screenshot(path=f"{OUT}/mobile-chat.png")
         B.screenshot(path=f"{OUT}/desktop-chat.png")
@@ -216,12 +220,12 @@ try:
 
         # profile edit + photo upload (A, mobile)
         nav(A, "me")
-        A.fill("#me-bio", "Here for the ham. Staying for the Tab.")
+        A.fill("#me-bio", "Just here to meet people.")
         A.click("[data-me-form] button[type=submit]")
         wait_text(A, "#toast", "Saved", 10000)
         step("A saves profile text", True)
         A.set_input_files("#avatar-file", {"name": "qa.png", "mimeType": "image/png", "buffer": png()})
-        wait_text(A, "#toast", "New photo is up", 30000)
+        wait_text(A, "#toast", "Photo updated", 30000)
         A.wait_for_selector("[data-me-form] img.avatar", timeout=15000)
         step("A uploads a photo", True)
         A.screenshot(path=f"{OUT}/mobile-me.png", full_page=True)
@@ -236,7 +240,7 @@ try:
 
         # person sheet + sign out
         B.click(f"[data-open-person='{ids['a']}']")
-        wait_text(B, "#person-sheet", "Staying for the Tab", 8000)
+        wait_text(B, "#person-sheet", "meet people", 8000)
         step("person sheet shows the bio", True)
         B.keyboard.press("Escape")
         nav(B, "me")

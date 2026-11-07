@@ -7,15 +7,16 @@ create extension if not exists pgcrypto;
 create table if not exists public.profiles (
   id          uuid primary key references auth.users (id) on delete cascade,
   display_name text not null check (char_length(display_name) between 1 and 40),
-  drink       text not null default '' check (char_length(drink) <= 60),
   bio         text not null default '' check (char_length(bio) <= 280),
   avatar_url  text,
   created_at  timestamptz not null default now(),
   updated_at  timestamptz not null default now()
 );
+-- The signup form no longer asks for a "usual order"; drop the old column on existing projects.
+alter table public.profiles drop column if exists drink;
 
 -- ---------------------------------------------------------------- verdicts
--- Append-only log. 'round' = another round (like), 'night' = call it a night (dislike).
+-- Append-only log. 'round' = like, 'night' = dislike (values kept from the original schema).
 create table if not exists public.verdicts (
   id          bigint generated always as identity primary key,
   actor       uuid not null references public.profiles (id) on delete cascade,
@@ -54,11 +55,10 @@ security definer
 set search_path = public
 as $$
 begin
-  insert into public.profiles (id, display_name, drink)
+  insert into public.profiles (id, display_name)
   values (
     new.id,
-    coalesce(nullif(trim(new.raw_user_meta_data ->> 'display_name'), ''), split_part(coalesce(new.email, 'someone'), '@', 1)),
-    coalesce(left(new.raw_user_meta_data ->> 'drink', 60), '')
+    coalesce(nullif(trim(new.raw_user_meta_data ->> 'display_name'), ''), split_part(coalesce(new.email, 'someone'), '@', 1))
   )
   on conflict (id) do nothing;
   return new;
