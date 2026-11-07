@@ -1,5 +1,5 @@
 {
-  "run": "42355500263",
+  "run": "42355907867",
   "site": "http://127.0.0.1:8765/",
   "steps": [
     {
@@ -110,7 +110,7 @@
     {
       "step": "admin can see both QA users",
       "ok": true,
-      "detail": "{'a': '023877c4-8587-40f5-b8e8-b488c1db6ed0', 'b': 'c0ad3d04-7b45-4b2c-acf4-a00a0c9c18d3'}"
+      "detail": "{'a': '89a1b442-34ad-45ea-b965-551469d31c28', 'b': '521f428a-10a9-4380-9ea5-d807ea09a5c7'}"
     },
     {
       "step": "eleven AI members exist, including Joseph",
@@ -139,6 +139,16 @@
     },
     {
       "step": "People links to the etiquette guide",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "step": "phone tab bar shows Etiquette after login",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "step": "desktop header shows Etiquette after login",
       "ok": true,
       "detail": ""
     },
@@ -180,7 +190,7 @@
     {
       "step": "member Daiki replies live",
       "ok": true,
-      "detail": "Hey! On weekends I usually catch a baseball game if I can, or if not, I'm digging through records for my next DJ set. Lately I've been trying to find a good tonkotsu ramen place around here, which is "
+      "detail": "Hi! Weekends are mostly baseball for me, if I can catch a game or at least a replay. When I'm not doing that, I'm usually spinning records at a friend's bar or hunting for a good bowl of tonkotsu rame"
     },
     {
       "step": "asking for a straight answer gets one",
@@ -195,12 +205,12 @@
     {
       "step": "Joseph answers about Morrison in character",
       "ok": true,
-      "detail": "Morrison Christian"
+      "detail": "Morrison Christian Academy, class of 2010! Wait, are you the Carol I'm thinking of? It's been ages. What have you been up to since we all scattered?"
     },
     {
       "step": "Joseph stays in character on a detail he was never given",
       "ok": true,
-      "detail": "Ha, I'm drawing a blank on that one, Carol. Was it Mrs. something? You always had a better memory for those details than I did."
+      "detail": "Ha, you're testing me already! I'm drawing a complete blank on the name, which is embarrassing since I walked into that room every morning for years. Do you remember? I bet you'd remember the nickname"
     },
     {
       "step": "the conversation log holds the QA chats with AI members",
@@ -265,7 +275,7 @@
     {
       "step": "B sees A's photo on the People card",
       "ok": true,
-      "detail": "https://itnxowacktdwbetzkhmw.supabase.co/storage/v1/object/public/avatars/023877c4-8587-40f5-b8e8-b488c1db6ed0/avatar.jpg?v=1794040132537"
+      "detail": "https://itnxowacktdwbetzkhmw.supabase.co/storage/v1/object/public/avatars/89a1b442-34ad-45ea-b965-551469d31c28/avatar.jpg?v=1794040480037"
     },
     {
       "step": "person sheet shows the bio",
@@ -288,22 +298,22 @@
       "detail": "[]"
     },
     {
-      "step": "deleted QA photo 023877c4",
+      "step": "deleted QA photo 89a1b442",
       "ok": true,
-      "detail": "(200, [{'name': '023877c4-8587-40f5-b8e8-b488c1db6ed0/avatar.jpg', 'bucket_id': 'avatars', 'owner': '023877c4-8587-40f5-b8e8-b488c1db6ed0', 'owner_id': '023877c4-8587-40f5-b8e8-b488c1db6ed0', 'version': '2a2a0968-9e05-4ab0-b086-ce66d7361573', 'id': 'de308b70-c9ff-471d-96c2-464677d3faa5', 'updated_at': '2026-11-07T08:28:52.437Z', 'created_at': '2026-11-07T08:28:52.437Z', 'last_accessed_at': '2026-1"
+      "detail": "(200, [{'name': '89a1b442-34ad-45ea-b965-551469d31c28/avatar.jpg', 'bucket_id': 'avatars', 'owner': '89a1b442-34ad-45ea-b965-551469d31c28', 'owner_id': '89a1b442-34ad-45ea-b965-551469d31c28', 'version': '481b5cc3-2ddd-4010-a731-d4422ebd2c41', 'id': '24e70d3d-9176-4a87-b2ce-795469c929b3', 'updated_at': '2026-11-07T08:34:39.918Z', 'created_at': '2026-11-07T08:34:39.918Z', 'last_accessed_at': '2026-1"
     },
     {
-      "step": "deleted QA user 023877c4",
+      "step": "deleted QA user 89a1b442",
       "ok": true,
       "detail": "200"
     },
     {
-      "step": "deleted QA photo c0ad3d04",
+      "step": "deleted QA photo 521f428a",
       "ok": true,
       "detail": "(200, 'nothing to delete')"
     },
     {
-      "step": "deleted QA user c0ad3d04",
+      "step": "deleted QA user 521f428a",
       "ok": true,
       "detail": "200"
     },
@@ -319,7 +329,7 @@
     }
   ],
   "pass": true,
-  "started": "2026-11-07T08:27:59Z",
+  "started": "2026-11-07T08:33:47Z",
   "realtime": true,
-  "finished": "2026-11-07T08:29:00Z"
+  "finished": "2026-11-07T08:34:48Z"
 }
