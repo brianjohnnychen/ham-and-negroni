@@ -1,5 +1,5 @@
 {
-  "run": "42338523505",
+  "run": "42338707770",
   "site": "http://127.0.0.1:8765/",
   "steps": [
     {
@@ -60,7 +60,7 @@
     {
       "step": "admin can see both QA users",
       "ok": true,
-      "detail": "{'a': '3681a070-73f4-4fb6-b56e-31f9c36455f0', 'b': '53051ddb-e76f-4dd1-b072-53a39e453ab9'}"
+      "detail": "{'a': 'aac20c01-08f8-46bf-a314-f7af1a461c25', 'b': '260b3d98-3bc1-4bec-b463-1a02e5a8429a'}"
     },
     {
       "step": "ten AI members exist",
@@ -118,32 +118,77 @@
       "detail": ""
     },
     {
-      "step": "click open-chat-B",
-      "ok": false,
-      "detail": "Page.click: Timeout 15000ms exceeded.\nCall log:\n  - waiting for locator(\"[data-open-chat='3681a070-73f4-4fb6-b56e-31f9c3 || {\"rect\":[200,255.578125,874,72.6875],\"top\":\"<div class=\\\"empty\\\" data-mobile-hide=\\\"\\\"><h3>Select a conversation</h3><p>Choose one from the list, or start a new one.</p></div>\",\"convos\":2,\"view\":\"#chats\"}"
-    },
-    {
-      "step": "unexpected error",
-      "ok": false,
-      "detail": "TimeoutError('Page.click: Timeout 15000ms exceeded.\\nCall log:\\n  - waiting for locator(\"[data-open-chat=\\'3681a070-73f4-4fb6-b56e-31f9c36455f0\\']\")\\n    - locator resolved to <button class=\"convo\" type=\"button\" data-open-chat=\"3681a070-73f4-4fb6-b56e-31f9c36455f0\">\u2026</button>\\n  - attempting click a || a: no debug (Error('Event loop is closed! Is Playwright already stopped?')) || b: no debug (Erro"
-    },
-    {
-      "step": "deleted QA photo 3681a070",
+      "step": "realtime: A receives B's reply without reload",
       "ok": true,
-      "detail": "(200, 'nothing to delete')"
+      "detail": ""
     },
     {
-      "step": "deleted QA user 3681a070",
+      "step": "A sees B's reply",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "step": "anonymous visitor cannot read messages",
+      "ok": true,
+      "detail": "got 0 rows"
+    },
+    {
+      "step": "anonymous visitor cannot list members",
+      "ok": true,
+      "detail": "got 0 rows"
+    },
+    {
+      "step": "A saves profile text",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "step": "A uploads a photo",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "step": "B sees A's photo on the People card",
+      "ok": true,
+      "detail": "https://itnxowacktdwbetzkhmw.supabase.co/storage/v1/object/public/avatars/aac20c01-08f8-46bf-a314-f7af1a461c25/avatar.jpg?v=1794025858983"
+    },
+    {
+      "step": "person sheet shows the bio",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "step": "sign out returns to the landing page",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "step": "no page errors (A)",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "step": "no page errors (B)",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "step": "deleted QA photo aac20c01",
+      "ok": true,
+      "detail": "(200, [{'name': 'aac20c01-08f8-46bf-a314-f7af1a461c25/avatar.jpg', 'bucket_id': 'avatars', 'owner': 'aac20c01-08f8-46bf-a314-f7af1a461c25', 'owner_id': 'aac20c01-08f8-46bf-a314-f7af1a461c25', 'version': '5fc648d1-3000-4038-83df-9aa82985340d', 'id': 'ed424dfa-d02b-411c-84d9-344d4529ace5', 'updated_at': '2026-11-07T04:30:58.854Z', 'created_at': '2026-11-07T04:30:58.854Z', 'last_accessed_at': '2026-1"
+    },
+    {
+      "step": "deleted QA user aac20c01",
       "ok": true,
       "detail": "200"
     },
     {
-      "step": "deleted QA photo 53051ddb",
+      "step": "deleted QA photo 260b3d98",
       "ok": true,
       "detail": "(200, 'nothing to delete')"
     },
     {
-      "step": "deleted QA user 53051ddb",
+      "step": "deleted QA user 260b3d98",
       "ok": true,
       "detail": "200"
     },
@@ -159,11 +204,7 @@
     }
   ],
   "pass": false,
-  "started": "2026-11-07T04:27:50Z",
-  "console": {
-    "a": [],
-    "b": []
-  },
+  "started": "2026-11-07T04:30:28Z",
   "realtime": true,
-  "finished": "2026-11-07T04:28:33Z"
+  "finished": "2026-11-07T04:31:06Z"
 }
