@@ -1,0 +1,38 @@
+name: pages
+# Deploys site/ to GitHub Pages on every push that touches it (and when provision.yml calls it).
+# Skips quietly while site/config.js still has no backend (before provisioning has run).
+on:
+  workflow_dispatch:
+  workflow_call:
+  push:
+    branches: [main]
+    paths: ['site/**']
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency: { group: pages, cancel-in-progress: false }
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: main }
+      - name: Is the backend configured?
+        id: check
+        run: |
+          if grep -q 'supabase.co' site/config.js; then echo "ready=true" >> "$GITHUB_OUTPUT"; else echo "ready=false" >> "$GITHUB_OUTPUT"; echo "::notice::site/config.js has no backend yet; provisioning will deploy once it has run."; fi
+      - if: steps.check.outputs.ready == 'true'
+        uses: actions/configure-pages@v5
+      - if: steps.check.outputs.ready == 'true'
+        uses: actions/upload-pages-artifact@v3
+        with: { path: site }
+      - if: steps.check.outputs.ready == 'true'
+        id: deployment
+        uses: actions/deploy-pages@v4

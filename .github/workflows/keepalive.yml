@@ -1,0 +1,30 @@
+name: keepalive
+# Free-tier Supabase projects pause after a week without traffic, and GitHub disables scheduled
+# workflows after 60 days without commits. This pings the database twice a week and commits a heartbeat.
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '23 19 * * 0,3'   # 04:23 Tokyo, Monday and Thursday
+
+permissions:
+  contents: write
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Ping the database through the public API
+        run: |
+          URL=$(python3 -c "import re;print(re.search(r'\"url\":\s*\"([^\"]+)\"', open('site/config.js').read()).group(1))")
+          KEY=$(python3 -c "import re;print(re.search(r'\"key\":\s*\"([^\"]+)\"', open('site/config.js').read()).group(1))")
+          CODE=$(curl -s -o /dev/null -w '%{http_code}' "$URL/rest/v1/profiles?select=id&limit=1" -H "apikey: $KEY" -H "Authorization: Bearer $KEY")
+          echo "db ping: $CODE"
+          [ "$CODE" = "200" ] || exit 1
+          mkdir -p ops && echo "$(date -u +%FT%TZ) ping $CODE" > ops/heartbeat.txt
+      - name: Commit the heartbeat
+        run: |
+          git config user.name hn-bot
+          git config user.email bot@meteor.city
+          git add ops/heartbeat.txt
+          git commit -qm "ops: heartbeat [skip ci]" && git pull --rebase -q && git push

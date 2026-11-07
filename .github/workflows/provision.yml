@@ -1,0 +1,47 @@
+name: provision
+# One-time (re-runnable) backend setup: free Supabase org + project, schema, auth settings, repo secrets,
+# site/config.js, public repo, GitHub Pages. Then deploys the site and runs the e2e check.
+# Trigger: change ops/provision.request (any content) or run manually.
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['ops/provision.request']
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency: { group: provision, cancel-in-progress: false }
+
+jobs:
+  provision:
+    runs-on: ubuntu-latest
+    env:
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      GH_PAT: ${{ secrets.GH_PAT }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check secrets are present
+        run: |
+          [ -n "$SUPABASE_ACCESS_TOKEN" ] || { echo "SUPABASE_ACCESS_TOKEN secret missing"; exit 1; }
+          [ -n "$GH_PAT" ] || { echo "GH_PAT secret missing"; exit 1; }
+      - name: Provision Supabase, Pages and secrets
+        run: python3 ops/provision.py
+      - name: Commit the results
+        if: always()
+        run: |
+          git config user.name hn-bot
+          git config user.email bot@meteor.city
+          git add -A ops/provision.log ops/infra.json site/config.js || true
+          git diff --cached --quiet && echo "nothing to commit" || (git commit -qm "ops: provision result [skip ci]" && git pull --rebase -q && git push)
+
+  deploy:
+    needs: provision
+    uses: ./.github/workflows/pages.yml
+
+  e2e:
+    needs: deploy
+    uses: ./.github/workflows/e2e.yml
+    secrets: inherit

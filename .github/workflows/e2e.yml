@@ -1,0 +1,58 @@
+name: e2e
+# Drives the real UI against the real backend with two throwaway members on a phone and a desktop viewport,
+# then deletes them and their data. Results: ops/e2e/result.json and ops/e2e/*.png (committed back).
+# Trigger: touch ops/e2e.request, run manually, or via provision.yml.
+on:
+  workflow_dispatch:
+  workflow_call:
+  push:
+    branches: [main]
+    paths: ['ops/e2e.request']
+
+permissions:
+  contents: write
+
+concurrency: { group: e2e, cancel-in-progress: false }
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    env:
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: main }
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - name: Install Playwright
+        run: |
+          pip install -q playwright
+          python -m playwright install --with-deps chromium
+      - name: Serve the site locally
+        run: |
+          (cd site && python3 -m http.server 8765 >/tmp/http.log 2>&1 &)
+          sleep 1
+          curl -sf -o /dev/null http://127.0.0.1:8765/index.html
+      - name: Run the e2e check
+        id: run
+        run: python3 ops/e2e.py
+      - name: Check the live GitHub Pages URL
+        if: always()
+        run: |
+          URL="https://${GITHUB_REPOSITORY_OWNER}.github.io/${GITHUB_REPOSITORY#*/}/"
+          for i in $(seq 1 18); do
+            CODE=$(curl -s -o /tmp/live.html -w '%{http_code}' "$URL")
+            if [ "$CODE" = "200" ] && grep -q "Negroni" /tmp/live.html && grep -q "supabase.co" <(curl -s "${URL}config.js"); then echo "live: $URL (200, real config)"; echo "{\"url\":\"$URL\",\"status\":200,\"checked\":\"$(date -u +%FT%TZ)\"}" > ops/e2e/live.json; exit 0; fi
+            echo "waiting for pages ($CODE)"; sleep 10
+          done
+          echo "{\"url\":\"$URL\",\"status\":\"$CODE\",\"checked\":\"$(date -u +%FT%TZ)\"}" > ops/e2e/live.json
+          echo "pages not live yet"; exit 1
+      - name: Commit the results
+        if: always()
+        run: |
+          git config user.name hn-bot
+          git config user.email bot@meteor.city
+          git add -A ops/e2e || true
+          git diff --cached --quiet && echo "nothing to commit" || (git commit -qm "ops: e2e result [skip ci]" && git pull --rebase -q && git push)
