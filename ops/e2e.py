@@ -68,7 +68,7 @@ def png(size=256, color=(200, 55, 30)):
 
 
 def join(page, who):
-    page.goto(SITE + "#join", wait_until="networkidle")
+    nav(page, "join")
     page.wait_for_selector("#join-form:not([hidden])", timeout=15000)
     page.fill("#join-name", who["name"])
     page.fill("#join-drink", who["drink"])
@@ -76,6 +76,11 @@ def join(page, who):
     page.fill("#join-password", who["pw"])
     page.click("#join-form button[type=submit]")
     page.wait_for_selector("#app:not([hidden]) #view-root h2", timeout=30000)
+
+
+def nav(page, hash_):
+    """Full page load (a changing query string defeats same-document hash navigation)."""
+    page.goto(f"{SITE}?t={time.time_ns()}#{hash_}", wait_until="networkidle")
 
 
 def wait_text(page, selector, text, timeout=15000):
@@ -127,10 +132,10 @@ try:
         step("B joins and lands in the app", True)
 
         # both see each other (B reloads to be sure)
-        B.goto(SITE + "#people", wait_until="networkidle")
+        nav(B, "people")
         wait_text(B, "#view-root", qa["a"]["name"])
         step("B sees A under People", True)
-        A.goto(SITE + "#people", wait_until="networkidle")
+        nav(A, "people")
         wait_text(A, "#view-root", qa["b"]["name"])
         step("A sees B under People", True)
 
@@ -142,7 +147,7 @@ try:
         step("admin can see both QA users", all(ids.values()), ids)
 
         # realtime: B watches the Tab while A gives a verdict
-        B.goto(SITE + "#tab", wait_until="networkidle")
+        nav(B, "tab")
         B.wait_for_timeout(1500)
         A.click(f"[data-verdict=round][data-target='{ids['b']}']")
         wait_text(A, "#toast", "on the Tab", 10000)
@@ -157,24 +162,24 @@ try:
         step("Tab shows who wanted another round with whom", (qa["a"]["name"] in line) and ("another round" in line) and (qa["b"]["name"] in line))
 
         # B calls it a night with A; A's people card tally updates after reload
-        B.goto(SITE + "#people", wait_until="networkidle")
+        nav(B, "people")
         B.click(f"[data-verdict=night][data-target='{ids['a']}']")
         wait_text(B, "#toast", "on the Tab", 10000)
-        A.goto(SITE + "#tab", wait_until="networkidle")
+        nav(A, "tab")
         wait_text(A, "#view-root", "calling it a night")
         step("Tab shows the call-it-a-night verdict too", True)
         A.screenshot(path=f"{OUT}/mobile-tab.png", full_page=True)
-        B.goto(SITE + "#tab", wait_until="networkidle")
+        nav(B, "tab")
         B.wait_for_timeout(800)
         B.screenshot(path=f"{OUT}/desktop-tab.png", full_page=True)
 
         # messaging both ways
-        A.goto(SITE + f"#chats/{ids['b']}", wait_until="networkidle")
+        nav(A, "chats/" + ids["b"])
         A.fill("[data-composer] input", "Table for two at the usual place?")
         A.click("[data-composer] button")
         wait_text(A, "[data-bubbles]", "Table for two")
         step("A sends a message", True)
-        B.goto(SITE + "#chats", wait_until="networkidle")
+        nav(B, "chats")
         wait_text(B, "#view-root", "Table for two", 20000)
         step("B sees A's message in the chat list", True)
         B.click(f"[data-open-chat='{ids['a']}']")
@@ -210,7 +215,7 @@ try:
             step("anonymous visitor cannot list members", e.code in (401, 403), f"http {e.code}")
 
         # profile edit + photo upload (A, mobile)
-        A.goto(SITE + "#me", wait_until="networkidle")
+        nav(A, "me")
         A.fill("#me-bio", "Here for the ham. Staying for the Tab.")
         A.click("[data-me-form] button[type=submit]")
         wait_text(A, "#toast", "Saved", 10000)
@@ -220,12 +225,12 @@ try:
         A.wait_for_selector("[data-me-form] img.avatar", timeout=15000)
         step("A uploads a photo", True)
         A.screenshot(path=f"{OUT}/mobile-me.png", full_page=True)
-        B.goto(SITE + "#people", wait_until="networkidle")
+        nav(B, "people")
         B.wait_for_selector(f"[data-person='{ids['a']}'] .person-photo img", timeout=15000)
         src = B.get_attribute(f"[data-person='{ids['a']}'] .person-photo img", "src")
         step("B sees A's photo on the People card", bool(src and "/avatars/" in src), src)
         B.screenshot(path=f"{OUT}/desktop-people.png", full_page=True)
-        A.goto(SITE + "#people", wait_until="networkidle")
+        nav(A, "people")
         A.wait_for_timeout(800)
         A.screenshot(path=f"{OUT}/mobile-people.png", full_page=True)
 
@@ -234,7 +239,7 @@ try:
         wait_text(B, "#person-sheet", "Staying for the Tab", 8000)
         step("person sheet shows the bio", True)
         B.keyboard.press("Escape")
-        B.goto(SITE + "#me", wait_until="networkidle")
+        nav(B, "me")
         B.click("[data-signout]")
         B.wait_for_selector("#landing:not([hidden])", timeout=10000)
         step("sign out returns to the landing page", True)
