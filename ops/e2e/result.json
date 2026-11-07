@@ -1,0 +1,35 @@
+{
+  "run": "42330485375",
+  "site": "http://127.0.0.1:8765/",
+  "steps": [
+    {
+      "step": "landing loads (mobile)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "step": "landing loads (desktop)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "step": "not in demo mode",
+      "ok": true,
+      "detail": "config.js has a backend url"
+    },
+    {
+      "step": "no QA profiles remain",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "step": "no QA photos remain",
+      "ok": true,
+      "detail": "[]"
+    }
+  ],
+  "pass": true,
+  "started": "2026-11-07T02:42:44Z",
+  "realtime": true,
+  "finished": "2026-11-07T02:43:19Z"
+}
