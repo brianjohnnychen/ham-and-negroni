@@ -1,6 +1,6 @@
 # Ham & Negroni
 
-A joke dating site for friends in Japan. Founded by Carol, Anderson, Thomas, Brian and Timothy.
+A joke dating site for friends in Japan. Founded by Carol, Anderson, Thomas, Brian, Timothy and Joseph.
 
 - Live: https://brianjohnnychen.github.io/ham-and-negroni/
 - Frontend: `site/` (static HTML/CSS/JS, no build step), deployed by `.github/workflows/pages.yml`.

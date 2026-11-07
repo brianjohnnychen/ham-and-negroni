@@ -126,7 +126,7 @@ try:
         B.screenshot(path=f"{OUT}/desktop-landing.png", full_page=True)
         landing = B.text_content("#landing")
         step("founder titles list is gone", "Chief Taste Officer" not in landing and "Last Train Coordinator" not in landing and B.query_selector(".founder-list") is None)
-        step("founders are still credited in one plain line", "Carol, Anderson, Thomas, Brian and Timothy" in landing)
+        step("founders are still credited in one plain line", "Carol, Anderson, Thomas, Brian, Timothy and Joseph" in landing)
         step("not in demo mode", A.evaluate("() => !!(window.HN_CONFIG && window.HN_CONFIG.url)"), "config.js has a backend url")
 
         # join
