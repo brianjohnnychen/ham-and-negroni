@@ -448,7 +448,7 @@
           const p = state.profiles.get(c.peer) || { display_name: 'Someone' };
           const preview = (c.last.sender === state.user.id ? 'You: ' : '') + c.last.body;
           return '<button class="convo' + (state.peer === c.peer ? ' is-active' : '') + '" type="button" data-open-chat="' + esc(c.peer) + '">' + avatar(p) +
-            '<span><span class="cname">' + nm(p) + '</span><br><span class="cpreview">' + esc(preview) + '</span></span>' +
+            '<span class="convo-text"><span class="cname">' + nm(p) + '</span><span class="cpreview">' + esc(preview) + '</span></span>' +
             (c.unread ? '<span class="dot" aria-label="Unread"></span>' : '<time class="small">' + esc(timeAgo(c.last.created_at)) + '</time>') + '</button>';
         }).join('') + '</div>'
       : '';
