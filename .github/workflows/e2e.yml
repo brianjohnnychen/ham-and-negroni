@@ -52,7 +52,4 @@ jobs:
       - name: Commit the results
         if: always()
         run: |
-          git config user.name hn-bot
-          git config user.email bot@meteor.city
-          git add -A ops/e2e || true
-          git diff --cached --quiet && echo "nothing to commit" || (git commit -qm "ops: e2e result [skip ci]" && git pull --rebase -q && git push)
+          ops/commit_back.sh "ops: e2e result [skip ci]" ops/e2e
