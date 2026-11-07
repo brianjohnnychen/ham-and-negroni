@@ -83,13 +83,31 @@ def wait_text(page, selector, text, timeout=15000):
 
 
 cleanup_ids = []
+pages_for_debug = {}
+
+
+def record_failure(exc):
+    detail = repr(exc)[:300]
+    for tag, pg in pages_for_debug.items():
+        try:
+            err = pg.evaluate("() => Array.from(document.querySelectorAll('[data-error]:not([hidden]), .form-error:not([hidden])')).map(e => e.textContent.trim()).join(' | ')")
+            detail += f" || {tag} url={pg.url} formError={err!r}"
+            pg.screenshot(path=f"{OUT}/failure-{tag}.png", full_page=True)
+        except Exception as e2:
+            detail += f" || {tag}: no debug ({e2!r})"[:120]
+    step("unexpected error", False, detail)
+
+
 try:
     with sync_playwright() as p:
         browser = p.chromium.launch()
         ca = browser.new_context(viewport={"width": 390, "height": 844}, device_scale_factor=2, is_mobile=True, has_touch=True)
         cb = browser.new_context(viewport={"width": 1440, "height": 900})
         A, B = ca.new_page(), cb.new_page()
+        pages_for_debug.update({"a": A, "b": B})
         errors = {"a": [], "b": []}
+        A.on("console", lambda m: errors["a"].append("console: " + m.text) if m.type == "error" else None)
+        B.on("console", lambda m: errors["b"].append("console: " + m.text) if m.type == "error" else None)
         A.on("pageerror", lambda e: errors["a"].append(str(e)))
         B.on("pageerror", lambda e: errors["b"].append(str(e)))
 
@@ -224,6 +242,12 @@ try:
         step("no page errors (A)", not errors["a"], errors["a"][:3])
         step("no page errors (B)", not errors["b"], errors["b"][:3])
         browser.close()
+except Exception as exc:  # noqa: BLE001
+    record_failure(exc)
+    try:
+        result["console"] = {k: v[:5] for k, v in errors.items()}
+    except Exception:
+        pass
 finally:
     # ---------------------------------------------------------------- cleanup: QA users, data and photos
     for uid in cleanup_ids:
@@ -237,8 +261,10 @@ finally:
     st2, objs = admin("POST", "/storage/v1/object/list/avatars", {"prefix": "", "limit": 100})
     qa_objs = [o for o in (objs if isinstance(objs, list) else []) if any(o.get("name", "").startswith(uid) for uid in cleanup_ids)]
     step("no QA photos remain", len(qa_objs) == 0, [o.get("name") for o in qa_objs])
-    result["pass"] = all(s["ok"] for s in result["steps"] if not s["step"].startswith("realtime"))
-    result["realtime"] = all(s["ok"] for s in result["steps"] if s["step"].startswith("realtime"))
+    names = [s["step"] for s in result["steps"]]
+    result["pass"] = all(s["ok"] for s in result["steps"] if not s["step"].startswith("realtime")) and "A sees B's reply" in names and "B sees A's photo on the People card" in names
+    rt = [s for s in result["steps"] if s["step"].startswith("realtime")]
+    result["realtime"] = bool(rt) and all(s["ok"] for s in rt)
     result["finished"] = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())
     with open(f"{OUT}/result.json", "w") as f:
         json.dump(result, f, indent=2)
