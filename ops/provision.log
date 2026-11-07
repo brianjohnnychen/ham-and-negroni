@@ -1,15 +1,15 @@
-2026-11-07T05:20:00Z org found: Meteor City Sandbox (xaegzjcvnawshndfoyqa)
-2026-11-07T05:20:00Z project found: itnxowacktdwbetzkhmw status=ACTIVE_HEALTHY
-2026-11-07T05:20:00Z project is ACTIVE_HEALTHY
-2026-11-07T05:20:02Z schema applied
-2026-11-07T05:20:03Z public tables: ['bot_config', 'bot_personas', 'current_verdicts', 'messages', 'profiles', 'verdicts']
-2026-11-07T05:20:05Z auth: email+password on, confirmation off, site_url set
-2026-11-07T05:20:05Z keys: using 'anon' for the site, 'service_role' stored as secret
-2026-11-07T05:20:06Z secret SUPABASE_URL: set
-2026-11-07T05:20:06Z secret SUPABASE_PROJECT_REF: set
-2026-11-07T05:20:07Z secret SUPABASE_ANON_KEY: set
-2026-11-07T05:20:07Z secret SUPABASE_SERVICE_ROLE_KEY: set
-2026-11-07T05:20:07Z wrote site/config.js and ops/infra.json
-2026-11-07T05:20:07Z repo already public
-2026-11-07T05:20:07Z pages already enabled (workflow)
-2026-11-07T05:20:07Z provisioning complete
+2026-11-07T05:33:05Z org found: Meteor City Sandbox (xaegzjcvnawshndfoyqa)
+2026-11-07T05:33:05Z project found: itnxowacktdwbetzkhmw status=ACTIVE_HEALTHY
+2026-11-07T05:33:05Z project is ACTIVE_HEALTHY
+2026-11-07T05:33:07Z schema applied
+2026-11-07T05:33:08Z public tables: ['bot_config', 'bot_personas', 'current_verdicts', 'messages', 'profiles', 'verdicts']
+2026-11-07T05:33:10Z auth: email+password on, confirmation off, site_url set
+2026-11-07T05:33:11Z keys: using 'anon' for the site, 'service_role' stored as secret
+2026-11-07T05:33:12Z secret SUPABASE_URL: set
+2026-11-07T05:33:12Z secret SUPABASE_PROJECT_REF: set
+2026-11-07T05:33:12Z secret SUPABASE_ANON_KEY: set
+2026-11-07T05:33:13Z secret SUPABASE_SERVICE_ROLE_KEY: set
+2026-11-07T05:33:13Z wrote site/config.js and ops/infra.json
+2026-11-07T05:33:13Z repo already public
+2026-11-07T05:33:13Z pages already enabled (workflow)
+2026-11-07T05:33:13Z provisioning complete
