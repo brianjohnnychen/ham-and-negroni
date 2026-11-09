@@ -130,19 +130,23 @@ for attempt in range(1, 7):
 else:
     finish(False)
 
-# 5. verify what visitors get
-code, final, body = fetch(f"https://{DOMAIN}/")
-cfg_code, _, cfg = fetch(f"https://{DOMAIN}/config.js")
+# 5. verify what visitors get (a new certificate takes a few minutes to reach every GitHub edge, so retry)
+deadline = time.time() + 15 * 60
+while True:
+    code, final, body = fetch(f"https://{DOMAIN}/")
+    cfg_code, _, cfg = fetch(f"https://{DOMAIN}/config.js")
+    wcode, wfinal, _ = fetch(f"https://www.{DOMAIN}/")
+    hcode, hfinal, _ = fetch(f"http://{DOMAIN}/")
+    good = (code == 200 and "Negroni" in body and "supabase.co" in cfg
+            and wcode == 200 and wfinal.startswith(f"https://{DOMAIN}")
+            and hcode == 200 and hfinal.startswith("https://"))
+    log(f"https://{DOMAIN}/ -> {str(code)[:60]}, site={'Negroni' in body}, backend config={'supabase.co' in cfg}; "
+        f"www -> {str(wcode)[:40]} ({wfinal}); http -> {str(hcode)[:40]} ({hfinal})")
+    if good or time.time() > deadline:
+        break
+    time.sleep(30)
 RESULT["apex"] = {"status": code, "final_url": final, "has_site": "Negroni" in body, "has_backend": "supabase.co" in cfg}
-log(f"https://{DOMAIN}/ -> {code}, site={'Negroni' in body}, backend config={'supabase.co' in cfg}")
-wcode, wfinal, _ = fetch(f"https://www.{DOMAIN}/")
 RESULT["www"] = {"status": wcode, "final_url": wfinal}
-log(f"https://www.{DOMAIN}/ -> {wcode} (lands on {wfinal})")
-hcode, hfinal, _ = fetch(f"http://{DOMAIN}/")
 RESULT["http"] = {"status": hcode, "final_url": hfinal}
-log(f"http://{DOMAIN}/ -> {hcode} (lands on {hfinal})")
-good = (code == 200 and "Negroni" in body and "supabase.co" in cfg
-        and wcode == 200 and wfinal.startswith(f"https://{DOMAIN}")
-        and hcode == 200 and hfinal.startswith("https://"))
 log("verified" if good else "verification failed")
 finish(good)
