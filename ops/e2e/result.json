@@ -1,5 +1,5 @@
 {
-  "run": "42594938702",
+  "run": "42595398168",
   "site": "http://127.0.0.1:8765/",
   "steps": [
     {
@@ -110,7 +110,7 @@
     {
       "step": "admin can see both QA users",
       "ok": true,
-      "detail": "{'a': '9a79cece-79ed-4a70-ab20-2d5a45106685', 'b': '091ca1fa-3890-44b2-a366-6cfad2887d53'}"
+      "detail": "{'a': '6475dc6a-a858-4172-8de9-566e8ac4a373', 'b': '52ea88ba-b077-4d4e-b567-39962fcdd683'}"
     },
     {
       "step": "eleven AI members exist, including Joseph",
@@ -190,7 +190,7 @@
     {
       "step": "member Daiki replies live",
       "ok": true,
-      "detail": "Hey! Weekends are mostly baseball for me, if I can catch a game, or just hanging out with a bowl of tonkotsu ramen. I also DJ sometimes, which is probably the most fun way I spend a Saturday night. Wh"
+      "detail": "Hi! Weekends for me are usually a mix of baseball on TV and digging through records for my DJ sets. Sometimes I just end up at a ramen place in Fukuoka with a friend and talk for hours. What about you"
     },
     {
       "step": "asking for a straight answer gets one",
@@ -205,12 +205,12 @@
     {
       "step": "Joseph answers about Morrison in character",
       "ok": true,
-      "detail": "Morrison Christian Academy, MCA all the way! Wait, don't tell me you forgot already, Carol. Are you still in touch with anyone from those days?"
+      "detail": "Morrison Christian Academy, same as you! Honestly, Carol, I'm glad to see your name pop up here. Are you still in touch with anyone from our class?"
     },
     {
       "step": "Joseph stays in character on a detail he was never given",
       "ok": true,
-      "detail": "Ha, you're testing me now! I'm blanking on the name, which is embarrassing since I still remember the cafeteria food. Was it the one with the ridiculous whiteboard markers? Tell me yours and I'll see "
+      "detail": "Ha, you're testing me already! I'm blanking on the name, though I remember the room had that awful radiator that clanked all through first period. Was it Mr. or Mrs. whoever who ran the morning announ"
     },
     {
       "step": "the conversation log holds the QA chats with AI members",
@@ -275,7 +275,7 @@
     {
       "step": "B sees A's photo on the People card",
       "ok": true,
-      "detail": "https://itnxowacktdwbetzkhmw.supabase.co/storage/v1/object/public/avatars/9a79cece-79ed-4a70-ab20-2d5a45106685/avatar.jpg?v=1794217248295"
+      "detail": "https://itnxowacktdwbetzkhmw.supabase.co/storage/v1/object/public/avatars/6475dc6a-a858-4172-8de9-566e8ac4a373/avatar.jpg?v=1794217432927"
     },
     {
       "step": "person sheet shows the bio",
@@ -298,22 +298,22 @@
       "detail": "[]"
     },
     {
-      "step": "deleted QA photo 9a79cece",
+      "step": "deleted QA photo 6475dc6a",
       "ok": true,
-      "detail": "(200, [{'name': '9a79cece-79ed-4a70-ab20-2d5a45106685/avatar.jpg', 'bucket_id': 'avatars', 'owner': '9a79cece-79ed-4a70-ab20-2d5a45106685', 'owner_id': '9a79cece-79ed-4a70-ab20-2d5a45106685', 'version': 'efc531d4-f15b-47d9-8acd-1fd7e3e89384', 'id': 'a3a94f6c-a263-4fc7-9ab7-b7c24e7b14d2', 'updated_at': '2026-11-09T09:40:48.195Z', 'created_at': '2026-11-09T09:40:48.195Z', 'last_accessed_at': '2026-1"
+      "detail": "(200, [{'name': '6475dc6a-a858-4172-8de9-566e8ac4a373/avatar.jpg', 'bucket_id': 'avatars', 'owner': '6475dc6a-a858-4172-8de9-566e8ac4a373', 'owner_id': '6475dc6a-a858-4172-8de9-566e8ac4a373', 'version': 'b74125a2-efad-4709-89a2-0a57db99f892', 'id': 'bfc1e14c-153c-4efe-ae51-8b630604ea8a', 'updated_at': '2026-11-09T09:43:52.822Z', 'created_at': '2026-11-09T09:43:52.822Z', 'last_accessed_at': '2026-1"
     },
     {
-      "step": "deleted QA user 9a79cece",
+      "step": "deleted QA user 6475dc6a",
       "ok": true,
       "detail": "200"
     },
     {
-      "step": "deleted QA photo 091ca1fa",
+      "step": "deleted QA photo 52ea88ba",
       "ok": true,
       "detail": "(200, 'nothing to delete')"
     },
     {
-      "step": "deleted QA user 091ca1fa",
+      "step": "deleted QA user 52ea88ba",
       "ok": true,
       "detail": "200"
     },
@@ -329,7 +329,7 @@
     }
   ],
   "pass": true,
-  "started": "2026-11-09T09:39:52Z",
+  "started": "2026-11-09T09:42:57Z",
   "realtime": true,
-  "finished": "2026-11-09T09:40:56Z"
+  "finished": "2026-11-09T09:44:03Z"
 }
