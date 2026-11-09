@@ -56,8 +56,8 @@ import datetime  # noqa: E402
 end = datetime.datetime.now(datetime.timezone.utc)
 start = end - datetime.timedelta(minutes=45)
 q = "select timestamp, event_message from function_logs order by timestamp desc limit 60"
-params = urllib.parse.urlencode({"sql": q, "iso_timestamp_start": start.isoformat(), "iso_timestamp_end": end.isoformat()})
-for path in ("logs", "logs.all"):
+params = urllib.parse.urlencode({"sql": q, "iso_timestamp_start": start.strftime("%Y-%m-%dT%H:%M:%SZ"), "iso_timestamp_end": end.strftime("%Y-%m-%dT%H:%M:%SZ")})
+for path in ("logs",):
     st, res = api("GET", f"/v1/projects/{REF}/analytics/endpoints/{path}?{params}")
     print(f"\n== edge function logs via {path} (http {st})")
     rows = res.get("result") if isinstance(res, dict) else None
