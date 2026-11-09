@@ -9,7 +9,7 @@
     "plan": "free"
   },
   "site": {
-    "url": "https://brianjohnnychen.github.io/ham-and-negroni/",
+    "url": "https://hamandnegroni.com/",
     "hosting": "GitHub Pages (workflow build from site/)"
   },
   "secrets": [
@@ -19,5 +19,5 @@
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_DB_PASSWORD"
   ],
-  "provisioned_at": "2026-11-07T08:36:01Z"
+  "provisioned_at": "2026-11-09T09:26:03Z"
 }
