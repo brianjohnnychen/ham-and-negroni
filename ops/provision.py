@@ -21,7 +21,10 @@ OWNER, NAME = REPO.split("/")
 ORG_NAME = os.environ.get("HN_ORG_NAME", "Meteor City Sandbox")
 PROJECT_NAME = os.environ.get("HN_PROJECT_NAME", "ham-and-negroni")
 REGION = os.environ.get("HN_REGION", "ap-northeast-1")
-SITE_URL = f"https://{OWNER}.github.io/{NAME}/"
+LEGACY_URL = f"https://{OWNER}.github.io/{NAME}/"
+_cname = os.path.join("site", "CNAME")  # custom domain, single source of truth (see ops/domain.py)
+DOMAIN = open(_cname).read().strip() if os.path.exists(_cname) else ""
+SITE_URL = f"https://{DOMAIN}/" if DOMAIN else LEGACY_URL
 LOG = []
 
 
@@ -137,7 +140,7 @@ log(f"public tables: {[r.get('table_name') for r in res] if isinstance(res, list
 # ------------------------------------------------------------------ auth settings
 status, res = call("PATCH", f"/v1/projects/{REF}/config/auth", {
     "site_url": SITE_URL,
-    "uri_allow_list": f"{SITE_URL},{SITE_URL}*,http://localhost:8765/*,http://127.0.0.1:8765/*",
+    "uri_allow_list": f"{SITE_URL},{SITE_URL}*,{LEGACY_URL},{LEGACY_URL}*,http://localhost:8765/*,http://127.0.0.1:8765/*",
     "mailer_autoconfirm": True,
     "external_email_enabled": True,
     "disable_signup": False,

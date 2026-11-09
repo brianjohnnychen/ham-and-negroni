@@ -38,10 +38,11 @@ jobs:
       - name: Run the e2e check
         id: run
         run: python3 ops/e2e.py
-      - name: Check the live GitHub Pages URL
+      - name: Check the live site URL
         if: always()
         run: |
-          URL="https://${GITHUB_REPOSITORY_OWNER}.github.io/${GITHUB_REPOSITORY#*/}/"
+          DOM=$(cat site/CNAME 2>/dev/null | tr -d '[:space:]')
+          if [ -n "$DOM" ]; then URL="https://${DOM}/"; else URL="https://${GITHUB_REPOSITORY_OWNER}.github.io/${GITHUB_REPOSITORY#*/}/"; fi
           for i in $(seq 1 18); do
             CODE=$(curl -s -o /tmp/live.html -w '%{http_code}' "$URL")
             if [ "$CODE" = "200" ] && grep -q "Negroni" /tmp/live.html && grep -q "supabase.co" <(curl -s "${URL}config.js"); then echo "live: $URL (200, real config)"; echo "{\"url\":\"$URL\",\"status\":200,\"checked\":\"$(date -u +%FT%TZ)\"}" > ops/e2e/live.json; exit 0; fi
