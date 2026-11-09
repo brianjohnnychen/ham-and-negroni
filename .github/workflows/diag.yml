@@ -1,0 +1,21 @@
+name: diag
+# Read-only diagnostics for the AI and welcome pipeline (pg_net responses, triggers, edge function logs).
+# Output goes to the job log only. Trigger: touch ops/diag.request or run manually.
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['ops/diag.request']
+
+permissions:
+  contents: read
+
+jobs:
+  diag:
+    runs-on: ubuntu-latest
+    env:
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 ops/diag.py
