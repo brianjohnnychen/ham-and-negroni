@@ -1,5 +1,5 @@
 {
-  "run": "42356160481",
+  "run": "42593358517",
   "site": "http://127.0.0.1:8765/",
   "steps": [
     {
@@ -110,7 +110,7 @@
     {
       "step": "admin can see both QA users",
       "ok": true,
-      "detail": "{'a': 'aaa9ec34-27cb-4693-8ce0-b1357633cd04', 'b': 'b1e993e3-34a1-492c-b001-211871797541'}"
+      "detail": "{'a': '3b7cfa30-c5ce-4f38-8ea2-aa3e2b045fcd', 'b': '07f8ab7a-1022-4f93-af8a-f00f5c6e39f3'}"
     },
     {
       "step": "eleven AI members exist, including Joseph",
@@ -159,13 +159,8 @@
     },
     {
       "step": "a welcome message from a member arrives",
-      "ok": true,
-      "detail": "JosephCarol? It's Joseph from MCA, class of 2010. Long time no see! I've been hoping you'd turn up h"
-    },
-    {
-      "step": "Joseph writes first to a member named Carol",
-      "ok": true,
-      "detail": "JosephCarol? It's Joseph from MCA, class of 2010. Long time no see! I've been hoping you'd turn up here. We should hang out and catch up soo"
+      "ok": false,
+      "detail": "Page.wait_for_function: Timeout 40000ms exceeded."
     },
     {
       "step": "members cannot read an AI flag on profiles",
@@ -190,7 +185,7 @@
     {
       "step": "member Daiki replies live",
       "ok": true,
-      "detail": "Hey! On weekends I usually catch a baseball game if I can, or spend way too long hunting for the perfect tonkotsu ramen spot. I'm originally from Fukuoka, so I'm pretty picky about my broth. How about"
+      "detail": "Hey! Weekends are usually a mix of baseball on TV and digging through records for my DJ sets. Sometimes I also end up eating way too much tonkotsu ramen in Fukuoka with friends. What about you, QA Car"
     },
     {
       "step": "asking for a straight answer gets one",
@@ -205,12 +200,12 @@
     {
       "step": "Joseph answers about Morrison in character",
       "ok": true,
-      "detail": "Morrison Christian Academy, the whole way through from elementary. Wait, Carol, is that you? It's been ages! What have you been up to since we all scattered?"
+      "detail": "Ha, MCA, of course! Morrison Christian Academy, all the way from elementary through graduation in 2010. Feels like a lifetime ago now that I'm out in the States. Wait, don't tell me you're the Carol I"
     },
     {
       "step": "Joseph stays in character on a detail he was never given",
       "ok": true,
-      "detail": "Ha, I'm drawing a blank on that one. Was it the one with the squeaky chalk, or the one who always had a mug of tea on her desk? Tell me if it comes back to you before it does to me."
+      "detail": "Ugh, you're going to make me dig for that one. I think it was Mrs. something, but I've completely lost the name. Was yours the one with the ridiculous bulletin boards, or am I mixing up years?"
     },
     {
       "step": "the conversation log holds the QA chats with AI members",
@@ -225,7 +220,7 @@
     {
       "step": "Feed shows who liked whom",
       "ok": true,
-      "detail": "FeedEvery like and dislike, newest first. Updates live.QCQTQA Carol liked QA Thomasjust nowAAnderson liked Joseph3 hours"
+      "detail": "FeedEvery like and dislike, newest first. Updates live.QCQTQA Carol liked QA Thomasjust nowAAnderson liked Joseph2 days "
     },
     {
       "step": "Feed shows the dislike too",
@@ -275,7 +270,7 @@
     {
       "step": "B sees A's photo on the People card",
       "ok": true,
-      "detail": "https://itnxowacktdwbetzkhmw.supabase.co/storage/v1/object/public/avatars/aaa9ec34-27cb-4693-8ce0-b1357633cd04/avatar.jpg?v=1794040685556"
+      "detail": "https://itnxowacktdwbetzkhmw.supabase.co/storage/v1/object/public/avatars/3b7cfa30-c5ce-4f38-8ea2-aa3e2b045fcd/avatar.jpg?v=1794216543224"
     },
     {
       "step": "person sheet shows the bio",
@@ -298,22 +293,22 @@
       "detail": "[]"
     },
     {
-      "step": "deleted QA photo aaa9ec34",
+      "step": "deleted QA photo 3b7cfa30",
       "ok": true,
-      "detail": "(200, [{'name': 'aaa9ec34-27cb-4693-8ce0-b1357633cd04/avatar.jpg', 'bucket_id': 'avatars', 'owner': 'aaa9ec34-27cb-4693-8ce0-b1357633cd04', 'owner_id': 'aaa9ec34-27cb-4693-8ce0-b1357633cd04', 'version': '22c68801-b8a4-4eeb-8f71-0c648ba5fb97', 'id': 'b200caca-1992-4bb4-8173-41e91acc8894', 'updated_at': '2026-11-07T08:38:05.433Z', 'created_at': '2026-11-07T08:38:05.433Z', 'last_accessed_at': '2026-1"
+      "detail": "(200, [{'name': '3b7cfa30-c5ce-4f38-8ea2-aa3e2b045fcd/avatar.jpg', 'bucket_id': 'avatars', 'owner': '3b7cfa30-c5ce-4f38-8ea2-aa3e2b045fcd', 'owner_id': '3b7cfa30-c5ce-4f38-8ea2-aa3e2b045fcd', 'version': '9db86418-4240-4e43-90c8-2c8561e5dfaa', 'id': '14f27b91-8b72-485e-bd93-c8fcb1ba2b09', 'updated_at': '2026-11-09T09:29:03.124Z', 'created_at': '2026-11-09T09:29:03.124Z', 'last_accessed_at': '2026-1"
     },
     {
-      "step": "deleted QA user aaa9ec34",
+      "step": "deleted QA user 3b7cfa30",
       "ok": true,
       "detail": "200"
     },
     {
-      "step": "deleted QA photo b1e993e3",
+      "step": "deleted QA photo 07f8ab7a",
       "ok": true,
       "detail": "(200, 'nothing to delete')"
     },
     {
-      "step": "deleted QA user b1e993e3",
+      "step": "deleted QA user 07f8ab7a",
       "ok": true,
       "detail": "200"
     },
@@ -328,8 +323,8 @@
       "detail": "[]"
     }
   ],
-  "pass": true,
-  "started": "2026-11-07T08:37:12Z",
+  "pass": false,
+  "started": "2026-11-09T09:27:23Z",
   "realtime": true,
-  "finished": "2026-11-07T08:38:13Z"
+  "finished": "2026-11-09T09:29:11Z"
 }
