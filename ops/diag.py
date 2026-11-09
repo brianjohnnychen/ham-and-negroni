@@ -43,14 +43,28 @@ sql("bot messages today (utc) and last hour", "select count(*) filter (where cre
 sql("most recent messages from AI members", "select m.id, m.created_at, p.display_name as sender, left(m.body,60) as body from public.messages m join public.profiles p on p.id=m.sender where m.sender in (select profile_id from public.bot_personas) order by m.id desc limit 6")
 sql("most recent profiles", "select display_name, created_at from public.profiles order by created_at desc limit 4")
 
-q = "select timestamp, event_message from function_logs order by timestamp desc limit 40"
-st, res = api("GET", f"/v1/projects/{REF}/analytics/endpoints/logs.all?sql=" + urllib.parse.quote(q))
-print(f"\n== edge function logs (http {st})")
-rows = res.get("result") if isinstance(res, dict) else None
-if isinstance(rows, list):
-    for r in rows:
-        print(str(r.get("timestamp")), str(r.get("event_message"))[:300])
-    if not rows:
-        print("(no rows)")
+sql("persona crush fields", "select p.display_name, bp.crush_name, length(bp.crush_greeting) as crush_len, length(bp.greeting) as greet_len from public.bot_personas bp join public.profiles p on p.id=bp.profile_id where bp.crush_name is not null or bp.greeting is null")
+
+st, res = api("GET", f"/v1/projects/{REF}/functions/bot-reply")
+print(f"\n== function metadata (http {st})")
+if isinstance(res, dict):
+    print(json.dumps({k: res.get(k) for k in ("slug", "status", "version", "verify_jwt", "updated_at", "entrypoint_path", "import_map")}, default=str))
 else:
+    print(str(res)[:300])
+
+import datetime  # noqa: E402
+end = datetime.datetime.now(datetime.timezone.utc)
+start = end - datetime.timedelta(minutes=45)
+q = "select timestamp, event_message from function_logs order by timestamp desc limit 60"
+params = urllib.parse.urlencode({"sql": q, "iso_timestamp_start": start.isoformat(), "iso_timestamp_end": end.isoformat()})
+for path in ("logs", "logs.all"):
+    st, res = api("GET", f"/v1/projects/{REF}/analytics/endpoints/{path}?{params}")
+    print(f"\n== edge function logs via {path} (http {st})")
+    rows = res.get("result") if isinstance(res, dict) else None
+    if isinstance(rows, list):
+        for r in rows:
+            print(str(r.get("timestamp")), str(r.get("event_message"))[:300])
+        if not rows:
+            print("(no rows)")
+        break
     print(str(res)[:500])
