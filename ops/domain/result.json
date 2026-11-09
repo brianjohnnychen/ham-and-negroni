@@ -1,13 +1,13 @@
 {
   "domain": "hamandnegroni.com",
   "log": [
-    "2026-11-09T09:25:20Z pages: cname='hamandnegroni.com' https_enforced=True build_type=workflow",
-    "2026-11-09T09:25:20Z custom domain already set",
-    "2026-11-09T09:25:20Z dns ok: hamandnegroni.com -> ['185.199.108.153', '185.199.109.153', '185.199.110.153', '185.199.111.153'], www -> ['185.199.108.153', '185.199.109.153', '185.199.110.153', '185.199.111.153']",
-    "2026-11-09T09:25:20Z certificate approved (expires 2027-02-07, domains ['hamandnegroni.com', 'www.hamandnegroni.com'])",
-    "2026-11-09T09:25:20Z https enforced",
-    "2026-11-09T09:25:21Z https://hamandnegroni.com/ -> 200, site=True, backend config=True; www -> 200 (https://hamandnegroni.com/); http -> 200 (https://hamandnegroni.com/)",
-    "2026-11-09T09:25:21Z verified"
+    "2026-11-09T09:45:58Z pages: cname='hamandnegroni.com' https_enforced=True build_type=workflow",
+    "2026-11-09T09:45:58Z custom domain already set",
+    "2026-11-09T09:45:58Z dns ok: hamandnegroni.com -> ['185.199.108.153', '185.199.109.153', '185.199.110.153', '185.199.111.153'], www -> ['185.199.108.153', '185.199.109.153', '185.199.110.153', '185.199.111.153']",
+    "2026-11-09T09:45:59Z certificate approved (expires 2027-02-07, domains ['hamandnegroni.com', 'www.hamandnegroni.com'])",
+    "2026-11-09T09:45:59Z https enforced",
+    "2026-11-09T09:46:00Z https://hamandnegroni.com/ -> 200, site=True, backend config=True; www -> 200 (https://hamandnegroni.com/); http -> 200 (https://hamandnegroni.com/)",
+    "2026-11-09T09:46:00Z verified"
   ],
   "apex": {
     "status": 200,
@@ -24,5 +24,5 @@
     "final_url": "https://hamandnegroni.com/"
   },
   "ok": true,
-  "finished": "2026-11-09T09:25:21Z"
+  "finished": "2026-11-09T09:46:00Z"
 }
