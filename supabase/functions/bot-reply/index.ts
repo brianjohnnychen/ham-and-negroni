@@ -50,6 +50,12 @@ async function send(sender: string, recipient: string, body: string) {
   const r = await rest("messages", { method: "POST", headers: { Prefer: "return=minimal" }, body: JSON.stringify({ sender, recipient, body: body.slice(0, 2000) }) });
   if (!r.ok) throw new Error(`insert message: ${r.status} ${await r.text()}`);
 }
+// What the function did and why it skipped or failed, for debugging (bot_events is closed to members). Best effort.
+async function note(kind: string, detail = "", profileId: string | null = null) {
+  try {
+    await rest("bot_events", { method: "POST", headers: { Prefer: "return=minimal" }, body: JSON.stringify({ kind, detail: detail.slice(0, 500), profile_id: profileId }) });
+  } catch { /* never let logging break the flow */ }
+}
 const sleep = (ms: number) => new Promise((res) => setTimeout(res, ms));
 const pause = () => sleep(1500 + Math.random() * 2500);
 
@@ -162,20 +168,23 @@ async function handleMessage(messageId: number) {
 }
 
 async function handleWelcome(profileId: string) {
+  await note("welcome_start", "", profileId);
   const [member] = await get(`profiles?select=id,display_name&id=eq.${profileId}`);
-  if (!member) return;
+  if (!member) { await note("welcome_skip", "no profile row", profileId); return; }
   const personas = await get("bot_personas?select=profile_id,greeting,crush_name,crush_greeting");
-  if (!personas.length || personas.some((p) => p.profile_id === member.id)) return;
+  if (!personas.length || personas.some((p) => p.profile_id === member.id)) { await note("welcome_skip", `no personas or member is an AI member (${personas.length} personas)`, profileId); return; }
   const words = String(member.display_name ?? "").toLowerCase().split(/[^\p{L}]+/u).filter(Boolean);
   const crush = personas.find((p) => p.crush_name && words.includes(String(p.crush_name).toLowerCase()));
   const pick = crush ?? personas[Math.floor(Math.random() * personas.length)];
   const bot = { id: pick.profile_id };
+  await note("welcome_pick", `words=${words.join(",")} crush=${Boolean(crush)} bot=${bot.id}`, profileId);
   const already = await count(`messages?select=id&sender=eq.${bot.id}&recipient=eq.${member.id}`);
-  if (already) return;
+  if (already) { await note("welcome_skip", `already messaged (${already})`, profileId); return; }
   const template = (crush ? crush.crush_greeting : null) ?? pick.greeting ?? "Hi {name}, welcome to Ham & Negroni!";
   const greeting = template.replaceAll("{name}", member.display_name);
   await sleep(4000 + Math.random() * 4000);
   await send(bot.id, member.id, greeting);
+  await note("welcome_sent", `bot=${bot.id}`, profileId);
 }
 
 Deno.serve(async (req) => {
@@ -189,6 +198,7 @@ Deno.serve(async (req) => {
       else if (body.type === "welcome" && body.profile_id) await handleWelcome(String(body.profile_id));
     } catch (e) {
       console.error("bot-reply failed", String(e));
+      await note("error", `${body.type}: ${String(e)}`, body.profile_id ? String(body.profile_id) : null);
     }
   })();
   // @ts-ignore: provided by the Supabase Edge runtime; lets the work finish after the response is sent

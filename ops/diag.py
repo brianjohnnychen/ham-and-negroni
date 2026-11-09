@@ -43,6 +43,7 @@ sql("bot messages today (utc) and last hour", "select count(*) filter (where cre
 sql("most recent messages from AI members", "select m.id, m.created_at, p.display_name as sender, left(m.body,60) as body from public.messages m join public.profiles p on p.id=m.sender where m.sender in (select profile_id from public.bot_personas) order by m.id desc limit 6")
 sql("most recent profiles", "select display_name, created_at from public.profiles order by created_at desc limit 4")
 
+sql("bot_events (most recent 40)", "select id, at, kind, profile_id, left(detail,200) as detail from public.bot_events order by id desc limit 40")
 sql("persona crush fields", "select p.display_name, bp.crush_name, length(bp.crush_greeting) as crush_len, length(bp.greeting) as greet_len from public.bot_personas bp join public.profiles p on p.id=bp.profile_id where bp.crush_name is not null or bp.greeting is null")
 
 st, res = api("GET", f"/v1/projects/{REF}/functions/bot-reply")

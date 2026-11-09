@@ -150,6 +150,18 @@ alter table public.bot_config enable row level security;
 revoke all on public.bot_personas, public.bot_config from anon, authenticated;
 drop table if exists public.bot_usage;
 
+-- What the AI function did and why it skipped or failed (one row per step of the welcome flow, one per error).
+-- Closed to members like the other bot tables; only the service role and admins can read it.
+create table if not exists public.bot_events (
+  id         bigserial primary key,
+  at         timestamptz not null default now(),
+  kind       text not null,
+  profile_id uuid,
+  detail     text
+);
+alter table public.bot_events enable row level security;
+revoke all on public.bot_events from anon, authenticated;
+
 -- Log of every conversation with an AI member (both directions), with names and an AI flag. Not readable by members or the
 -- public API; the project owner reads it in the Supabase dashboard (Table Editor).
 create or replace view public.ai_conversation_log as
