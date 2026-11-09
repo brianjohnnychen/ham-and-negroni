@@ -1,5 +1,5 @@
 {
-  "run": "42593358517",
+  "run": "42594013107",
   "site": "http://127.0.0.1:8765/",
   "steps": [
     {
@@ -110,7 +110,7 @@
     {
       "step": "admin can see both QA users",
       "ok": true,
-      "detail": "{'a': '3b7cfa30-c5ce-4f38-8ea2-aa3e2b045fcd', 'b': '07f8ab7a-1022-4f93-af8a-f00f5c6e39f3'}"
+      "detail": "{'a': '8125da6d-9af3-4871-8560-2354653b397a', 'b': '2fd4b045-eda6-41cd-bbe7-3bf563bbc702'}"
     },
     {
       "step": "eleven AI members exist, including Joseph",
@@ -185,7 +185,7 @@
     {
       "step": "member Daiki replies live",
       "ok": true,
-      "detail": "Hey! Weekends are usually a mix of baseball on TV and digging through records for my DJ sets. Sometimes I also end up eating way too much tonkotsu ramen in Fukuoka with friends. What about you, QA Car"
+      "detail": "Hey! On weekends I'm usually either at a ballpark cheering on my team or spinning some records at home. I also have a standing order for tonkotsu ramen in Fukuoka that I try to fit in whenever I'm bac"
     },
     {
       "step": "asking for a straight answer gets one",
@@ -200,12 +200,12 @@
     {
       "step": "Joseph answers about Morrison in character",
       "ok": true,
-      "detail": "Ha, MCA, of course! Morrison Christian Academy, all the way from elementary through graduation in 2010. Feels like a lifetime ago now that I'm out in the States. Wait, don't tell me you're the Carol I"
+      "detail": "Morrison Christian Academy, the whole way through from elementary. Wait, Carol, is that really you? It's been ages! What have you been up to since we all scattered?"
     },
     {
       "step": "Joseph stays in character on a detail he was never given",
       "ok": true,
-      "detail": "Ugh, you're going to make me dig for that one. I think it was Mrs. something, but I've completely lost the name. Was yours the one with the ridiculous bulletin boards, or am I mixing up years?"
+      "detail": "Ha, I'm blanking on that completely. Ten-plus years will do that. Do you remember? I'm"
     },
     {
       "step": "the conversation log holds the QA chats with AI members",
@@ -270,7 +270,7 @@
     {
       "step": "B sees A's photo on the People card",
       "ok": true,
-      "detail": "https://itnxowacktdwbetzkhmw.supabase.co/storage/v1/object/public/avatars/3b7cfa30-c5ce-4f38-8ea2-aa3e2b045fcd/avatar.jpg?v=1794216543224"
+      "detail": "https://itnxowacktdwbetzkhmw.supabase.co/storage/v1/object/public/avatars/8125da6d-9af3-4871-8560-2354653b397a/avatar.jpg?v=1794216785834"
     },
     {
       "step": "person sheet shows the bio",
@@ -293,22 +293,22 @@
       "detail": "[]"
     },
     {
-      "step": "deleted QA photo 3b7cfa30",
+      "step": "deleted QA photo 8125da6d",
       "ok": true,
-      "detail": "(200, [{'name': '3b7cfa30-c5ce-4f38-8ea2-aa3e2b045fcd/avatar.jpg', 'bucket_id': 'avatars', 'owner': '3b7cfa30-c5ce-4f38-8ea2-aa3e2b045fcd', 'owner_id': '3b7cfa30-c5ce-4f38-8ea2-aa3e2b045fcd', 'version': '9db86418-4240-4e43-90c8-2c8561e5dfaa', 'id': '14f27b91-8b72-485e-bd93-c8fcb1ba2b09', 'updated_at': '2026-11-09T09:29:03.124Z', 'created_at': '2026-11-09T09:29:03.124Z', 'last_accessed_at': '2026-1"
+      "detail": "(200, [{'name': '8125da6d-9af3-4871-8560-2354653b397a/avatar.jpg', 'bucket_id': 'avatars', 'owner': '8125da6d-9af3-4871-8560-2354653b397a', 'owner_id': '8125da6d-9af3-4871-8560-2354653b397a', 'version': '26f8d0de-bb05-45ff-a188-f1120678c96c', 'id': 'b339d3ce-f28a-4972-b40a-0a739e5ae4ae', 'updated_at': '2026-11-09T09:33:05.756Z', 'created_at': '2026-11-09T09:33:05.756Z', 'last_accessed_at': '2026-1"
     },
     {
-      "step": "deleted QA user 3b7cfa30",
+      "step": "deleted QA user 8125da6d",
       "ok": true,
       "detail": "200"
     },
     {
-      "step": "deleted QA photo 07f8ab7a",
+      "step": "deleted QA photo 2fd4b045",
       "ok": true,
       "detail": "(200, 'nothing to delete')"
     },
     {
-      "step": "deleted QA user 07f8ab7a",
+      "step": "deleted QA user 2fd4b045",
       "ok": true,
       "detail": "200"
     },
@@ -324,7 +324,7 @@
     }
   ],
   "pass": false,
-  "started": "2026-11-09T09:27:23Z",
+  "started": "2026-11-09T09:31:32Z",
   "realtime": true,
-  "finished": "2026-11-09T09:29:11Z"
+  "finished": "2026-11-09T09:33:12Z"
 }
