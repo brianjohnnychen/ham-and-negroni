@@ -55,16 +55,20 @@ else:
 import datetime  # noqa: E402
 end = datetime.datetime.now(datetime.timezone.utc)
 start = end - datetime.timedelta(minutes=45)
-q = "select timestamp, event_message from function_logs order by timestamp desc limit 60"
-params = urllib.parse.urlencode({"sql": q, "iso_timestamp_start": start.strftime("%Y-%m-%dT%H:%M:%SZ"), "iso_timestamp_end": end.strftime("%Y-%m-%dT%H:%M:%SZ")})
-for path in ("logs",):
-    st, res = api("GET", f"/v1/projects/{REF}/analytics/endpoints/{path}?{params}")
-    print(f"\n== edge function logs via {path} (http {st})")
+queries = {
+    "function_logs (console)": "select id, function_logs.timestamp, event_message, metadata.level from function_logs cross join unnest(metadata) as metadata order by timestamp desc limit 60",
+    "function_edge_logs (requests)": "select id, function_edge_logs.timestamp, event_message from function_edge_logs order by timestamp desc limit 30",
+    "function_logs plain": "select timestamp, event_message from function_logs order by timestamp desc limit 60",
+}
+for title, q in queries.items():
+    params = urllib.parse.urlencode({"sql": q, "iso_timestamp_start": start.strftime("%Y-%m-%dT%H:%M:%SZ"), "iso_timestamp_end": end.strftime("%Y-%m-%dT%H:%M:%SZ")})
+    st, res = api("GET", f"/v1/projects/{REF}/analytics/endpoints/logs?{params}")
+    print(f"\n== {title} (http {st})")
     rows = res.get("result") if isinstance(res, dict) else None
     if isinstance(rows, list):
         for r in rows:
             print(str(r.get("timestamp")), str(r.get("event_message"))[:300])
         if not rows:
             print("(no rows)")
-        break
-    print(str(res)[:500])
+    else:
+        print(str(res)[:400])
