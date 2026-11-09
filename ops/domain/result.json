@@ -1,0 +1,31 @@
+{
+  "domain": "hamandnegroni.com",
+  "log": [
+    "2026-11-09T09:24:15Z pages: cname=None https_enforced=True build_type=workflow",
+    "2026-11-09T09:24:16Z set custom domain hamandnegroni.com: ok",
+    "2026-11-09T09:24:17Z dns ok: hamandnegroni.com -> ['185.199.108.153', '185.199.109.153', '185.199.110.153', '185.199.111.153'], www -> ['185.199.108.153', '185.199.109.153', '185.199.110.153', '185.199.111.153']",
+    "2026-11-09T09:24:17Z certificate state: None",
+    "2026-11-09T09:24:47Z certificate approved (expires 2027-02-07, domains ['hamandnegroni.com', 'www.hamandnegroni.com'])",
+    "2026-11-09T09:24:47Z https enforced",
+    "2026-11-09T09:24:48Z https://hamandnegroni.com/ -> error: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not valid for 'hamandnegroni.com'. (_ssl.c:1000)>, site=False, backend config=True",
+    "2026-11-09T09:24:48Z https://www.hamandnegroni.com/ -> 200 (lands on https://hamandnegroni.com/)",
+    "2026-11-09T09:24:48Z http://hamandnegroni.com/ -> error: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not valid for 'hamandnegroni.com'. (_ssl.c:1000)> (lands on http://hamandnegroni.com/)",
+    "2026-11-09T09:24:48Z verification failed"
+  ],
+  "apex": {
+    "status": "error: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not valid for 'hamandnegroni.com'. (_ssl.c:1000)>",
+    "final_url": "https://hamandnegroni.com/",
+    "has_site": false,
+    "has_backend": true
+  },
+  "www": {
+    "status": 200,
+    "final_url": "https://hamandnegroni.com/"
+  },
+  "http": {
+    "status": "error: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not valid for 'hamandnegroni.com'. (_ssl.c:1000)>",
+    "final_url": "http://hamandnegroni.com/"
+  },
+  "ok": false,
+  "finished": "2026-11-09T09:24:48Z"
+}
